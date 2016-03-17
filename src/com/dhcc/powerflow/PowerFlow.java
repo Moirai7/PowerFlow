@@ -20,7 +20,7 @@ public class PowerFlow {
 		double max = 0;
 		for (int i=0; i<info.getN()-1; ++i) {
 			double sump = 0.0, di = Ua[i];
-			for (int j=0; j<info.getN()-1; ++j) {
+			for (int j=0; j<info.getN(); ++j) {
 				double g = G[i][j], b = B[i][j], dj = Ua[j];
 				double dij = di-dj;
 				sump += Um[i]*Um[j]*(g*Math.cos(dij)+b*Math.sin(dij));
@@ -29,9 +29,9 @@ public class PowerFlow {
 			if (Math.abs(dp[i]) > max)
 				max = Math.abs(dp[i]);
 		}
+		Variable.setPtemp(dp);
 		if (max < info.getEps())
 			return true;
-		Variable.setPtemp(dp);
 		return false;
 	}
 	
@@ -63,13 +63,13 @@ public class PowerFlow {
 		double G[][] = Variable.getG();
 		double Um[] = Variable.getOriU();
 		double Ua[] = Variable.getOriTheta();
-		double Qi[] = Variable.getP();
+		double Qi[] = Variable.getQ();
 		double dq[] = new double[info.getNpq()];
 		
 		double max = 0;
 		for (int i=0; i<info.getNpq(); ++i) {
 			double sump = 0.0, di = Ua[i];
-			for (int j=0; j<info.getNpq(); ++j) {
+			for (int j=0; j<info.getN(); ++j) {
 				double g = G[i][j], b = B[i][j], dj = Ua[j];
 				double dij = di-dj;
 				sump += Um[i]*Um[j]*(g*Math.sin(dij)-b*Math.cos(dij));
@@ -78,10 +78,9 @@ public class PowerFlow {
 			if (Math.abs(dq[i]) > max)
 				max = Math.abs(dq[i]);
 		}
-		
+		Variable.setQtemp(dq);
 		if (max < info.getEps())
 			return true;
-		Variable.setQtemp(dq);
 		return false;
 	}
 
@@ -101,6 +100,18 @@ public class PowerFlow {
 		qi = MatrixUtil.Multi(qi, invBpp);
 		for (int i=0; i<qi.length; ++i)
 			Um[i] += qi[i];
+	}
+	
+	public void run() {
+		k = 0;
+		while (k < 10) {
+			CalcDp();
+			CalcTheta();
+			CalcDq();
+			CalcV();
+			PrintInfo();
+			k++;
+		}
 	}
 	
 	public void Run() {
@@ -153,11 +164,14 @@ public class PowerFlow {
 		System.out.println("The End! " + k);
 	}
 	
-	public void PrintInfo(){
+	public void PrintInfo() {
+		
 		double Um[] = Variable.getOriU();
 		double Ua[] = Variable.getOriTheta();
 		double Ptemp[] = Variable.getPtemp();
 		double Qtemp[] = Variable.getQtemp();
+		
+		System.out.println(k + "'s iterator.");
 		
 		System.out.println("Um " + Um.length );
 		for (int i=0; i<Um.length; ++i) 
@@ -175,20 +189,21 @@ public class PowerFlow {
 		System.out.println("Qtemp " + Qtemp.length );
 		for (int i=0; i<Qtemp.length; ++i) 
 			System.out.print(Qtemp[i] + " ");
-		System.out.println("\n");
+		System.out.println();
 	}
 	
 	public static void main(String[] args) {
 		ProcData pd = new ProcData();
-		pd.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
+		pd.ReadData("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
 		pd.InitData();
 		//pd.TestInfo();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
-		pd.CalcPQ();
+//		pd.CalcPQ();
+		pd.calcPQ();
 		//pd.PrintInfo();
 		PowerFlow pf = new PowerFlow();
-		pf.Run();
+		pf.run();
 	}
 }

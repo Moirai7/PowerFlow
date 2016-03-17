@@ -171,11 +171,11 @@ public class ProcData {
 		double[][] bus = _mpc.getBus();
 		
 		//Ö§Â·
-		//±äÑ¹Æ÷Êý¾Ý
-		//¿´·Ç±ê×¼±ä±ÈÊÇ·ñ·Ç0
+		//ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		//ï¿½ï¿½ï¿½Ç±ï¿½×¼ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½0
 		int _nb = 0, _nt = 0;
 		for (int i = 0; i < info.getNb() + info.getNt(); ++i) {
-			//µçÈÝÈÝÄÉ or ¶ÔµØµ¼ÄÉ
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ or ï¿½ÔµØµï¿½ï¿½ï¿½
 			if (brch[i][8] == 0) {
 				branch[_nb] = new Branch();
 				branch[_nb].setFrom((int) brch[i][0]);
@@ -193,7 +193,7 @@ public class ProcData {
 			}
 		}
 		
-		//·¢µç»ú
+		//ï¿½ï¿½ï¿½ï¿½ï¿½
 		for (int i = 0; i < info.getNg(); ++i) {
 			generator[i] = new Gene();
 			generator[i].setI((int) gen[i][0]);
@@ -211,7 +211,7 @@ public class ProcData {
 			genIdx.add((int) gen[i][0]);
 		}
 
-		//¸ººÉ
+		//ï¿½ï¿½ï¿½ï¿½
 		int j = 0;
 		for (int i = 0; i < info.getN(); ++i) {
 			if (genIdx.contains((int) bus[i][0])) continue;
@@ -219,7 +219,7 @@ public class ProcData {
 			//System.out.println(load.length + " " + j + " " + bus[i][0]);
 			load[j] = new Load();
 			load[j].setI((int) bus[i][0]);
-			//È¡¸ºÖµ
+			//È¡ï¿½ï¿½Öµ
 			load[j].setP(bus[i][2]);
 			load[j].setQ(bus[i][3]);
 			j++;
@@ -276,7 +276,7 @@ public class ProcData {
 //				System.out.print("\n");
 //			}
 		}
-		//±äÑ¹Æ÷Êý¾Ý
+		//ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		for (int k=0; k<info.getNt(); ++k) {
 			i = tran[k].getFrom();
 			j = tran[k].getTo();
@@ -332,11 +332,29 @@ public class ProcData {
 				oriTheta[i] = 0.0; 
 		}
 		for (int i=0; i<info.getN(); ++i) 
-			if (bus[i][1] == Variable.PV) 
+			if (bus[i][1] == Variable.PV || bus[i][1] == Variable.REF) 
 				oriU[(int) bus[i][0]] = bus[i][7];
 		
 		Variable.setOriTheta(oriTheta);
 		Variable.setOriU(oriU);
+	}
+	
+	public void calcPQ() {
+		Info info = Variable.getPf_info();
+		double[][] bus = _mpc.getBus();
+		
+		double Pi[] = new double[info.getN()];
+		double Qi[] = new double[info.getN()];
+		for (int i = 0; i < info.getN(); ++i) {
+			Pi[i] = bus[i][2];
+			if (bus[i][1] == Variable.PQ) {
+				Qi[i] = bus[i][3];
+			} else {
+				Qi[i] = 0;
+			}
+		}
+		Variable.setP(Pi);
+		Variable.setQ(Qi);
 	}
 	
 	public void CalcPQ() {
