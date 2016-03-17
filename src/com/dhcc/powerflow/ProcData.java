@@ -52,6 +52,9 @@ public class ProcData {
 				}
 				V0 += Math.abs(bus[i][7]);
 				bus[i][0] = bus[i][0] - 1;
+				bus[i][3] = bus[i][3] / 100;
+				bus[i][2] = bus[i][2] / 100;
+				bus[i][8] = bus[i][8] * Math.PI / 180;
 				if(bus[i][1] == Variable.PV) ++Npv;
 			}
 			V0 = V0 / nbus;
@@ -78,8 +81,6 @@ public class ProcData {
 				}
 				branch[i][0] = branch[i][0] - 1;
 				branch[i][1] = branch[i][1] - 1;
-				branch[i][3] = branch[i][3] / 100;
-				branch[i][2] = branch[i][2] / 100;
 				if (branch[i][8]!=0) 
 					++Nt;
 			}
@@ -139,7 +140,7 @@ public class ProcData {
 			_mpc.setBranch(branchc);
 			_mpc.setGen(gen);
 			Nb = nbranch - Nt;
-			Info pf_info = new Info(N, Nb,Nt, Ng, Nl, V0, Npv, 0.1);
+			Info pf_info = new Info(N, Nb,Nt, Ng, Nl, V0, Npv, 0.00000001);
 			Variable.setPf_info(pf_info);
 			
 			
@@ -251,6 +252,7 @@ public class ProcData {
 				continue;
 			}
 			b = branch[k].getY0();
+			
 			G[i][j] = G[i][j] - r;
 			B[i][j] = B[i][j] - x;
 			G[j][i] = G[i][j];
@@ -260,6 +262,19 @@ public class ProcData {
 			B[i][i] = B[i][i] + x + b/2;
 			G[j][j] = G[j][j] + r;
 			B[j][j] = B[j][j] + x + b/2;
+			
+//			System.out.println("G " + G.length + " " + G[0].length);
+//			for (int i1=0; i1<info.getN(); ++i1) {
+//				for (int j1=0; j1<G[i1].length; ++j1)
+//					System.out.print(G[i1][j1] + " ");
+//				System.out.print("\n");
+//			}
+//			System.out.println("B " + B.length + " " + B[0].length);
+//			for (int i1=0; i1<info.getN(); ++i1) {
+//				for (int j1=0; j1<B[i1].length; ++j1)
+//					System.out.print(B[i1][j1] + " ");
+//				System.out.print("\n");
+//			}
 		}
 		//±äÑ¹Æ÷Êý¾Ý
 		for (int k=0; k<info.getNt(); ++k) {
@@ -445,8 +460,8 @@ public class ProcData {
 		pd.InitData();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
-		pd.PrintInfo();		
 		pd.InitOri();
 		pd.CalcPQ();
+		pd.PrintInfo();		
 	}
 }

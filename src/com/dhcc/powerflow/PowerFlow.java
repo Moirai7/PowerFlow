@@ -149,6 +149,7 @@ public class PowerFlow {
 				}
 			}
 		}
+		PrintInfo();
 		System.out.println("The End! " + k);
 	}
 	
