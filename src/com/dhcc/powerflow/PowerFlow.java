@@ -8,50 +8,6 @@ public class PowerFlow {
 	private int k = 0;
 	private int kp = 1, kq = 1;
 	
-	public void CalcPQ() {
-		Info info = Variable.getPf_info();
-		double B[][] = Variable.getB();
-		double G[][] = Variable.getG();
-		double Um[] = Variable.getOriU();
-		double Ua[] = Variable.getOriTheta();
-		double Pi[] = new double[info.getN()];
-		double Qi[] = new double[info.getN()];
-		for (int i=0; i<info.getN(); ++i) {
-			double vi = Um[i], di = Ua[i], dp = 0.0, dq = 0.0;
-			for (int j=0; j<info.getN(); ++j) {
-				if (i==j) continue;
-				double g = G[i][j], b = B[i][j], dj = Ua[j];
-				double dij = di-dj;
-				double p = Um[j]*(g*Math.cos(dij)+b*Math.sin(dij));
-				double q = Um[j]*(g*Math.sin(dij)-b*Math.cos(dij));
-				dp += p;
-				dq += q;
-			}
-			double g = G[i][i], b = B[i][i];
-			Pi[i] = vi*(dp+vi*g);
-			Qi[i] = vi*(dq-vi*b);
-		}
-		Variable.setP(Pi);
-		Variable.setQ(Qi);
-		
-		System.out.println("Um " + Um.length );
-		for (int i=0; i<Um.length; ++i) 
-			System.out.print(Um[i] + " ");
-		System.out.println();
-		System.out.println("Ua " + Ua.length );
-		for (int i=0; i<Ua.length; ++i) 
-			System.out.print(Ua[i] + " ");
-		System.out.println();
-		System.out.println("Pi " + Pi.length );
-		for (int i=0; i<Pi.length; ++i) 
-			System.out.print(Pi[i] + " ");
-		System.out.println();
-		System.out.println("Qi " + Qi.length );
-		for (int i=0; i<Qi.length; ++i) 
-			System.out.print(Qi[i] + " ");
-		System.out.println("\n");
-	}
-	
 	public boolean CalcDp() {
 		Info info = Variable.getPf_info();
 		double B[][] = Variable.getB();
@@ -73,7 +29,6 @@ public class PowerFlow {
 			if (Math.abs(dp[i]) > max)
 				max = Math.abs(dp[i]);
 		}
-		
 		if (max < info.getEps())
 			return true;
 		Variable.setPtemp(dp);
@@ -84,17 +39,16 @@ public class PowerFlow {
 		double pi[] = Variable.getPtemp();
 		double Um[] = Variable.getOriU();
 		double Ua[] = Variable.getOriTheta();
-		double Bp[][] = Variable.getBp();
 		double dtheta[] = new double[pi.length];
-		double invBp[][] = MatrixUtil.Inverse(Bp);
+		double invBp[][] = Variable.getInvBp();
 		
 		for (int i=0; i<pi.length; ++i) 
 			pi[i] = -pi[i]/Um[i];
 		
-		System.out.println("pi " + pi.length );
-		for (int i=0; i<pi.length; ++i) 
-			System.out.print(pi[i] + " ");
-		System.out.println();
+		//System.out.println("pi " + pi.length );
+		//for (int i=0; i<pi.length; ++i) 
+		//	System.out.print(pi[i] + " ");
+		//System.out.println();
 		
 		pi = MatrixUtil.Multi(pi, invBp);
 		for (int i=0; i<pi.length; ++i){
@@ -134,27 +88,24 @@ public class PowerFlow {
 	public void CalcV() {
 		double qi[] = Variable.getQtemp();
 		double Um[] = Variable.getOriU();
-		double Bpp[][] = Variable.getBpp();
-		double dtheta[] = new double[qi.length];
-		double invBpp[][] = MatrixUtil.Inverse(Bpp);
+		double invBpp[][] = Variable.getInvBpp();
 		
 		for (int i=0; i<qi.length; ++i) 
 			qi[i] = -qi[i]/Um[i];
 		
-		System.out.println("qi " + qi.length );
-		for (int i=0; i<qi.length; ++i) 
-			System.out.print(qi[i] + " ");
-		System.out.println();
+		//System.out.println("qi " + qi.length );
+		//for (int i=0; i<qi.length; ++i) 
+		//	System.out.print(qi[i] + " ");
+		//System.out.println();
 		
 		qi = MatrixUtil.Multi(qi, invBpp);
 		for (int i=0; i<qi.length; ++i)
-			Um[i] += dtheta[i];
+			Um[i] += qi[i];
 	}
 	
 	public void Run() {
-		CalcPQ();
 		while (true) {
-			if (k>5) break;
+			//if (k>5) break;
 			if (!CalcDp()) {
 				CalcTheta();
 				kq = 1;
@@ -198,7 +149,7 @@ public class PowerFlow {
 				}
 			}
 		}
-		System.out.println("The End!");
+		System.out.println("The End! " + k);
 	}
 	
 	public void PrintInfo(){
@@ -232,6 +183,7 @@ public class PowerFlow {
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
+		pd.CalcPQ();
 		//pd.PrintInfo();
 		PowerFlow pf = new PowerFlow();
 		pf.Run();

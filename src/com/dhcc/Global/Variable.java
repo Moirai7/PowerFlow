@@ -26,7 +26,21 @@ public class Variable {
 	private static double[] Q;
 	private static double[] Ptemp;
 	private static double[] Qtemp;
+	private static double[][] invBp;
+	private static double[][] invBpp;
 	
+	public static double[][] getInvBp() {
+		return invBp;
+	}
+	public static void setInvBp(double[][] invBp) {
+		Variable.invBp = invBp;
+	}
+	public static double[][] getInvBpp() {
+		return invBpp;
+	}
+	public static void setInvBpp(double[][] invBpp) {
+		Variable.invBpp = invBpp;
+	}
 	public static Tran[] getTrans() {
 		return trans;
 	}

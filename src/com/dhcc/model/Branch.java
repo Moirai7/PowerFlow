@@ -1,7 +1,6 @@
 package com.dhcc.model;
 
 public class Branch {
-	
 	//输电线路端点
 	private int from;
 	//输电线路端点

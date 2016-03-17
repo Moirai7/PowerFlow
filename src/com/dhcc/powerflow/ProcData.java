@@ -15,6 +15,7 @@ import com.dhcc.model.Info;
 import com.dhcc.model.Load;
 import com.dhcc.model.MPC;
 import com.dhcc.model.Tran;
+import com.dhcc.util.MatrixUtil;
 
 public class ProcData {
 	
@@ -82,7 +83,7 @@ public class ProcData {
 				if (branch[i][8]!=0) 
 					++Nt;
 			}
-			Nb = nbranch - Nt;
+			
 			//System.out.print(Nt);
 			
 			//index
@@ -137,8 +138,8 @@ public class ProcData {
 			_mpc.setBus(busc);
 			_mpc.setBranch(branchc);
 			_mpc.setGen(gen);
-			
-			Info pf_info = new Info(N, Nb,Nt, Ng, Nl, V0, Npv, 0.00001);
+			Nb = nbranch - Nt;
+			Info pf_info = new Info(N, Nb,Nt, Ng, Nl, V0, Npv, 0.1);
 			Variable.setPf_info(pf_info);
 			
 			
@@ -231,12 +232,12 @@ public class ProcData {
 	public void AdmtMatrix() {
 		Info info = Variable.getPf_info();
 		Branch branch[] = Variable.getBranch();
+		Tran tran[] = Variable.getTrans();
 		double G[][] = new double[info.getN()][info.getN()];
 		double B[][] = new double[info.getN()][info.getN()];
-		
+		double r,x,b,kt;
+		int i,j;
 		for (int k=0; k<info.getNb(); ++k) {
-			double r,x,b;
-			int i,j;
 			i = branch[k].getFrom();
 			j = branch[k].getTo();
 			r = branch[k].getR();
@@ -254,13 +255,32 @@ public class ProcData {
 			B[i][j] = B[i][j] - x;
 			G[j][i] = G[i][j];
 			B[j][i] = B[i][j];
+			
 			G[i][i] = G[i][i] + r;
-			B[i][i] = B[i][i] + x + b;
+			B[i][i] = B[i][i] + x + b/2;
 			G[j][j] = G[j][j] + r;
-			B[j][j] = B[j][j] + x + b;
+			B[j][j] = B[j][j] + x + b/2;
 		}
 		//±äÑ¹Æ÷Êý¾Ý
-		//TODO
+		for (int k=0; k<info.getNt(); ++k) {
+			i = tran[k].getFrom();
+			j = tran[k].getTo();
+			r = tran[k].getR();
+			x = tran[k].getX();
+			b = r*r + x*x;
+			r = r/b;
+			x = -x/b;
+			kt = tran[k].getK();
+			G[i][i] = G[i][i] + r;
+			B[i][i] = B[i][i] + x;
+			G[i][j] = G[i][j] - r/kt;
+			B[i][j] = B[i][j] - x/kt;
+			G[j][i] = G[j][i];
+			B[j][i] = B[j][i];
+			r = r/kt/kt;x = x/kt/kt;
+			G[j][j] += r;
+			B[j][j] += x;
+		}
 		Variable.setB(B);
 		Variable.setG(G);
 	}
@@ -278,7 +298,10 @@ public class ProcData {
 		for (int i=0; i<info.getNpq(); ++i) 
 			for (int j=0; j<info.getNpq(); ++j)
 				Bpp[i][j] = Bc[i][j];
-
+		double invBp[][] = MatrixUtil.Inverse(Bp);
+		double invBpp[][] = MatrixUtil.Inverse(Bpp);
+		Variable.setInvBp(invBp);
+		Variable.setInvBpp(invBpp);
 		Variable.setBp(Bp);
 		Variable.setBpp(Bpp);
 	}
@@ -300,9 +323,54 @@ public class ProcData {
 		Variable.setOriU(oriU);
 	}
 	
+	public void CalcPQ() {
+		Info info = Variable.getPf_info();
+		double B[][] = Variable.getB();
+		double G[][] = Variable.getG();
+		double Um[] = Variable.getOriU();
+		double Ua[] = Variable.getOriTheta();
+		double Pi[] = new double[info.getN()];
+		double Qi[] = new double[info.getN()];
+		for (int i=0; i<info.getN(); ++i) {
+			double vi = Um[i], di = Ua[i], dp = 0.0, dq = 0.0;
+			for (int j=0; j<info.getN(); ++j) {
+				if (i==j) continue;
+				double g = G[i][j], b = B[i][j], dj = Ua[j];
+				double dij = di-dj;
+				double p = Um[j]*(g*Math.cos(dij)+b*Math.sin(dij));
+				double q = Um[j]*(g*Math.sin(dij)-b*Math.cos(dij));
+				dp += p;
+				dq += q;
+			}
+			double g = G[i][i], b = B[i][i];
+			Pi[i] = vi*(dp+vi*g);
+			Qi[i] = vi*(dq-vi*b);
+		}
+		Variable.setP(Pi);
+		Variable.setQ(Qi);
+		
+		System.out.println("Um " + Um.length );
+		for (int i=0; i<Um.length; ++i) 
+			System.out.print(Um[i] + " ");
+		System.out.println();
+		System.out.println("Ua " + Ua.length );
+		for (int i=0; i<Ua.length; ++i) 
+			System.out.print(Ua[i] + " ");
+		System.out.println();
+		System.out.println("Pi " + Pi.length );
+		for (int i=0; i<Pi.length; ++i) 
+			System.out.print(Pi[i] + " ");
+		System.out.println();
+		System.out.println("Qi " + Qi.length );
+		for (int i=0; i<Qi.length; ++i) 
+			System.out.print(Qi[i] + " ");
+		System.out.println("\n");
+	}
+	
 	public void PrintInfo(){
 		Info info = Variable.getPf_info();
 		double bus[][] = _mpc.getBus();
+		double bra[][] = _mpc.getBranch();
 		Branch[] branch = Variable.getBranch();
 		Tran[] tran = Variable.getTrans();
 		Gene[] gen = Variable.getGenerator();
@@ -316,6 +384,12 @@ public class ProcData {
 		for (int i=0; i<info.getN(); ++i) {
 			for (int j=0; j<bus[i].length; ++j)
 				System.out.print(bus[i][j] + " ");
+			System.out.print("\n");
+		}
+		System.out.println("Bra " + bra.length + " " + bra[0].length);
+		for (int i=0; i<bra.length; ++i) {
+			for (int j=0; j<bra[i].length; ++j)
+				System.out.print(bra[i][j] + " ");
 			System.out.print("\n");
 		}
 		System.out.println("Branch " + branch.length);
@@ -371,6 +445,8 @@ public class ProcData {
 		pd.InitData();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
-		pd.PrintInfo();
+		pd.PrintInfo();		
+		pd.InitOri();
+		pd.CalcPQ();
 	}
 }
