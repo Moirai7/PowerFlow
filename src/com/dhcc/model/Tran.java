@@ -6,6 +6,14 @@ public class Tran {
 	private double R;
 	private double X;
 	private double K;
+	public Tran() {}
+	public Tran(int f,int t,double r,double x,double k) {
+		from = f;
+		to = t;
+		R = r;
+		X = x;
+		K = k;
+	}
 	public int getFrom() {
 		return from;
 	}

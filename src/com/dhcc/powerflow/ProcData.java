@@ -323,16 +323,17 @@ public class ProcData {
 	
 	public void InitOri(){
 		Info info = Variable.getPf_info();
-		Gene gene[] = Variable.getGenerator();
+		//Gene gene[] = Variable.getGenerator();
+		double bus[][] = _mpc.getBus();
 		double oriU[] = new double[info.getN()];
 		double oriTheta[] = new double[info.getN()];
 		for (int i=0; i<info.getN(); ++i){
 				oriU[i] = 1.0; 
 				oriTheta[i] = 0.0; 
 		}
-		for (int i=0; i<info.getNg(); ++i) 
-			if (gene[i].getJ() <= 0) 
-				oriU[gene[i].getI()] = gene[i].getV();
+		for (int i=0; i<info.getN(); ++i) 
+			if (bus[i][1] == Variable.PV) 
+				oriU[(int) bus[i][0]] = bus[i][7];
 		
 		Variable.setOriTheta(oriTheta);
 		Variable.setOriU(oriU);
@@ -364,49 +365,73 @@ public class ProcData {
 		Variable.setP(Pi);
 		Variable.setQ(Qi);
 		
-		System.out.println("Um " + Um.length );
-		for (int i=0; i<Um.length; ++i) 
-			System.out.print(Um[i] + " ");
-		System.out.println();
-		System.out.println("Ua " + Ua.length );
-		for (int i=0; i<Ua.length; ++i) 
-			System.out.print(Ua[i] + " ");
-		System.out.println();
-		System.out.println("Pi " + Pi.length );
-		for (int i=0; i<Pi.length; ++i) 
-			System.out.print(Pi[i] + " ");
-		System.out.println();
-		System.out.println("Qi " + Qi.length );
-		for (int i=0; i<Qi.length; ++i) 
-			System.out.print(Qi[i] + " ");
-		System.out.println("\n");
+//		System.out.println("Um " + Um.length );
+//		for (int i=0; i<Um.length; ++i) 
+//			System.out.print(Um[i] + " ");
+//		System.out.println();
+//		System.out.println("Ua " + Ua.length );
+//		for (int i=0; i<Ua.length; ++i) 
+//			System.out.print(Ua[i] + " ");
+//		System.out.println();
+//		System.out.println("Pi " + Pi.length );
+//		for (int i=0; i<Pi.length; ++i) 
+//			System.out.print(Pi[i] + " ");
+//		System.out.println();
+//		System.out.println("Qi " + Qi.length );
+//		for (int i=0; i<Qi.length; ++i) 
+//			System.out.print(Qi[i] + " ");
+//		System.out.println("\n");
 	}
 	
-	public void PrintInfo(){
+	public void TestInfo() {
+		Info info = new Info(4, 4,1, 2, 2, 0, 1, 0.00000001);
+		Variable.setPf_info(info);
+		Branch[] branch = new Branch[info.getNb()];
+		Tran[] tran = new Tran[info.getNt()];
+		Gene[] generator = new Gene[info.getNg()];
+		Load[] load = new Load[info.getNl()];
+		
+		branch[0] = new Branch(0, 3, 0.173554, 0.330579, 0.017243);
+		branch[1] = new Branch(1,2,0.0,-20.0,0.0);
+		branch[2] = new Branch(2,0,.130165,0.247934,0.012932);
+		branch[3] = new Branch(3, 2, 0.260331, 0.495868, 0.025864);
+
+		tran[0] = new Tran(0,1,0.0,0.166667,1.128205);
+		
+		generator[0] = new Gene(3,0,0,0,1.05);
+		generator[1] = new Gene(2,-1,0.2,0,1.05);
+		
+		load[0] = new Load(1,0.5,0.3);
+		load[1] = new Load(3,0.15,0.1);
+		
+		Variable.setTrans(tran);
+		Variable.setBranch(branch);
+		Variable.setGenerator(generator);
+		Variable.setLoad(load);
+	}
+	
+	public void PrintInfo_b() {
 		Info info = Variable.getPf_info();
-		double bus[][] = _mpc.getBus();
-		double bra[][] = _mpc.getBranch();
+//		double bus[][] = _mpc.getBus();
+//		double bra[][] = _mpc.getBranch();
 		Branch[] branch = Variable.getBranch();
 		Tran[] tran = Variable.getTrans();
 		Gene[] gen = Variable.getGenerator();
-		Load[] load = Variable.getLoad();
-		double B[][] = Variable.getB();
-		double Bp[][] = Variable.getBp();
-		double Bpp[][] = Variable.getBpp();
-		double G[][] = Variable.getG();
+		Load[] load = Variable.getLoad();	
 		
-		System.out.println("Bus " + bus.length + " " + bus[0].length);
-		for (int i=0; i<info.getN(); ++i) {
-			for (int j=0; j<bus[i].length; ++j)
-				System.out.print(bus[i][j] + " ");
-			System.out.print("\n");
-		}
-		System.out.println("Bra " + bra.length + " " + bra[0].length);
-		for (int i=0; i<bra.length; ++i) {
-			for (int j=0; j<bra[i].length; ++j)
-				System.out.print(bra[i][j] + " ");
-			System.out.print("\n");
-		}
+//		System.out.println("Bus " + bus.length + " " + bus[0].length);
+//		for (int i=0; i<info.getN(); ++i) {
+//			for (int j=0; j<bus[i].length; ++j)
+//				System.out.print(bus[i][j] + " ");
+//			System.out.print("\n");
+//		}
+//		System.out.println("Bra " + bra.length + " " + bra[0].length);
+//		for (int i=0; i<bra.length; ++i) {
+//			for (int j=0; j<bra[i].length; ++j)
+//				System.out.print(bra[i][j] + " ");
+//			System.out.print("\n");
+//		}
+		
 		System.out.println("Branch " + branch.length);
 		for (int i=0; i<info.getNb(); ++i) {
 			System.out.println(branch[i].getFrom() + " " + branch[i].getTo() + " "
@@ -428,6 +453,14 @@ public class ProcData {
 			System.out.println(load[i].getI() + " " + load[i].getP() 
 					+ " " + load[i].getQ());
 		}
+	}
+	public void PrintInfo(){
+		Info info = Variable.getPf_info();
+		double B[][] = Variable.getB();
+		double Bp[][] = Variable.getBp();
+		double Bpp[][] = Variable.getBpp();
+		double G[][] = Variable.getG();
+		
 		System.out.println("G " + G.length + " " + G[0].length);
 		for (int i=0; i<info.getN(); ++i) {
 			for (int j=0; j<G[i].length; ++j)
@@ -458,6 +491,8 @@ public class ProcData {
 		ProcData pd = new ProcData();
 		pd.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
 		pd.InitData();
+		//pd.TestInfo();
+		pd.PrintInfo_b();	
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();

@@ -4,6 +4,13 @@ public class Load {
 	private int i;
 	private double p;
 	private double q;
+
+	public Load(){}
+	public Load(int i,double p,double q) {
+		this.i=i;
+		this.p=p;
+		this.q=q;
+	}
 	
 	public int getI() {
 		return i;

@@ -112,8 +112,8 @@ public class PowerFlow {
 				if (!CalcDq()) {
 					CalcV();
 					kp = 1;
-					//System.out.print(136);
-					//PrintInfo();
+//					System.out.print(136);
+//					PrintInfo();
 					++k;
 				}else {
 					kq = 0;
@@ -167,6 +167,7 @@ public class PowerFlow {
 		for (int i=0; i<Ua.length; ++i) 
 			System.out.print(Ua[i] + " ");
 		System.out.println();
+		
 		System.out.println("Ptemp " + Ptemp.length );
 		for (int i=0; i<Ptemp.length; ++i) 
 			System.out.print(Ptemp[i] + " ");
@@ -181,6 +182,7 @@ public class PowerFlow {
 		ProcData pd = new ProcData();
 		pd.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
 		pd.InitData();
+		//pd.TestInfo();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();

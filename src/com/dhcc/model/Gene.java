@@ -6,7 +6,12 @@ public class Gene {
 	private double p;//有功功率
 	private double q;//无功功率
 	private double v;
+	public Gene() {}
 	
+	public Gene(int i,int j,double p,double q,double v) {
+		this.i=i;
+		this.j=j;this.p=p;this.q=q;this.v=v;
+	}
 	public int getI() {
 		return i;
 	}
