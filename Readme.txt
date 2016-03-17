@@ -1,21 +1,21 @@
-³±Á÷¼ÆËã
+æ½®æµè®¡ç®—
 --------
 com.dhcc.Global
 	Variable
-		PQ PV REF	½ÚµãÀàÐÍ
-		pf_info	InfoÀà°üº¬½ÚµãÐÅÏ¢
-		branch	Ö§Â·ÐÅÏ¢
-		gene	·¢µç»ú½áµã
-		load	³ý·¢µç»úÒÔÎªµÄÆäËû½áµã
-		trans	±äÑ¹Æ÷½áµã
-		G	µ¼ÄÉ¾ØÕóÊµ²¿
-		B	µ¼ÄÉ¾ØÕóÐé²¿
+		PQ PV REF	èŠ‚ç‚¹ç±»åž‹
+		pf_info	Infoç±»åŒ…å«èŠ‚ç‚¹ä¿¡æ¯
+		branch	æ”¯è·¯ä¿¡æ¯
+		gene	å‘ç”µæœºç»“ç‚¹
+		load	é™¤å‘ç”µæœºä»¥ä¸ºçš„å…¶ä»–ç»“ç‚¹
+		trans	å˜åŽ‹å™¨ç»“ç‚¹
+		G	å¯¼çº³çŸ©é˜µå®žéƒ¨
+		B	å¯¼çº³çŸ©é˜µè™šéƒ¨
 		Bp	
 		Bpp
-		oriU	µçÑ¹µÄ³õÊ¼»¯
-		oriTheta	ÏàÎ»½ÇµÄ³õÊ¼»¯
-		P	×¢ÈëÓÐ¹¦¹¦ÂÊ
-		Q	×¢ÈëÎÞ¹¦¹¦ÂÊ
+		oriU	ç”µåŽ‹çš„åˆå§‹åŒ–
+		oriTheta	ç›¸ä½è§’çš„åˆå§‹åŒ–
+		P	æ³¨å…¥æœ‰åŠŸåŠŸçŽ‡
+		Q	æ³¨å…¥æ— åŠŸåŠŸçŽ‡
 		invBp	
 		invBpp
 
@@ -23,51 +23,51 @@ com.dhcc.Branch
 	Branch
 		from
 		to
-		R	µç×è
-		X	µç¿¹
-		Y0	µçÄÉ
+		R	ç”µé˜»
+		X	ç”µæŠ—
+		Y0	ç”µçº³
 	Gene
-		i	½Úµãid
-		j	½áµãÀàÐÍ
-		p	ÓÐ¹¦¹¦ÂÊ
-		q	ÎÞ¹¦¹¦ÂÊ
-		v	µçÑ¹
-	Load (Tip:³ý·¢µç»úÒÔÎªµÄÆäËû½áµã)
-		i	½Úµãid
-		j	½áµãÀàÐÍ
-		p	ÓÐ¹¦¹¦ÂÊ
-		q	ÎÞ¹¦¹¦ÂÊ
-		v	µçÑ¹
+		i	èŠ‚ç‚¹id
+		j	ç»“ç‚¹ç±»åž‹
+		p	æœ‰åŠŸåŠŸçŽ‡
+		q	æ— åŠŸåŠŸçŽ‡
+		v	ç”µåŽ‹
+	Load (Tip:é™¤å‘ç”µæœºä»¥ä¸ºçš„å…¶ä»–ç»“ç‚¹)
+		i	èŠ‚ç‚¹id
+		j	ç»“ç‚¹ç±»åž‹
+		p	æœ‰åŠŸåŠŸçŽ‡
+		q	æ— åŠŸåŠŸçŽ‡
+		v	ç”µåŽ‹
 	Info 
-		N 	½Úµã×ÜÊý
-		Nt	±äÑ¹Æ÷×ÜÊý
-		Nb	³ý±äÑ¹Æ÷½áµãµÄÖ§Â·×ÜÊý
-		Ng	·¢µç»ú½Úµã×ÜÊý
-		Nl	¸ººÉ½áµã×ÜÊý
-		V0	Æ½¾ùµçÑ¹
-		eps	¾«¶È
-		Npv	pv½ÚµãÊý
-		Npq pq½ÚµãÊý
+		N 	èŠ‚ç‚¹æ€»æ•°
+		Nt	å˜åŽ‹å™¨æ€»æ•°
+		Nb	é™¤å˜åŽ‹å™¨ç»“ç‚¹çš„æ”¯è·¯æ€»æ•°
+		Ng	å‘ç”µæœºèŠ‚ç‚¹æ€»æ•°
+		Nl	è´Ÿè·ç»“ç‚¹æ€»æ•°
+		V0	å¹³å‡ç”µåŽ‹
+		eps	ç²¾åº¦
+		Npv	pvèŠ‚ç‚¹æ•°
+		Npq pqèŠ‚ç‚¹æ•°
 	Tran
 		from
 		to
-		R	µç×è
-		X	µç¿¹
-		K	±ä±È
+		R	ç”µé˜»
+		X	ç”µæŠ—
+		K	å˜æ¯”
 com.dhcc.powerflow
 	PowerFlow
-		CalcDp	¼ÆËãdP£¬±£´ædpµ½Variable£¬·µ»Ødp×î´óÖµÊÇ·ñÐ¡ÓÚ¾«¶È
-		CalcTheta	¸üÐÂtheta
-		CalcDq	¼ÆËãdQ£¬±£´ædQµ½Variable£¬·µ»Ødq×î´óÖµÊÇ·ñÐ¡ÓÚ¾«¶È
-		Calcv	¸üÐÂµçÑ¹
-		run	²âÊÔ
-		Run	powerflowÁ÷³Ì
+		CalcDp	è®¡ç®—dPï¼Œä¿å­˜dpåˆ°Variableï¼Œè¿”å›ždpæœ€å¤§å€¼æ˜¯å¦å°äºŽç²¾åº¦
+		CalcTheta	æ›´æ–°theta
+		CalcDq	è®¡ç®—dQï¼Œä¿å­˜dQåˆ°Variableï¼Œè¿”å›ždqæœ€å¤§å€¼æ˜¯å¦å°äºŽç²¾åº¦
+		Calcv	æ›´æ–°ç”µåŽ‹
+		run	æµ‹è¯•
+		Run	powerflowæµç¨‹
 		PrintInfo
 	ProcData
-		AdmtMatrix	Çóµ¼ÄÉ¾ØÕó±£´æGºÍB
-		CalcFactor	ÇóBpºÍBppÒÔ¼°invBp invBpp
-		InitOri	µçÑ¹ºÍÏàÎ»½ÇµÄ³õÊ¼»¯
-		calcPQ	¼ÆËã×¢ÈëÓÐ¹¦/ÎÞ¹¦¹¦ÂÊ
-		CalcPQ	£¨ÒÑ·ÏÆú£©¼ÆËã×¢ÈëÓÐ¹¦/ÎÞ¹¦¹¦ÂÊ¡ª¡ªÊ¹ÓÃÆäËû·½·¨
-		PrintInfo_b	´òÓ¡ÊäÈëµÄÊý¾Ýbranch/tran/gene/load
-		PrintInfo	´òÓ¡G/B/Bp/Bpp
+		AdmtMatrix	æ±‚å¯¼çº³çŸ©é˜µä¿å­˜Gå’ŒB
+		CalcFactor	æ±‚Bpå’ŒBppä»¥åŠinvBp invBpp
+		InitOri	ç”µåŽ‹å’Œç›¸ä½è§’çš„åˆå§‹åŒ–
+		calcPQ	è®¡ç®—æ³¨å…¥æœ‰åŠŸ/æ— åŠŸåŠŸçŽ‡
+		CalcPQ	ï¼ˆå·²åºŸå¼ƒï¼‰è®¡ç®—æ³¨å…¥æœ‰åŠŸ/æ— åŠŸåŠŸçŽ‡â€”â€”ä½¿ç”¨å…¶ä»–æ–¹æ³•
+		PrintInfo_b	æ‰“å°è¾“å…¥çš„æ•°æ®branch/tran/gene/load
+		PrintInfo	æ‰“å°G/B/Bp/Bpp
