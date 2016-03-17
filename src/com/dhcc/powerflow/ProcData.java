@@ -170,12 +170,9 @@ public class ProcData {
 		double[][] gen = _mpc.getGen();
 		double[][] bus = _mpc.getBus();
 		
-		//֧·
-		//��ѹ������
-		//���Ǳ�׼����Ƿ��0
+		//支路
 		int _nb = 0, _nt = 0;
 		for (int i = 0; i < info.getNb() + info.getNt(); ++i) {
-			//�������� or �Եص���
 			if (brch[i][8] == 0) {
 				branch[_nb] = new Branch();
 				branch[_nb].setFrom((int) brch[i][0]);
@@ -193,7 +190,6 @@ public class ProcData {
 			}
 		}
 		
-		//�����
 		for (int i = 0; i < info.getNg(); ++i) {
 			generator[i] = new Gene();
 			generator[i].setI((int) gen[i][0]);
@@ -202,16 +198,15 @@ public class ProcData {
 			generator[i].setV(gen[i][5]);
 			//TODO
 			if ((int)bus[(int) gen[i][0]][1] == Variable.REF) {
-				generator[i].setJ(0);
+				generator[i].setJ(Variable.REF);
 			}else if ((int)bus[(int) gen[i][0]][1] == Variable.PV) {
-				generator[i].setJ(-1);
+				generator[i].setJ(Variable.PV);
 			}else if ((int)bus[(int) gen[i][0]][1] == Variable.PQ) {
-				generator[i].setJ(1);
+				generator[i].setJ(Variable.PQ);
 			}
 			genIdx.add((int) gen[i][0]);
 		}
 
-		//����
 		int j = 0;
 		for (int i = 0; i < info.getN(); ++i) {
 			if (genIdx.contains((int) bus[i][0])) continue;
@@ -219,7 +214,6 @@ public class ProcData {
 			//System.out.println(load.length + " " + j + " " + bus[i][0]);
 			load[j] = new Load();
 			load[j].setI((int) bus[i][0]);
-			//ȡ��ֵ
 			load[j].setP(bus[i][2]);
 			load[j].setQ(bus[i][3]);
 			j++;
@@ -276,7 +270,7 @@ public class ProcData {
 //				System.out.print("\n");
 //			}
 		}
-		//��ѹ������
+		
 		for (int k=0; k<info.getNt(); ++k) {
 			i = tran[k].getFrom();
 			j = tran[k].getTo();
@@ -323,20 +317,31 @@ public class ProcData {
 	
 	public void InitOri(){
 		Info info = Variable.getPf_info();
-		//Gene gene[] = Variable.getGenerator();
-		double bus[][] = _mpc.getBus();
+		Gene gene[] = Variable.getGenerator();
+		Load load[] = Variable.getLoad();
+		//double bus[][] = _mpc.getBus();
 		double oriU[] = new double[info.getN()];
 		double oriTheta[] = new double[info.getN()];
 		for (int i=0; i<info.getN(); ++i){
 				oriU[i] = 1.0; 
 				oriTheta[i] = 0.0; 
 		}
-		for (int i=0; i<info.getN(); ++i) 
-			if (bus[i][1] == Variable.PV || bus[i][1] == Variable.REF) 
-				oriU[(int) bus[i][0]] = bus[i][7];
+		for (int i=0; i<info.getNg(); ++i) 
+			if (gene[i].getJ() == Variable.PV || gene[i].getJ() == Variable.REF)
+				oriU[(int) gene[i].getI()] = gene[i].getV();
+		for (int i=0; i<info.getNt(); ++i) 
+			if (load[i].getJ() == Variable.PV || load[i].getJ() == Variable.REF)
+				oriU[(int) load[i].getI()] = load[i].getV();
+		//		for (int i=0; i<info.getN(); ++i) 
+		//			if (bus[i][1] == Variable.PV || bus[i][1] == Variable.REF) 
+		//				oriU[(int) bus[i][0]] = bus[i][7];
 		
 		Variable.setOriTheta(oriTheta);
 		Variable.setOriU(oriU);
+		System.out.println("Um " + oriU.length );
+		for (int i=0; i<oriU.length; ++i) 
+			System.out.print(oriU[i] + " ");
+		System.out.println();
 	}
 	
 	public void calcPQ() {
@@ -416,8 +421,8 @@ public class ProcData {
 
 		tran[0] = new Tran(0,1,0.0,0.166667,1.128205);
 		
-		generator[0] = new Gene(3,0,0,0,1.05);
-		generator[1] = new Gene(2,-1,0.2,0,1.05);
+		generator[0] = new Gene(3,Variable.REF,0,0,1.05);
+		generator[1] = new Gene(2,Variable.PV,0.2,0,1.05);
 		
 		load[0] = new Load(1,0.5,0.3);
 		load[1] = new Load(3,0.15,0.1);
@@ -507,9 +512,10 @@ public class ProcData {
 	
 	public static void main(String[] args) {
 		ProcData pd = new ProcData();
+		//pd.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
 		pd.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
 		pd.InitData();
-		//pd.TestInfo();
+		pd.TestInfo();
 		pd.PrintInfo_b();	
 		pd.AdmtMatrix();
 		pd.CalcFactor();

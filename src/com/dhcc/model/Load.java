@@ -4,14 +4,28 @@ public class Load {
 	private int i;
 	private double p;
 	private double q;
-
+	private int j;//type
+	private double v;
+	
 	public Load(){}
 	public Load(int i,double p,double q) {
 		this.i=i;
 		this.p=p;
 		this.q=q;
 	}
-	
+
+	public int getJ() {
+		return j;
+	}
+	public void setJ(int j) {
+		this.j = j;
+	}
+	public double getV() {
+		return v;
+	}
+	public void setV(double v) {
+		this.v = v;
+	}
 	public int getI() {
 		return i;
 	}
