@@ -424,8 +424,8 @@ public class ProcData {
 		generator[0] = new Gene(3,Variable.REF,0,0,1.05);
 		generator[1] = new Gene(2,Variable.PV,0.2,0,1.05);
 		
-		load[0] = new Load(1,0.5,0.3);
-		load[1] = new Load(3,0.15,0.1);
+		load[0] = new Load(1,0,0.5,0.3,0.0);
+		load[1] = new Load(3,0,0.15,0.1,0.0);
 		
 		Variable.setTrans(tran);
 		Variable.setBranch(branch);

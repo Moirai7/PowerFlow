@@ -8,10 +8,12 @@ public class Load {
 	private double v;
 	
 	public Load(){}
-	public Load(int i,double p,double q) {
+	public Load(int i, int j,double p,double q,double v) {
 		this.i=i;
+		this.j=j;
 		this.p=p;
 		this.q=q;
+		this.v=v;
 	}
 
 	public int getJ() {
