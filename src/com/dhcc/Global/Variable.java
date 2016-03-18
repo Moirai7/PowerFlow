@@ -28,7 +28,15 @@ public class Variable {
 	private static double[] Qtemp;
 	private static double[][] invBp;
 	private static double[][] invBpp;
+	private static Load[] realLoad;
 	
+	
+	public static Load[] getRealLoad() {
+		return realLoad;
+	}
+	public static void setRealLoad(Load[] realLoad) {
+		Variable.realLoad = realLoad;
+	}
 	public static double[][] getInvBp() {
 		return invBp;
 	}

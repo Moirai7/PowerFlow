@@ -24,7 +24,7 @@ public class PowerFlow {
 			for (int j=0; j<info.getN(); ++j) {
 				double g = G[i][j], b = B[i][j], dj = Ua[j];
 				double dij = di-dj;
-				sump += Um[i]*Um[j]*(g*Math.cos(dij)+b*Math.sin(dij));
+				sump += Um[i]*Um[j]*(g*Math.cos(dij * Math.PI / 180)+b*Math.sin(dij * Math.PI / 180));
 			}
 			dp[i] = Pi[i] - sump; 
 			if (Math.abs(dp[i]) > max)
@@ -59,6 +59,7 @@ public class PowerFlow {
 	}
 
 	public boolean CalcDq() {
+		
 		Info info = Variable.getPf_info();
 		double B[][] = Variable.getB();
 		double G[][] = Variable.getG();
@@ -73,18 +74,20 @@ public class PowerFlow {
 			for (int j=0; j<info.getN(); ++j) {
 				double g = G[i][j], b = B[i][j], dj = Ua[j];
 				double dij = di-dj;
-				sump += Um[i]*Um[j]*(g*Math.sin(dij)-b*Math.cos(dij));
+				sump += Um[i]*Um[j]*(g*Math.sin(dij * Math.PI / 180)-b*Math.cos(dij * Math.PI / 180));
 			}
 			dq[i] = Qi[i] - sump; 
 			if (Math.abs(dq[i]) > max)
 				max = Math.abs(dq[i]);
 		}
+		
 		Variable.setQtemp(dq);
 		if (max < info.getEps())
 			return true;
 		return false;
+		
 	}
-
+	
 	public void CalcV() {
 		double qi[] = Variable.getQtemp();
 		double Um[] = Variable.getOriU();
@@ -161,10 +164,11 @@ public class PowerFlow {
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
 		ProcData pd = new ProcData();
-		//io.ReadData("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
-		io.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-		io.InitData();
-		io.TestInfo();
+//		io.ReadData("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
+//		io.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
+//		io.InitData();
+//		io.TestInfo();
+		io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
@@ -173,6 +177,6 @@ public class PowerFlow {
 		//pd.PrintInfo();
 		PowerFlow pf = new PowerFlow();
 		pf.Run();
-		io.PrintInfo_iter(0);
+		//io.PrintInfo_iter(0);
 	}
 }

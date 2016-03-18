@@ -102,7 +102,7 @@ public class ProcData {
 		Variable.setBpp(Bpp);
 	}
 	
-	public void InitOri(){
+	public void InitOri() {
 		Info info = Variable.getPf_info();
 		Gene gene[] = Variable.getGenerator();
 		Load load[] = Variable.getLoad();
@@ -113,10 +113,10 @@ public class ProcData {
 				oriU[i] = 1.0; 
 				oriTheta[i] = 0.0; 
 		}
-		for (int i=0; i<info.getNg(); ++i) 
+		for (int i=0; i<info.getNg(); ++i)
 			if (gene[i].getJ() == Variable.PV || gene[i].getJ() == Variable.REF)
 				oriU[(int) gene[i].getI()] = gene[i].getV();
-		for (int i=0; i<info.getNt(); ++i) 
+		for (int i=0; i<info.getNt(); ++i)
 			if (load[i].getJ() == Variable.PV || load[i].getJ() == Variable.REF)
 				oriU[(int) load[i].getI()] = load[i].getV();
 		//		for (int i=0; i<info.getN(); ++i) 
@@ -130,6 +130,8 @@ public class ProcData {
 			System.out.print(oriU[i] + " ");
 		System.out.println();
 	}
+	
+	
 	
 	public void calcPQ() {
 		Info info = Variable.getPf_info();
@@ -154,6 +156,7 @@ public class ProcData {
 	}
 	
 	public void CalcPQ() {
+		
 		Info info = Variable.getPf_info();
 		double B[][] = Variable.getB();
 		double G[][] = Variable.getG();
@@ -179,31 +182,15 @@ public class ProcData {
 		Variable.setP(Pi);
 		Variable.setQ(Qi);
 		
-//		System.out.println("Um " + Um.length );
-//		for (int i=0; i<Um.length; ++i) 
-//			System.out.print(Um[i] + " ");
-//		System.out.println();
-//		System.out.println("Ua " + Ua.length );
-//		for (int i=0; i<Ua.length; ++i) 
-//			System.out.print(Ua[i] + " ");
-//		System.out.println();
-//		System.out.println("Pi " + Pi.length );
-//		for (int i=0; i<Pi.length; ++i) 
-//			System.out.print(Pi[i] + " ");
-//		System.out.println();
-//		System.out.println("Qi " + Qi.length );
-//		for (int i=0; i<Qi.length; ++i) 
-//			System.out.print(Qi[i] + " ");
-//		System.out.println("\n");
 	}
 
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
 		ProcData pd = new ProcData();
-		io.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-		//io.ReadData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/case14.txt");
-		io.InitData();
-		io.PrintInfo_b();
+//		io.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
+//		io.ReadData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/case14.txt");
+//		io.InitData();
+//		io.PrintInfo_b();
 //		pd.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 //		pd.PrintInfo_b();
 		pd.AdmtMatrix();

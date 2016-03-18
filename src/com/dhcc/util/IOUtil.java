@@ -19,7 +19,7 @@ import com.dhcc.model.Tran;
 
 public class IOUtil {
 	public void TestInfo() {
-		Info info = new Info(4, 4,1, 2, 2, 0, 1, 0.00000001);
+		Info info = new Info(4, 4,1, 2, 2, 0, 1, 3, 0.00000001);
 		Variable.setPf_info(info);
 		Branch[] branch = new Branch[info.getNb()];
 		Tran[] tran = new Tran[info.getNt()];
@@ -54,10 +54,12 @@ public class IOUtil {
 		int npv = 0;
 		int npq = 0;
 		int nb = 0;
+		int nrl = 0;
 		Branch[] branch;
 		Tran[] tran;
 		Gene[] generator;
 		Load[] load;
+		Load[] realLoad;
 		
 		try {
 			InputStreamReader instrr = new InputStreamReader(new FileInputStream(filename));
@@ -67,6 +69,7 @@ public class IOUtil {
 			row = br.readLine();n_bus = Integer.parseInt(row);
 			generator = new Gene[n_bus];
 			load = new Load[n_bus];
+			realLoad = new Load[n_bus];
 			
 			int phIdx = 0;
 			double php = 0, phq = 0, phv = 0;
@@ -93,6 +96,7 @@ public class IOUtil {
 					p = Double.parseDouble(rowdata[9]);
 					q = Double.parseDouble(rowdata[10]);
 					load[nl++] = new Load(idx,Variable.PQ,p/100.0,q/100.0,v);
+					if(type == 0) realLoad[nrl++] = new Load(idx,Variable.PQ,p/100,q/100,v);
 				} else if (type == 3) {
 					phIdx = Integer.parseInt(rowdata[0]);
 					npv++;
@@ -148,12 +152,13 @@ public class IOUtil {
 				}
 			}
 			
-			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,0.0001);
+			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,nrl,0.01);
 			Variable.setPf_info(info);
 			Variable.setTrans(Arrays.copyOf(tran, nt));
 			Variable.setBranch(Arrays.copyOf(branch, nb));
 			Variable.setGenerator(Arrays.copyOf(generator, ng));
 			Variable.setLoad(Arrays.copyOf(load, nl));
+			Variable.setRealLoad(Arrays.copyOf(realLoad, nrl));
 			
 			instrr.close();
 		} catch (UnsupportedEncodingException e) {
@@ -396,7 +401,7 @@ public class IOUtil {
 			_mpc.setBranch(branchc);
 			_mpc.setGen(gen);
 			Nb = nbranch - Nt;
-			Info pf_info = new Info(N, Nb,Nt, Ng, Nl, V0, Npv, 0.00000001);
+			Info pf_info = new Info(N, Nb,Nt, Ng, Nl, V0, Npv, Nl, 0.00000001);
 			Variable.setPf_info(pf_info);
 			
 			

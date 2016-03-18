@@ -20,10 +20,12 @@ public class Info {
 	//pq节点个数
 	private int Npq;
 	
+	private int Nrl;
+	
 //	public Info() {};
 	
 	
-	public Info(int n, int nb, int nt, int ng, int nl, double v0, int npv, double eps) {
+	public Info(int n, int nb, int nt, int ng, int nl, double v0, int npv, int nrl, double eps) {
 		this.N = n;
 		this.Nb = nb;
 		this.Nt = nt;
@@ -33,6 +35,7 @@ public class Info {
 		this.setNpv(npv);
 		this.eps = eps;
 		this.Npq = n-npv-1;
+		this.Nrl = nrl;
 	}
 	
 	public int getNt() {
