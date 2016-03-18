@@ -29,8 +29,14 @@ public class Variable {
 	private static double[][] invBp;
 	private static double[][] invBpp;
 	private static Load[] realLoad;
+	private static double[][] jacob;
 	
-	
+	public static double[][] getJacob() {
+		return jacob;
+	}
+	public static void setJacob(double[][] jacob) {
+		Variable.jacob = jacob;
+	}
 	public static Load[] getRealLoad() {
 		return realLoad;
 	}

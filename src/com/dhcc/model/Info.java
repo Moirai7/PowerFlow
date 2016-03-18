@@ -25,6 +25,14 @@ public class Info {
 //	public Info() {};
 	
 	
+	public int getNrl() {
+		return Nrl;
+	}
+
+	public void setNrl(int nrl) {
+		Nrl = nrl;
+	}
+
 	public Info(int n, int nb, int nt, int ng, int nl, double v0, int npv, int nrl, double eps) {
 		this.N = n;
 		this.Nb = nb;

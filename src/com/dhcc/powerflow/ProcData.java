@@ -154,35 +154,6 @@ public class ProcData {
 		Variable.setP(Pi);
 		Variable.setQ(Qi);
 	}
-	
-	public void CalcPQ() {
-		
-		Info info = Variable.getPf_info();
-		double B[][] = Variable.getB();
-		double G[][] = Variable.getG();
-		double Um[] = Variable.getOriU();
-		double Ua[] = Variable.getOriTheta();
-		double Pi[] = new double[info.getN()];
-		double Qi[] = new double[info.getN()];
-		for (int i=0; i<info.getN(); ++i) {
-			double vi = Um[i], di = Ua[i], dp = 0.0, dq = 0.0;
-			for (int j=0; j<info.getN(); ++j) {
-				if (i==j) continue;
-				double g = G[i][j], b = B[i][j], dj = Ua[j];
-				double dij = di-dj;
-				double p = Um[j]*(g*Math.cos(dij)+b*Math.sin(dij));
-				double q = Um[j]*(g*Math.sin(dij)-b*Math.cos(dij));
-				dp += p;
-				dq += q;
-			}
-			double g = G[i][i], b = B[i][i];
-			Pi[i] = vi*(dp+vi*g);
-			Qi[i] = vi*(dq-vi*b);
-		}
-		Variable.setP(Pi);
-		Variable.setQ(Qi);
-		
-	}
 
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
@@ -196,7 +167,7 @@ public class ProcData {
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
-		pd.CalcPQ();
+		pd.calcPQ();
 		io.PrintInfo();		
 		PowerFlow pf = new PowerFlow();
 		pf.Run();
