@@ -2,6 +2,7 @@ package com.dhcc.powerflow;
 
 import com.dhcc.Global.Variable;
 import com.dhcc.model.Info;
+import com.dhcc.util.IOUtil;
 import com.dhcc.util.MatrixUtil;
 
 public class PowerFlow {
@@ -103,13 +104,14 @@ public class PowerFlow {
 	}
 	
 	public void run() {
+		IOUtil io = new IOUtil();
 		k = 0;
 		while (k < 10) {
 			CalcDp();
 			CalcTheta();
 			CalcDq();
 			CalcV();
-			PrintInfo();
+			io.PrintInfo_iter(k);
 			k++;
 		}
 	}
@@ -123,16 +125,12 @@ public class PowerFlow {
 				if (!CalcDq()) {
 					CalcV();
 					kp = 1;
-//					System.out.print(136);
-//					PrintInfo();
 					++k;
 				}else {
 					kq = 0;
 					if(kp == 0)
 						break;
 					else {
-//						System.out.print(144);
-//						PrintInfo();
 						++k;
 					}
 				}
@@ -144,60 +142,29 @@ public class PowerFlow {
 					if (!CalcDq()) {
 						CalcV();
 						kp = 1;
-//						System.out.print(157);
-//						PrintInfo();
 						++k;
 					}else {
 						kq = 0;
 						if(kp == 0)
 							break;
 						else {
-//							System.out.print(165);
-//							PrintInfo();
 							++k;
 						}
 					}
 				}
 			}
 		}
-		PrintInfo();
 		System.out.println("The End! " + k);
 	}
-	
-	public void PrintInfo() {
-		
-		double Um[] = Variable.getOriU();
-		double Ua[] = Variable.getOriTheta();
-		double Ptemp[] = Variable.getPtemp();
-		double Qtemp[] = Variable.getQtemp();
-		
-		System.out.println(k + "'s iterator.");
-		
-		System.out.println("Um " + Um.length );
-		for (int i=0; i<Um.length; ++i) 
-			System.out.print(Um[i] + " ");
-		System.out.println();
-		System.out.println("Ua " + Ua.length );
-		for (int i=0; i<Ua.length; ++i) 
-			System.out.print(Ua[i] + " ");
-		System.out.println();
-		
-		System.out.println("Ptemp " + Ptemp.length );
-		for (int i=0; i<Ptemp.length; ++i) 
-			System.out.print(Ptemp[i] + " ");
-		System.out.println();
-		System.out.println("Qtemp " + Qtemp.length );
-		for (int i=0; i<Qtemp.length; ++i) 
-			System.out.print(Qtemp[i] + " ");
-		System.out.println();
-	}
+
 	
 	public static void main(String[] args) {
+		IOUtil io = new IOUtil();
 		ProcData pd = new ProcData();
-		pd.ReadData("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
-		//pd.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-		pd.InitData();
-		pd.TestInfo();
+		//io.ReadData("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
+		io.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
+		io.InitData();
+		io.TestInfo();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
@@ -206,6 +173,6 @@ public class PowerFlow {
 		//pd.PrintInfo();
 		PowerFlow pf = new PowerFlow();
 		pf.Run();
-		pf.PrintInfo();
+		io.PrintInfo_iter(0);
 	}
 }
