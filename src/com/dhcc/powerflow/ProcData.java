@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.dhcc.Global.Variable;
 import com.dhcc.model.Branch;
@@ -346,16 +347,20 @@ public class ProcData {
 	
 	public void calcPQ() {
 		Info info = Variable.getPf_info();
-		double[][] bus = _mpc.getBus();
-		
+		Gene gene[] = Variable.getGenerator();
+		Load load[] = Variable.getLoad();
 		double Pi[] = new double[info.getN()];
 		double Qi[] = new double[info.getN()];
-		for (int i = 0; i < info.getN(); ++i) {
-			Pi[i] = bus[i][2];
-			if (bus[i][1] == Variable.PQ) {
-				Qi[i] = bus[i][3];
-			} else {
-				Qi[i] = 0;
+		for (int i=0; i<info.getNg(); ++i) {
+			Pi[gene[i].getI()] = gene[i].getP();
+			if (gene[i].getJ() == Variable.PQ) {
+				Qi[gene[i].getI()] = gene[i].getP();
+			}
+		}
+		for (int i=0; i<info.getNt(); ++i) {
+			Pi[load[i].getI()] = load[i].getP();
+			if (load[i].getJ() == Variable.PQ) {
+				Qi[load[i].getI()] = load[i].getP();
 			}
 		}
 		Variable.setP(Pi);
@@ -431,6 +436,126 @@ public class ProcData {
 		Variable.setBranch(branch);
 		Variable.setGenerator(generator);
 		Variable.setLoad(load);
+	}
+	
+	public void readCDFData(String filename) {
+		int n_bus = 0;
+		int n_branch = 0;
+		int nt = 0;
+		int ng = 0;
+		int nl = 0;
+		int npv = 0;
+		int npq = 0;
+		int nb = 0;
+		Branch[] branch;
+		Tran[] tran;
+		Gene[] generator;
+		Load[] load;
+		
+		try {
+			InputStreamReader instrr = new InputStreamReader(new FileInputStream(filename));
+			BufferedReader br = new BufferedReader(instrr);
+			String row = null;
+			String[] rowdata = null;
+			row = br.readLine();n_bus = Integer.parseInt(row);
+			generator = new Gene[n_bus];
+			load = new Load[n_bus];
+			
+			int phIdx = 0;
+			double php = 0, phq = 0, phv = 0;
+			
+			for (int i = 0; i < n_bus; ++i) {
+				row = br.readLine();
+				rowdata = row.split(",");
+				int type = Integer.parseInt(rowdata[6]);
+				//System.out.println("type:" + type);
+				if (type == 2) {		//generator
+					int idx = Integer.parseInt(rowdata[0]);
+					npv++;
+					double p,q,v;
+					v = Double.parseDouble(rowdata[7]);
+					p = Double.parseDouble(rowdata[11]);
+					q = Double.parseDouble(rowdata[12]);
+					generator[ng++] = new Gene(idx,Variable.PV,p/100.0,q/100.0,v);
+//					System.out.println("Gene:" + idx);
+				} else if (type == 0 || type == 1) {
+					int idx = Integer.parseInt(rowdata[0]);
+					npq++;
+					double p,q,v;
+					v = Double.parseDouble(rowdata[7]);
+					p = Double.parseDouble(rowdata[9]);
+					q = Double.parseDouble(rowdata[10]);
+					load[nl++] = new Load(idx,Variable.PQ,p/100.0,q/100.0,v);
+				} else if (type == 3) {
+					phIdx = Integer.parseInt(rowdata[0]);
+					npv++;
+					phv = Double.parseDouble(rowdata[7]);
+					php = Double.parseDouble(rowdata[11]);
+					phq = Double.parseDouble(rowdata[12]);
+				}
+			}
+			
+			generator[ng++] = new Gene(phIdx,Variable.PV,php/100.0,phq/100.0,phv);
+			
+			int newIdx = 0;
+			int[] newIndex = new int[n_bus + 1];
+			for (int i = 0; i < nl; ++i) {
+				newIndex[load[i].getI()] = newIdx;
+				load[i].setI(newIdx);
+				newIdx++;
+			}
+			for (int i = 0; i < ng - 1; ++i) {
+				newIndex[generator[i].getI()] = newIdx;
+				generator[i].setI(newIdx);
+				newIdx++;
+			}
+			
+			newIndex[generator[ng-1].getI()] = newIdx;
+			generator[ng-1].setI(newIdx);
+
+//			System.out.println("newidx" + phIdx);
+//			for (int i = 1; i <= n_bus; ++i)
+//				System.out.println(i + " " + newIndex[i]);
+			
+			row = br.readLine();n_branch = Integer.parseInt(row);
+			tran = new Tran[n_branch];
+			branch = new Branch[n_branch];
+
+			for (int i = 0; i < n_branch; ++i) {
+				row = br.readLine();
+				rowdata = row.split(",");
+				double k = Double.parseDouble(rowdata[14]);
+				int from, to;
+				double r, x, b;
+				from = Integer.parseInt(rowdata[0]);
+				from = newIndex[from];
+				to = Integer.parseInt(rowdata[1]);
+				to = newIndex[to];
+				r = Double.parseDouble(rowdata[6]);
+				x = Double.parseDouble(rowdata[7]);
+				b = Double.parseDouble(rowdata[8]);
+				if (k == 0) {
+					branch[nb++] = new Branch(from,to,r,x,b);
+				} else {
+					tran[nt++] = new Tran(from,to,r,x,k);
+				}
+			}
+			
+			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,0.0001);
+			Variable.setPf_info(info);
+			Variable.setTrans(Arrays.copyOf(tran, nt));
+			Variable.setBranch(Arrays.copyOf(branch, nb));
+			Variable.setGenerator(Arrays.copyOf(generator, ng));
+			Variable.setLoad(Arrays.copyOf(load, nl));
+			
+			instrr.close();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void PrintInfo_b() {
@@ -512,15 +637,19 @@ public class ProcData {
 	
 	public static void main(String[] args) {
 		ProcData pd = new ProcData();
-		//pd.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-		pd.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
+//		pd.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
+		pd.ReadData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/case14.txt");
 		pd.InitData();
-		pd.TestInfo();
-		pd.PrintInfo_b();	
+		pd.PrintInfo_b();
+//		pd.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+//		pd.PrintInfo_b();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
 		pd.CalcPQ();
 		pd.PrintInfo();		
+		PowerFlow pf = new PowerFlow();
+		pf.Run();
+		pf.PrintInfo();
 	}
 }

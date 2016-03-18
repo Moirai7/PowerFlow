@@ -194,10 +194,10 @@ public class PowerFlow {
 	
 	public static void main(String[] args) {
 		ProcData pd = new ProcData();
-		//pd.ReadData("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
+		pd.ReadData("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
 		//pd.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-		//pd.InitData();
-		//pd.TestInfo();
+		pd.InitData();
+		pd.TestInfo();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
@@ -205,6 +205,7 @@ public class PowerFlow {
 		pd.calcPQ();
 		//pd.PrintInfo();
 		PowerFlow pf = new PowerFlow();
-		pf.run();
+		pf.Run();
+		pf.PrintInfo();
 	}
 }
