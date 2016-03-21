@@ -27,7 +27,7 @@ public class IOUtil {
 		Load[] load = new Load[info.getNl()];
 		
 		branch[0] = new Branch(0, 3, 0.173554, 0.330579, 0.017243);
-		branch[1] = new Branch(1,2,0.0,-20.0,0.0);
+		branch[1] = new Branch(1,1,0.0,-20.0,0.0);
 		branch[2] = new Branch(2,0,.130165,0.247934,0.012932);
 		branch[3] = new Branch(3, 2, 0.260331, 0.495868, 0.025864);
 
@@ -239,18 +239,18 @@ public class IOUtil {
 				System.out.print(B[i][j] + " ");
 			System.out.print("\n");
 		}
-		System.out.println("BP " + Bp.length + " " + Bp[0].length);
-		for (int i=0; i<info.getN()-1; ++i) {
-			for (int j=0; j<Bp[i].length; ++j)
-				System.out.print(Bp[i][j] + " ");
-			System.out.print("\n");
-		}
-		System.out.println("BPP " + Bpp.length + " " + Bpp[0].length);
-		for (int i=0; i<info.getNpq(); ++i) {
-			for (int j=0; j<Bpp[i].length; ++j)
-				System.out.print(Bpp[i][j] + " ");
-			System.out.print("\n");
-		}
+//		System.out.println("BP " + Bp.length + " " + Bp[0].length);
+//		for (int i=0; i<info.getN()-1; ++i) {
+//			for (int j=0; j<Bp[i].length; ++j)
+//				System.out.print(Bp[i][j] + " ");
+//			System.out.print("\n");
+//		}
+//		System.out.println("BPP " + Bpp.length + " " + Bpp[0].length);
+//		for (int i=0; i<info.getNpq(); ++i) {
+//			for (int j=0; j<Bpp[i].length; ++j)
+//				System.out.print(Bpp[i][j] + " ");
+//			System.out.print("\n");
+//		}
 	}
 	
 	public void PrintInfo_iter(int k) {

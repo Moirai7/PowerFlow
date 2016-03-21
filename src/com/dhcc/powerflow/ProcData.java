@@ -41,16 +41,12 @@ public class ProcData {
 			
 			G[i][i] = G[i][i] + r;
 			B[i][i] = B[i][i] + x + b/2;
+			//B[i][i] = B[i][i] + x + b;
 			G[j][j] = G[j][j] + r;
 			B[j][j] = B[j][j] + x + b/2;
-			
-//			System.out.println("G " + G.length + " " + G[0].length);
-//			for (int i1=0; i1<info.getN(); ++i1) {
-//				for (int j1=0; j1<G[i1].length; ++j1)
-//					System.out.print(G[i1][j1] + " ");
-//				System.out.print("\n");
-//			}
-//			System.out.println("B " + B.length + " " + B[0].length);
+			//B[j][j] = B[j][j] + x + b;
+
+//			System.out.println("Bus " + B.length + " " + B[0].length);
 //			for (int i1=0; i1<info.getN(); ++i1) {
 //				for (int j1=0; j1<B[i1].length; ++j1)
 //					System.out.print(B[i1][j1] + " ");
@@ -71,11 +67,18 @@ public class ProcData {
 			B[i][i] = B[i][i] + x;
 			G[i][j] = G[i][j] - r/kt;
 			B[i][j] = B[i][j] - x/kt;
-			G[j][i] = G[j][i];
-			B[j][i] = B[j][i];
+			G[j][i] = G[i][j];
+			B[j][i] = B[i][j];
 			r = r/kt/kt;x = x/kt/kt;
 			G[j][j] += r;
 			B[j][j] += x;
+
+//			System.out.println("Tran " + B.length + " " + B[0].length);
+//			for (int i1=0; i1<info.getN(); ++i1) {
+//				for (int j1=0; j1<B[i1].length; ++j1)
+//					System.out.print(B[i1][j1] + " ");
+//				System.out.print("\n");
+//			}
 		}
 		Variable.setB(B);
 		Variable.setG(G);

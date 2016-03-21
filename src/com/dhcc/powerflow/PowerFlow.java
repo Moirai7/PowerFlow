@@ -164,20 +164,21 @@ public class PowerFlow {
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
 		ProcData pd = new ProcData();
-//		io.ReadData("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
-//		io.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-//		io.InitData();
-//		io.TestInfo();
-		io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
-		System.out.println("RealLoad " + Variable.getRealLoad().length);
+		//io.ReadCase14("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
+		io.ReadCase14("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
+		//io.InitData();
+		//io.TestInfo();
+		//io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		//io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		//io.PrintInfo_b();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
 //		pd.CalcPQ();
 		pd.calcPQ();
-		//pd.PrintInfo();
+		//io.PrintInfo();
 		PowerFlow pf = new PowerFlow();
 		pf.Run();
-		//io.PrintInfo_iter(0);
+		io.PrintInfo_iter(0);
 	}
 }
