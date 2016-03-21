@@ -26,7 +26,8 @@ public class NewtonPowerFlow {
 			for (int j=0; j<info.getN(); ++j) {
 				if (i==j) continue;
 				double g = G[i][j], b = B[i][j], dj = Ua[j];
-				double dij = di-dj;
+				//double dij = (di-dj) * Math.PI / 180.0;
+				double dij = di - dj;
 				double hij = -Um[i]*Um[j]*(g*Math.sin(dij)-b*Math.cos(dij));
 				jacob[i][j]=hij;
 				jacob[i+n][j+n]=hij;
@@ -51,7 +52,7 @@ public class NewtonPowerFlow {
 		}
 
 		Load load[] = Variable.getLoad();
-		for (int i=0; i<info.getNrl(); ++i) {
+		for (int i=0; i<info.getNl(); ++i) {
 			int kk=load[i].getI();
 			double lp=load[i].getP();
 			double lq=load[i].getQ();
@@ -120,7 +121,9 @@ public class NewtonPowerFlow {
 			}
 		}
 	}
+	
 	int k=0;
+	
 	public void Run() {
 		Info info = Variable.getPf_info();
 		int n =  info.getN(), nu = 2*n+1, n2 = 2*n;
@@ -134,33 +137,43 @@ public class NewtonPowerFlow {
 			for (int i=0; i<2*n; ++i)
 				if (Math.abs(jacob[i][2*n])>error)
 					error = Math.abs(jacob[i][2*n]);
-			System.out.println(k +" "+ error);
+			System.out.println("\n"+k +" "+ error);
 			if (error<info.getEps()) {
 				System.out.println("The End! " + k);
 				break;
-			}else {
-				++k;
-				SolvEqn();
-				for (int i=0; i<n; ++i) {
-					//System.out.println(i +" "+ (n2+1));
-					double a = jacob[i][n2];
-					Ua[i] = Ua[i] -a;
-					a = jacob[n+i][n2];
-					Um[i] = Um[i]-(Um[i]*a);
-				}
 			}
+			++k;
+			SolvEqn();
+			for (int i=0; i<n; ++i) {
+				//System.out.println(i +" "+ (n2+1));
+				double a = jacob[i][n2];
+				Ua[i] = Ua[i] - a;
+				a = jacob[n+i][n2];
+				Um[i] = Um[i]-(Um[i]*a);
+			}
+			System.out.println("\r\n" + k + "'s iterators");
+			System.out.println("Um");
+			for (int i=0; i<n; ++i) {
+				System.out.print(Um[i] + " ");
+			}
+			System.out.println("\r\nUa");
+			for (int i=0; i<n; ++i) {
+				System.out.print(Ua[i] + " ");
+			}
+			break;
 		}
 	}
 	
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
 		ProcData pd = new ProcData();
-//		io.ReadData("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
+		//io.ReadData("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
 //		io.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-//		io.InitData();
-//		io.TestInfo();
-		//io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
-		io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		//io.InitData();
+		io.TestInfo();
+//		io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+//		io.PrintInfo_b();
+		//io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
@@ -169,6 +182,5 @@ public class NewtonPowerFlow {
 		//pd.PrintInfo();
 		NewtonPowerFlow pf = new NewtonPowerFlow();
 		pf.Run();
-		//io.PrintInfo_iter(0);
 	}
 }

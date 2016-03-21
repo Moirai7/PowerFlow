@@ -19,7 +19,7 @@ import com.dhcc.model.Tran;
 
 public class IOUtil {
 	public void TestInfo() {
-		Info info = new Info(4, 4,1, 2, 2, 0, 1, 3, 0.00000001);
+		Info info = new Info(4, 4,1, 2, 2, 0, 1, 3, 0.0001);
 		Variable.setPf_info(info);
 		Branch[] branch = new Branch[info.getNb()];
 		Tran[] tran = new Tran[info.getNt()];
@@ -106,7 +106,7 @@ public class IOUtil {
 				}
 			}
 			
-			generator[ng++] = new Gene(phIdx,Variable.PV,php/100.0,phq/100.0,phv);
+			generator[ng++] = new Gene(phIdx,Variable.REF,php/100.0,phq/100.0,phv);
 			
 			int newIdx = 0;
 			int[] newIndex = new int[n_bus + 1];
@@ -152,7 +152,7 @@ public class IOUtil {
 				}
 			}
 			
-			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,nrl,0.01);
+			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,nrl,0.0001);
 			Variable.setPf_info(info);
 			Variable.setTrans(Arrays.copyOf(tran, nt));
 			Variable.setBranch(Arrays.copyOf(branch, nb));
@@ -401,7 +401,7 @@ public class IOUtil {
 			_mpc.setBranch(branchc);
 			_mpc.setGen(gen);
 			Nb = nbranch - Nt;
-			Info pf_info = new Info(N, Nb,Nt, Ng, Nl, V0, Npv, Nl, 0.00000001);
+			Info pf_info = new Info(N, Nb,Nt, Ng, Nl, V0, Npv, Nl, 0.0001);
 			Variable.setPf_info(pf_info);
 			
 			

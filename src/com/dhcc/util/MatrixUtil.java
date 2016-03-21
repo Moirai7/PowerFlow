@@ -2,7 +2,7 @@ package com.dhcc.util;
 
 public class MatrixUtil {
 	
-	//ÇóÄæ¾ØÕó
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public static double[][] Inverse(double[][] B) {
 		int n = B.length;
 		double[][] invB = new double[n][n];
@@ -53,13 +53,22 @@ public class MatrixUtil {
 	}
 	
 	public static void main(String[] args) {
-		double[] A = {1,2,3};
-		double[][] B = {{1,2,3},
-						{1,2,3},
-						{1,2,3}};
-		double[] C = Multi(A,B);
-		for (int i = 0; i < C.length; ++i) {
-			System.out.println(C[i]);
+//		double[] A = {1,2,3};
+//		double[][] B = {{1,2,3},
+//						{1,2,3},
+//						{1,2,3}};
+//		double[] C = Multi(A,B);
+//		for (int i = 0; i < C.length; ++i) {
+//			System.out.println(C[i]);
+//		}
+		double[][] A = {{3,4},
+						{1,2}};
+		double[][] invA = Inverse(A);
+		for (int i = 0; i < invA.length; ++i) {
+			for (int j = 0; j < invA.length; ++j) {
+				System.out.print(invA[i][j] + " ");
+			}
+			System.out.println();
 		}
 	}
 	

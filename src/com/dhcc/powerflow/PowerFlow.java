@@ -169,6 +169,7 @@ public class PowerFlow {
 //		io.InitData();
 //		io.TestInfo();
 		io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		System.out.println("RealLoad " + Variable.getRealLoad().length);
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
