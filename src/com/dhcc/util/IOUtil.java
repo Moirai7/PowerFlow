@@ -124,9 +124,9 @@ public class IOUtil {
 			newIndex[generator[ng-1].getI()] = newIdx;
 			generator[ng-1].setI(newIdx);
 
-//			System.out.println("newidx" + phIdx);
-//			for (int i = 1; i <= n_bus; ++i)
-//				System.out.println(i + " " + newIndex[i]);
+			System.out.println("newidx");
+			for (int i = 1; i <= n_bus; ++i)
+				System.out.println(i + " " + newIndex[i]);
 			
 			row = br.readLine();n_branch = Integer.parseInt(row);
 			tran = new Tran[n_branch];
@@ -152,7 +152,7 @@ public class IOUtil {
 				}
 			}
 			
-			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,nrl,0.0001);
+			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,nrl,0.000001);
 			Variable.setPf_info(info);
 			Variable.setTrans(Arrays.copyOf(tran, nt));
 			Variable.setBranch(Arrays.copyOf(branch, nb));

@@ -165,11 +165,9 @@ public class PowerFlow {
 		IOUtil io = new IOUtil();
 		ProcData pd = new ProcData();
 		//io.ReadCase14("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
-		io.ReadCase14("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-		//io.InitData();
-		//io.TestInfo();
+		//io.ReadCase14("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
 		//io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
-		//io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.PrintInfo_b();
 		pd.AdmtMatrix();
 		pd.CalcFactor();

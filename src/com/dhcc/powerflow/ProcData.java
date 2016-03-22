@@ -40,11 +40,11 @@ public class ProcData {
 			B[j][i] = B[i][j];
 			
 			G[i][i] = G[i][i] + r;
-			//B[i][i] = B[i][i] + x + b/2;
-			B[i][i] = B[i][i] + x + b;
+			B[i][i] = B[i][i] + x + b/2;
+			//B[i][i] = B[i][i] + x + b;
 			G[j][j] = G[j][j] + r;
-			//B[j][j] = B[j][j] + x + b/2;
-			B[j][j] = B[j][j] + x + b;
+			B[j][j] = B[j][j] + x + b/2;
+			//B[j][j] = B[j][j] + x + b;
 
 //			System.out.println("Bus " + B.length + " " + B[0].length);
 //			for (int i1=0; i1<info.getN(); ++i1) {
@@ -55,6 +55,7 @@ public class ProcData {
 		}
 		
 		for (int k=0; k<info.getNt(); ++k) {
+			//TODO变压器支路计算有问题
 			i = tran[k].getFrom();
 			j = tran[k].getTo();
 			r = tran[k].getR();
