@@ -30,7 +30,14 @@ public class Variable {
 	private static double[][] invBpp;
 	private static Load[] realLoad;
 	private static double[][] jacob;
+	private static double refTheta = 0.0;
 	
+	public static double getRefTheta() {
+		return refTheta;
+	}
+	public static void setRefTheta(double refTheta) {
+		Variable.refTheta = refTheta;
+	}
 	public static double[][] getJacob() {
 		return jacob;
 	}

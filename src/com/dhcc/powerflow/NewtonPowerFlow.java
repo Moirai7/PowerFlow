@@ -59,6 +59,7 @@ public class NewtonPowerFlow {
 			jacob[kk][nu-1] = -lp+jacob[kk][nu-1];
 			jacob[kk+n][nu-1] = -lq+jacob[kk+n][nu-1];
 		}
+		
 		Gene gene[] = Variable.getGenerator();
 		for (int i=0; i<info.getNg(); ++i) {
 			int kk=gene[i].getI();
@@ -67,10 +68,12 @@ public class NewtonPowerFlow {
 			jacob[kk][nu-1] = gp+jacob[kk][nu-1];
 			jacob[kk+n][nu-1] = gq+jacob[kk+n][nu-1];
 		}
+		
 		for (int k=0; k<info.getNg(); ++k) {
 			int ii=gene[k].getI();
 			if (gene[k].getJ() == Variable.REF) {
 				for (int j=0; j<n2; ++j) {
+					if(ii == j) continue;
 					jacob[ii][j]=0;
 					jacob[n+ii][j]=0;
 					jacob[j][ii]=0;
@@ -85,14 +88,15 @@ public class NewtonPowerFlow {
 					jacob[n+ii][j]=0;
 					jacob[j][n+ii]=0;
 				}
-				jacob[n+ii][n+ii]=1.0;
-				jacob[n+ii][nu-1]=0;
+				jacob[n+ii][n+ii] = 2 * gene[k].getV();
+				jacob[n+ii][nu-1] = 0;
 			}
 		}
+		
 		Variable.setJacob(jacob);
 		
 		System.out.println("\r\n" + k + "'s iterators");
-		System.out.println("jacob calc");
+		System.out.println("jacob calc" + jacob.length + " " + jacob[0].length);
 		for (int i=0; i<jacob.length; ++i) {
 			for (int j=0; j<jacob[i].length; ++j)
 				System.out.print(jacob[i][j] + " ");
@@ -106,18 +110,20 @@ public class NewtonPowerFlow {
 		int nu = n2+1;
 
 		for (int i=0; i<n2; ++i) {
-			double d = 1.0/jacob[i][i];
+//			double d = 1.0/jacob[i][i];
+			double d = jacob[i][i];
 			for (int j=i+1; j<nu; ++j) {
 				double e = jacob[i][j];
 				if (e==0.0) continue;
-				jacob[i][j] = e*d;
+//				jacob[i][j] = e*d;
+				jacob[i][j] = e / d;
 			}
-			if (i==n2)continue;
+			if (i==n2-1)continue;
 			for (int j=i+1; j<n2; ++j) {
 				double e = jacob[j][i];
 				if (e==0.0) continue;
 				for (int k=i+1; k<nu; ++k) 
-					jacob[j][k] = jacob[j][k] - jacob[i][k]*e;
+					jacob[j][k] = jacob[j][k] - jacob[i][k] * e;
 			}
 		}
 		for (int k=1; k<n2; ++k) {
@@ -144,7 +150,7 @@ public class NewtonPowerFlow {
 		jacob = new double[n2][nu];
 		double Um[] = Variable.getOriU();
 		double Ua[] = Variable.getOriTheta();
-		while (true) {
+		while (k < 3) {
 			CalcJacobian();
 
 			double error=0.0;
@@ -173,15 +179,9 @@ public class NewtonPowerFlow {
 			for (int i=0; i<n; ++i) {
 				System.out.print(Ua[i]*180 /Math.PI+ " ");
 			}
+			System.out.println();
 		}
-		System.out.println("Um");
-		for (int i=0; i<n; ++i) {
-			System.out.print(Um[i] + " ");
-		}
-		System.out.println("\r\nUa");
-		for (int i=0; i<n; ++i) {
-			System.out.print(Ua[i]*180 /Math.PI+ " ");
-		}
+
 	}
 	
 	public static void main(String[] args) {
@@ -190,7 +190,8 @@ public class NewtonPowerFlow {
 		//io.ReadCase14("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
 		//io.ReadCase14("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
 		//io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
-		io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		//io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.PrintInfo_b();
 		pd.AdmtMatrix();
 		pd.CalcFactor();

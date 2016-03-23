@@ -72,7 +72,7 @@ public class IOUtil {
 			realLoad = new Load[n_bus];
 			
 			int phIdx = 0;
-			double php = 0, phq = 0, phv = 0;
+			double php = 0, phq = 0, phv = 0, phtheta = 0;
 			
 			for (int i = 0; i < n_bus; ++i) {
 				row = br.readLine();
@@ -103,6 +103,7 @@ public class IOUtil {
 					phv = Double.parseDouble(rowdata[7]);
 					php = Double.parseDouble(rowdata[11]);
 					phq = Double.parseDouble(rowdata[12]);
+					phtheta = Double.parseDouble(rowdata[8]);
 				}
 			}
 			
@@ -142,6 +143,111 @@ public class IOUtil {
 				from = newIndex[from];
 				to = Integer.parseInt(rowdata[1]);
 				to = newIndex[to];
+				r = Double.parseDouble(rowdata[6]);
+				x = Double.parseDouble(rowdata[7]);
+				b = Double.parseDouble(rowdata[8]);
+				if (k == 0) {
+					branch[nb++] = new Branch(from,to,r,x,b);
+				} else {
+					tran[nt++] = new Tran(from,to,r,x,k);
+				}
+			}
+			
+			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,nrl,0.000001);
+			Variable.setPf_info(info);
+			Variable.setRefTheta(phtheta);
+			Variable.setTrans(Arrays.copyOf(tran, nt));
+			Variable.setBranch(Arrays.copyOf(branch, nb));
+			Variable.setGenerator(Arrays.copyOf(generator, ng));
+			Variable.setLoad(Arrays.copyOf(load, nl));
+			Variable.setRealLoad(Arrays.copyOf(realLoad, nrl));
+			
+			instrr.close();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readCDFDataWithOriIdx(String filename) {
+		int n_bus = 0;
+		int n_branch = 0;
+		int nt = 0;
+		int ng = 0;
+		int nl = 0;
+		int npv = 0;
+		int npq = 0;
+		int nb = 0;
+		int nrl = 0;
+		Branch[] branch;
+		Tran[] tran;
+		Gene[] generator;
+		Load[] load;
+		Load[] realLoad;
+		
+		try {
+			InputStreamReader instrr = new InputStreamReader(new FileInputStream(filename));
+			BufferedReader br = new BufferedReader(instrr);
+			String row = null;
+			String[] rowdata = null;
+			row = br.readLine();n_bus = Integer.parseInt(row);
+			generator = new Gene[n_bus];
+			load = new Load[n_bus];
+			realLoad = new Load[n_bus];
+			
+			int phIdx = 0;
+			double php = 0, phq = 0, phv = 0;
+			
+			for (int i = 0; i < n_bus; ++i) {
+				row = br.readLine();
+				rowdata = row.split(",");
+				int type = Integer.parseInt(rowdata[6]);
+				//System.out.println("type:" + type);
+				if (type == 2) {		//generator
+					int idx = Integer.parseInt(rowdata[0]) - 1;
+					npv++;
+					double p,q,v;
+					v = Double.parseDouble(rowdata[7]);
+					p = Double.parseDouble(rowdata[11]);
+					q = Double.parseDouble(rowdata[12]);
+					generator[ng++] = new Gene(idx,Variable.PV,p/100.0,q/100.0,v);
+//					System.out.println("Gene:" + idx);
+				} else if (type == 0 || type == 1) {
+					int idx = Integer.parseInt(rowdata[0]) - 1;
+					npq++;
+					double p,q,v;
+					v = Double.parseDouble(rowdata[7]);
+					p = Double.parseDouble(rowdata[9]);
+					q = Double.parseDouble(rowdata[10]);
+					load[nl++] = new Load(idx,Variable.PQ,p/100.0,q/100.0,v);
+					if(type == 0) realLoad[nrl++] = new Load(idx,Variable.PQ,p/100,q/100,v);
+				} else if (type == 3) {
+					phIdx = Integer.parseInt(rowdata[0]) - 1;
+					npv++;
+					phv = Double.parseDouble(rowdata[7]);
+					php = Double.parseDouble(rowdata[11]);
+					phq = Double.parseDouble(rowdata[12]);
+				}
+			}
+			
+			generator[ng++] = new Gene(phIdx,Variable.REF,php/100.0,phq/100.0,phv);
+			
+
+			row = br.readLine();n_branch = Integer.parseInt(row);
+			tran = new Tran[n_branch];
+			branch = new Branch[n_branch];
+
+			for (int i = 0; i < n_branch; ++i) {
+				row = br.readLine();
+				rowdata = row.split(",");
+				double k = Double.parseDouble(rowdata[14]);
+				int from, to;
+				double r, x, b;
+				from = Integer.parseInt(rowdata[0]) - 1;
+				to = Integer.parseInt(rowdata[1]) - 1;
 				r = Double.parseDouble(rowdata[6]);
 				x = Double.parseDouble(rowdata[7]);
 				b = Double.parseDouble(rowdata[8]);
