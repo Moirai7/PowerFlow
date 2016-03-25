@@ -146,18 +146,23 @@ public class ProcData {
 		Load load[] = Variable.getLoad();
 		double Pi[] = new double[info.getN()];
 		double Qi[] = new double[info.getN()];
-		for (int i=0; i<info.getNg(); ++i) {
+		for (int i=0; i<gene.length; ++i) {
 			Pi[gene[i].getI()] = gene[i].getP();
 			if (gene[i].getJ() == Variable.PQ) {
-				Qi[gene[i].getI()] = gene[i].getP();
+				Qi[gene[i].getI()] = gene[i].getQ();
 			}
 		}
-		for (int i=0; i<info.getNt(); ++i) {
+		for (int i=0; i<load.length; ++i) {
 			Pi[load[i].getI()] = load[i].getP();
 			if (load[i].getJ() == Variable.PQ) {
-				Qi[load[i].getI()] = load[i].getP();
+				Qi[load[i].getI()] = load[i].getQ();
 			}
 		}
+		System.out.println("P");
+		for (int i=0; i<info.getN(); ++i) System.out.print(Pi[i] + " ");
+		System.out.println("\r\nQ");
+		for (int i=0; i<info.getN(); ++i) System.out.print(Qi[i] + " ");
+		System.out.println();
 		Variable.setP(Pi);
 		Variable.setQ(Qi);
 	}

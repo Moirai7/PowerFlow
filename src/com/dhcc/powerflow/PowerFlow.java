@@ -101,7 +101,7 @@ public class PowerFlow {
 		//for (int i=0; i<qi.length; ++i) 
 		//	System.out.print(qi[i] + " ");
 		//System.out.println();
-		System.out.println(qi.length + "length");
+		//System.out.println(qi.length + "length");
 		
 		qi = MatrixUtil.Multi(qi, invBpp);
 		for (int i=0; i<qi.length; ++i)
