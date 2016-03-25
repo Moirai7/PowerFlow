@@ -88,7 +88,7 @@ public class NewtonPowerFlow {
 					jacob[n+ii][j]=0;
 					jacob[j][n+ii]=0;
 				}
-				jacob[n+ii][n+ii] = 2 * gene[k].getV();
+				jacob[n+ii][n+ii] = 1;
 				jacob[n+ii][nu-1] = 0;
 			}
 		}
