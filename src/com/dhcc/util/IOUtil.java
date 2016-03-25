@@ -84,8 +84,8 @@ public class IOUtil {
 					npv++;
 					double p,q,v;
 					v = Double.parseDouble(rowdata[7]);
-					p = Double.parseDouble(rowdata[11]);
-					q = Double.parseDouble(rowdata[12]);
+					p = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
+					q = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
 					generator[ng++] = new Gene(idx,Variable.PV,p/100.0,q/100.0,v);
 //					System.out.println("Gene:" + idx);
 				} else if (type == 0 || type == 1) {
@@ -93,16 +93,16 @@ public class IOUtil {
 					npq++;
 					double p,q,v;
 					v = Double.parseDouble(rowdata[7]);
-					p = Double.parseDouble(rowdata[9]);
-					q = Double.parseDouble(rowdata[10]);
+					p = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
+					q = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
 					load[nl++] = new Load(idx,Variable.PQ,p/100.0,q/100.0,v);
 					if(type == 0) realLoad[nrl++] = new Load(idx,Variable.PQ,p/100,q/100,v);
 				} else if (type == 3) {
 					phIdx = Integer.parseInt(rowdata[0]);
 					npv++;
 					phv = Double.parseDouble(rowdata[7]);
-					php = Double.parseDouble(rowdata[11]);
-					phq = Double.parseDouble(rowdata[12]);
+					php = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
+					phq = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
 					phtheta = Double.parseDouble(rowdata[8]);
 				}
 			}
@@ -152,7 +152,7 @@ public class IOUtil {
 					tran[nt++] = new Tran(from,to,r,x,k);
 				}
 			}
-			//System.out.println(n_bus + " " + ng + );
+			//System.out.println("nt" + nt);
 			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,nrl,0.0001);
 			Variable.setPf_info(info);
 			Variable.setRefTheta(phtheta);

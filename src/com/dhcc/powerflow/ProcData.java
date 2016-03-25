@@ -113,6 +113,7 @@ public class ProcData {
 		//double bus[][] = _mpc.getBus();
 		double oriU[] = new double[info.getN()];
 		double oriTheta[] = new double[info.getN()];
+		//System.out.println("GENE: " + info.getNt() + " " + load.length);
 		for (int i=0; i<info.getN(); ++i) {
 			oriU[i] = 1.0; 
 			oriTheta[i] = 0.0; 
@@ -123,7 +124,7 @@ public class ProcData {
 		for (int i=0; i<info.getNg(); ++i)
 			if (gene[i].getJ() == Variable.PV || gene[i].getJ() == Variable.REF)
 				oriU[(int) gene[i].getI()] = gene[i].getV();
-		for (int i=0; i<info.getNt(); ++i)
+		for (int i=0; i<load.length; ++i)
 			if (load[i].getJ() == Variable.PV || load[i].getJ() == Variable.REF)
 				oriU[(int) load[i].getI()] = load[i].getV();
 		//		for (int i=0; i<info.getN(); ++i) 
