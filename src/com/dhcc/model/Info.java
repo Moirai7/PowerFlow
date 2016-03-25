@@ -42,7 +42,7 @@ public class Info {
 		this.V0 = v0;
 		this.setNpv(npv);
 		this.eps = eps;
-		this.Npq = n-npv-1;
+		this.Npq = n-npv;
 		this.Nrl = nrl;
 	}
 	

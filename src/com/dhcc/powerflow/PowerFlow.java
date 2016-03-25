@@ -43,6 +43,7 @@ public class PowerFlow {
 		double dtheta[] = new double[pi.length];
 		double invBp[][] = Variable.getInvBp();
 		
+		
 		for (int i=0; i<pi.length; ++i) 
 			pi[i] = -pi[i]/Um[i];
 		
@@ -93,13 +94,14 @@ public class PowerFlow {
 		double Um[] = Variable.getOriU();
 		double invBpp[][] = Variable.getInvBpp();
 		
-		for (int i=0; i<qi.length; ++i) 
+		for (int i=0; i<qi.length; ++i)
 			qi[i] = -qi[i]/Um[i];
 		
 		//System.out.println("qi " + qi.length );
 		//for (int i=0; i<qi.length; ++i) 
 		//	System.out.print(qi[i] + " ");
 		//System.out.println();
+		System.out.println(qi.length + "length");
 		
 		qi = MatrixUtil.Multi(qi, invBpp);
 		for (int i=0; i<qi.length; ++i)
@@ -164,19 +166,21 @@ public class PowerFlow {
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
 		ProcData pd = new ProcData();
-		//io.ReadCase14("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
+		//io.ReadCase14("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/case14.txt");
 		//io.ReadCase14("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
 		io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.PrintInfo_b();
+		//io.TestInfo();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
-//		pd.CalcPQ();
 		pd.calcPQ();
 		//io.PrintInfo();
 		PowerFlow pf = new PowerFlow();
 		pf.Run();
 		io.PrintInfo_iter(0);
 	}
+	
+	
 }

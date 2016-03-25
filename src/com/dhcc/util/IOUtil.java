@@ -152,8 +152,8 @@ public class IOUtil {
 					tran[nt++] = new Tran(from,to,r,x,k);
 				}
 			}
-			
-			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,nrl,0.000001);
+			//System.out.println(n_bus + " " + ng + );
+			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,nrl,0.0001);
 			Variable.setPf_info(info);
 			Variable.setRefTheta(phtheta);
 			Variable.setTrans(Arrays.copyOf(tran, nt));
