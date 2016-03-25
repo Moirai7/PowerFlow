@@ -20,6 +20,10 @@ public class Info {
 	//pq节点个数
 	private int Npq;
 	
+	public void setNpq(int npq) {
+		Npq = npq;
+	}
+
 	private int Nrl;
 	
 //	public Info() {};

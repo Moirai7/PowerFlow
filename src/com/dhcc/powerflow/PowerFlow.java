@@ -26,7 +26,7 @@ public class PowerFlow {
 				double dij = di-dj;
 				sump += Um[i]*Um[j]*(g*Math.cos(dij * Math.PI / 180)+b*Math.sin(dij * Math.PI / 180));
 			}
-			dp[i] = Pi[i] - sump; 
+			dp[i] = -Pi[i] - sump; 
 			if (Math.abs(dp[i]) > max)
 				max = Math.abs(dp[i]);
 		}
@@ -77,7 +77,7 @@ public class PowerFlow {
 				double dij = di-dj;
 				sump += Um[i]*Um[j]*(g*Math.sin(dij * Math.PI / 180)-b*Math.cos(dij * Math.PI / 180));
 			}
-			dq[i] = Qi[i] - sump; 
+			dq[i] = -Qi[i] - sump; 
 			if (Math.abs(dq[i]) > max)
 				max = Math.abs(dq[i]);
 		}
@@ -170,8 +170,8 @@ public class PowerFlow {
 		//io.ReadCase14("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
 		//io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.TestInfo();
 		//io.PrintInfo_b();
-		//io.TestInfo();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();

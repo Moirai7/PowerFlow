@@ -20,6 +20,7 @@ import com.dhcc.model.Tran;
 public class IOUtil {
 	public void TestInfo() {
 		Info info = new Info(4, 4,1, 2, 2, 0, 1, 3, 0.0001);
+		info.setNpq(2);
 		Variable.setPf_info(info);
 		Branch[] branch = new Branch[info.getNb()];
 		Tran[] tran = new Tran[info.getNt()];
