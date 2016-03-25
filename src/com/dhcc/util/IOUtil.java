@@ -124,10 +124,10 @@ public class IOUtil {
 			
 			newIndex[generator[ng-1].getI()] = newIdx;
 			generator[ng-1].setI(newIdx);
-
-			System.out.println("newidx");
-			for (int i = 1; i <= n_bus; ++i)
-				System.out.println(i + " " + newIndex[i]);
+//
+//			System.out.println("newidx");
+//			for (int i = 1; i <= n_bus; ++i)
+//				System.out.println(i + " " + newIndex[i]);
 			
 			row = br.readLine();n_branch = Integer.parseInt(row);
 			tran = new Tran[n_branch];
@@ -377,14 +377,14 @@ public class IOUtil {
 			System.out.print(Ua[i] + " ");
 		System.out.println();
 		
-		System.out.println("Ptemp " + Ptemp.length );
-		for (int i=0; i<Ptemp.length; ++i) 
-			System.out.print(Ptemp[i] + " ");
-		System.out.println();
-		System.out.println("Qtemp " + Qtemp.length );
-		for (int i=0; i<Qtemp.length; ++i) 
-			System.out.print(Qtemp[i] + " ");
-		System.out.println();
+//		System.out.println("Ptemp " + Ptemp.length );
+//		for (int i=0; i<Ptemp.length; ++i) 
+//			System.out.print(Ptemp[i] + " ");
+//		System.out.println();
+//		System.out.println("Qtemp " + Qtemp.length );
+//		for (int i=0; i<Qtemp.length; ++i) 
+//			System.out.print(Qtemp[i] + " ");
+//		System.out.println();
 	}
 	private MPC _mpc;
 	
