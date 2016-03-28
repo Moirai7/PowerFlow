@@ -15,8 +15,18 @@ public class ProcData {
 		Info info = Variable.getPf_info();
 		Branch branch[] = Variable.getBranch();
 		Tran tran[] = Variable.getTrans();
+		Gene gene[] = Variable.getGenerator();
+		Load load[] = Variable.getLoad();
 		double G[][] = new double[info.getN()][info.getN()];
 		double B[][] = new double[info.getN()][info.getN()];
+		for (int k=0; k<gene.length; ++k) {
+			G[gene[k].getI()][gene[k].getI()] = gene[k].getG();
+			B[gene[k].getI()][gene[k].getI()] = gene[k].getB();
+		}
+		for (int k=0; k<load.length; ++k) {
+			G[load[k].getI()][load[k].getI()] = load[k].getG();
+			B[load[k].getI()][load[k].getI()] = load[k].getB();
+		}
 		double r,x,b,kt;
 		int i,j;
 		for (int k=0; k<info.getNb(); ++k) {
@@ -27,17 +37,17 @@ public class ProcData {
 			b = r*r + x*x;
 			r = r/b;
 			x = -x/b;
-			if (i==j) {
-				G[i][j] += r;
-				B[i][j] += x;
-				continue;
-			}
+//			if (i==j) {
+//				G[i][j] += r;
+//				B[i][j] += x;
+//				continue;
+//			}
 			b = branch[k].getY0();
 			
 			G[i][j] = G[i][j] - r;
 			B[i][j] = B[i][j] - x;
-			G[j][i] = G[i][j];
-			B[j][i] = B[i][j];
+			G[j][i] = G[j][i] - r;
+			B[j][i] = B[j][i] - x;
 			
 			G[i][i] = G[i][i] + r;
 			B[i][i] = B[i][i] + x + b/2;
@@ -45,8 +55,6 @@ public class ProcData {
 			G[j][j] = G[j][j] + r;
 			B[j][j] = B[j][j] + x + b/2;
 			//B[j][j] = B[j][j] + x + b;
-
-//			System.out.println("Bus " + B.length + " " + B[0].length);
 //			for (int i1=0; i1<info.getN(); ++i1) {
 //				for (int j1=0; j1<B[i1].length; ++j1)
 //					System.out.print(B[i1][j1] + " ");
@@ -64,16 +72,20 @@ public class ProcData {
 			r = r/b;
 			x = -x/b;
 			kt = tran[k].getK();
-			G[i][i] = G[i][i] + r;
-			B[i][i] = B[i][i] + x;
+			G[j][j] += r;
+			B[j][j] += x;
+//			G[i][i] = G[i][i] + r;
+//			B[i][i] = B[i][i] + x;
 			G[i][j] = G[i][j] - r/kt;
 			B[i][j] = B[i][j] - x/kt;
 			G[j][i] = G[i][j];
 			B[j][i] = B[i][j];
 			r = r/kt/kt;x = x/kt/kt;
-			G[j][j] += r;
-			B[j][j] += x;
-
+			//System.out.println("Lanlan " + B[j][j] + " " + r + " " + x);
+			G[i][i] += r;
+			B[i][i] += x;
+//			G[j][j] += r;
+//			B[j][j] += x;
 //			System.out.println("Tran " + B.length + " " + B[0].length);
 //			for (int i1=0; i1<info.getN(); ++i1) {
 //				for (int j1=0; j1<B[i1].length; ++j1)

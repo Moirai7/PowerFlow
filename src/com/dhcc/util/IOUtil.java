@@ -18,6 +18,40 @@ import com.dhcc.model.MPC;
 import com.dhcc.model.Tran;
 
 public class IOUtil {
+	public void UsingAdmtMatrix() {
+		double G[][] = {{6.02503,-4.99913,0,0,-1.0259,0,0,0,0,0,0,0,0,0},
+				{-4.99913,9.52132,-1.13502,-1.68603,-1.70114,0,0,0,0,0,0,0,0,0},
+				{0,-1.13502,3.12099,-1.98598,0,0,0,0,0,0,0,0,0,0},
+				{0,-1.68603,-1.98598,10.513,-6.84098,0,0,0,0,0,0,0,0,0},
+				{-1.0259,-1.70114,0,-6.84098,9.56802,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,6.57992,0,0,0,0,-1.95503,-1.52597,-3.09893,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,5.32606,-3.90205,0,0,0,-1.42401},
+				{0,0,0,0,0,0,0,0,-3.90205,5.78293,-1.88088,0,0,0},
+				{0,0,0,0,0,-1.95503,0,0,0,-1.88088,3.83591,0,0,0},
+				{0,0,0,0,0,-1.52597,0,0,0,0,0,4.01499,-2.48902,0},
+				{0,0,0,0,0,-3.09893,0,0,0,0,0,-2.48902,6.72495,-1.13699},
+				{0,0,0,0,0,0,0,0,-1.42401,0,0,0,-1.13699,2.561}};
+		double B[][] = {{-19.4471,15.2631,0,0,4.23498,0,0,0,0,0,0,0,0,0},
+				{15.2631,-30.2707,4.78186,5.11584,5.19393,0,0,0,0,0,0,0,0,0},
+				{0,4.78186,-9.81148,5.06882,0,0,0,0,0,0,0,0,0,0},
+				{0,5.11584,5.06882,-38.6352,21.5786,0,4.88951,0,1.8555,0,0,0,0,0},
+				{4.23498,5.19393,0,21.5786,-35.5275,4.25745,0,0,0,0,0,0,0,0},
+				{0,0,0,0,4.25745,-17.3407,0,0,0,0,4.09407,3.17596,6.10276,0},
+				{0,0,0,4.88951,0,0,-19.549,5.67698,9.09008,0,0,0,0,0},
+				{0,0,0,0,0,0,5.67698,-5.67698,0,0,0,0,0,0},
+				{0,0,0,1.8555,0,0,9.09008,0,-24.0925,10.3654,0,0,0,3.02905},
+				{0,0,0,0,0,0,0,0,10.3654,-14.7683,4.40294,0,0,0},
+				{0,0,0,0,0,4.09407,0,0,0,4.40294,-8.49702,0,0,0},
+				{0,0,0,0,0,3.17596,0,0,0,0,0,-5.42794,2.25197,0},
+				{0,0,0,0,0,6.10276,0,0,0,0,0,2.25197,-10.6697,2.31496},
+				{0,0,0,0,0,0,0,0,3.02905,0,0,0,2.31496,-5.34401}};
+
+		Variable.setB(B);
+		Variable.setG(G);
+	}
+	
 	public void TestInfo() {
 		Info info = new Info(4, 4,1, 2, 2, 0, 1, 3, 0.0001);
 		info.setNpq(2);
@@ -88,7 +122,9 @@ public class IOUtil {
 					p = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
 					q = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
 					generator[ng++] = new Gene(idx,Variable.PV,p/100.0,q/100.0,v);
-//					System.out.println("Gene:" + idx);
+					generator[ng-1].setG(Double.parseDouble(rowdata[17]));
+					generator[ng-1].setB(Double.parseDouble(rowdata[18]));
+					//System.out.println("Gene:" + Double.parseDouble(rowdata[18]));
 				} else if (type == 0 || type == 1) {
 					int idx = Integer.parseInt(rowdata[0]);
 					npq++;
@@ -98,6 +134,9 @@ public class IOUtil {
 					q = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
 					load[nl++] = new Load(idx,Variable.PQ,p/100.0,q/100.0,v);
 					if(type == 0) realLoad[nrl++] = new Load(idx,Variable.PQ,p/100,q/100,v);
+					load[nl-1].setG(Double.parseDouble(rowdata[17]));
+					load[nl-1].setB(Double.parseDouble(rowdata[18]));
+					//System.out.println("Load:" + Double.parseDouble(rowdata[18]));
 				} else if (type == 3) {
 					phIdx = Integer.parseInt(rowdata[0]);
 					npv++;
@@ -215,6 +254,8 @@ public class IOUtil {
 					p = Double.parseDouble(rowdata[11]);
 					q = Double.parseDouble(rowdata[12]);
 					generator[ng++] = new Gene(idx,Variable.PV,p/100.0,q/100.0,v);
+					generator[ng-1].setG(Double.parseDouble(rowdata[17]));
+					generator[ng-1].setB(Double.parseDouble(rowdata[18]));
 //					System.out.println("Gene:" + idx);
 				} else if (type == 0 || type == 1) {
 					int idx = Integer.parseInt(rowdata[0]) - 1;
@@ -225,6 +266,8 @@ public class IOUtil {
 					q = Double.parseDouble(rowdata[10]);
 					load[nl++] = new Load(idx,Variable.PQ,p/100.0,q/100.0,v);
 					if(type == 0) realLoad[nrl++] = new Load(idx,Variable.PQ,p/100,q/100,v);
+					load[nl-1].setG(Double.parseDouble(rowdata[17]));
+					load[nl-1].setB(Double.parseDouble(rowdata[18]));
 				} else if (type == 3) {
 					phIdx = Integer.parseInt(rowdata[0]) - 1;
 					npv++;

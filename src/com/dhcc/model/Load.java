@@ -6,7 +6,22 @@ public class Load {
 	private double q;
 	private int j;//type
 	private double v;
-	
+	private double g;
+	private double b;
+	public double getG() {
+		return g;
+	}
+
+	public void setG(double g) {
+		this.g = g;
+	}
+	public double getB() {
+		return b;
+	}
+
+	public void setB(double b) {
+		this.b = b;
+	}
 	public Load(){}
 	public Load(int i, int j,double p,double q,double v) {
 		this.i=i;
@@ -14,6 +29,8 @@ public class Load {
 		this.p=p;
 		this.q=q;
 		this.v=v;
+		this.g=0;
+		this.b=0;
 	}
 
 	public int getJ() {

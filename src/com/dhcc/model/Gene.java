@@ -6,11 +6,31 @@ public class Gene {
 	private double p;//有功功率
 	private double q;//无功功率
 	private double v;
+	private double g;
+	private double b;
+	public double getG() {
+		return g;
+	}
+
+	public void setG(double g) {
+		this.g = g;
+	}
+
+	public double getB() {
+		return b;
+	}
+
+	public void setB(double b) {
+		this.b = b;
+	}
+
 	public Gene() {}
 	
 	public Gene(int i,int j,double p,double q,double v) {
 		this.i=i;
 		this.j=j;this.p=p;this.q=q;this.v=v;
+		this.g=0;
+		this.b=0;
 	}
 	public int getI() {
 		return i;
