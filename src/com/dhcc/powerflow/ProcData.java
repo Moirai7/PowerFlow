@@ -55,11 +55,6 @@ public class ProcData {
 			G[j][j] = G[j][j] + r;
 			B[j][j] = B[j][j] + x + b/2;
 			//B[j][j] = B[j][j] + x + b;
-//			for (int i1=0; i1<info.getN(); ++i1) {
-//				for (int j1=0; j1<B[i1].length; ++j1)
-//					System.out.print(B[i1][j1] + " ");
-//				System.out.print("\n");
-//			}
 		}
 		
 		for (int k=0; k<info.getNt(); ++k) {
@@ -86,12 +81,6 @@ public class ProcData {
 			B[i][i] += x;
 //			G[j][j] += r;
 //			B[j][j] += x;
-//			System.out.println("Tran " + B.length + " " + B[0].length);
-//			for (int i1=0; i1<info.getN(); ++i1) {
-//				for (int j1=0; j1<B[i1].length; ++j1)
-//					System.out.print(B[i1][j1] + " ");
-//				System.out.print("\n");
-//			}
 		}
 		Variable.setB(B);
 		Variable.setG(G);
@@ -139,10 +128,6 @@ public class ProcData {
 		for (int i=0; i<load.length; ++i)
 			if (load[i].getJ() == Variable.PV || load[i].getJ() == Variable.REF)
 				oriU[(int) load[i].getI()] = load[i].getV();
-		//		for (int i=0; i<info.getN(); ++i) 
-		//			if (bus[i][1] == Variable.PV || bus[i][1] == Variable.REF) 
-		//				oriU[(int) bus[i][0]] = bus[i][7];
-		
 		Variable.setOriTheta(oriTheta);
 		Variable.setOriU(oriU);
 		System.out.println("Um " + oriU.length );
@@ -183,12 +168,7 @@ public class ProcData {
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
 		ProcData pd = new ProcData();
-//		io.ReadData("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-//		io.ReadData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/case14.txt");
-//		io.InitData();
-//		io.PrintInfo_b();
-//		pd.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee30cdf.txt");
-//		pd.PrintInfo_b();
+		io.TestInfo();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
