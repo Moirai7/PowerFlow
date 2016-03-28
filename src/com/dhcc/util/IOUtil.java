@@ -239,7 +239,7 @@ public class IOUtil {
 			realLoad = new Load[n_bus];
 			
 			int phIdx = 0;
-			double php = 0, phq = 0, phv = 0;
+			double php = 0, phq = 0, phv = 0, phg = 0, phb = 0;
 			
 			for (int i = 0; i < n_bus; ++i) {
 				row = br.readLine();
@@ -251,8 +251,8 @@ public class IOUtil {
 					npv++;
 					double p,q,v;
 					v = Double.parseDouble(rowdata[7]);
-					p = Double.parseDouble(rowdata[11]);
-					q = Double.parseDouble(rowdata[12]);
+					p = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
+					q = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
 					generator[ng++] = new Gene(idx,Variable.PV,p/100.0,q/100.0,v);
 					generator[ng-1].setG(Double.parseDouble(rowdata[17]));
 					generator[ng-1].setB(Double.parseDouble(rowdata[18]));
@@ -262,8 +262,8 @@ public class IOUtil {
 					npq++;
 					double p,q,v;
 					v = Double.parseDouble(rowdata[7]);
-					p = Double.parseDouble(rowdata[9]);
-					q = Double.parseDouble(rowdata[10]);
+					p = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
+					q = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
 					load[nl++] = new Load(idx,Variable.PQ,p/100.0,q/100.0,v);
 					if(type == 0) realLoad[nrl++] = new Load(idx,Variable.PQ,p/100,q/100,v);
 					load[nl-1].setG(Double.parseDouble(rowdata[17]));
@@ -272,12 +272,17 @@ public class IOUtil {
 					phIdx = Integer.parseInt(rowdata[0]) - 1;
 					npv++;
 					phv = Double.parseDouble(rowdata[7]);
-					php = Double.parseDouble(rowdata[11]);
-					phq = Double.parseDouble(rowdata[12]);
-				}
+					php = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
+					phq = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
+					phg = Double.parseDouble(rowdata[17]);
+					phb = Double.parseDouble(rowdata[18]);
+;				}
 			}
 			
-			generator[ng++] = new Gene(phIdx,Variable.REF,php/100.0,phq/100.0,phv);
+			
+			generator[ng] = new Gene(phIdx,Variable.REF,php/100.0,phq/100.0,phv);
+			generator[ng].setG(phg);
+			generator[ng++].setB(phb);
 			
 
 			row = br.readLine();n_branch = Integer.parseInt(row);
@@ -302,7 +307,7 @@ public class IOUtil {
 				}
 			}
 			
-			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,nrl,0.000001);
+			Info info = new Info(n_bus,nb,nt,ng,nl,1,npv,nrl,0.0001);
 			Variable.setPf_info(info);
 			Variable.setTrans(Arrays.copyOf(tran, nt));
 			Variable.setBranch(Arrays.copyOf(branch, nb));
