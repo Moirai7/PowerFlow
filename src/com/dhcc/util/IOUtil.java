@@ -245,7 +245,6 @@ public class IOUtil {
 				row = br.readLine();
 				rowdata = row.split(",");
 				int type = Integer.parseInt(rowdata[6]);
-				System.out.println("type:" + type);
 				if (type == 2) {		//generator
 					int idx = Integer.parseInt(rowdata[0]) - 1;
 					npv++;

@@ -173,7 +173,7 @@ public class NewtonPowerFlow {
 		//io.TestInfo();
 		//io.PrintInfo_b();
 		pd.AdmtMatrix();
-		io.PrintInfo_b();
+		//io.PrintInfo_b();
 		//io.UsingAdmtMatrix();
 		//pd.CalcFactor();
 		pd.InitOri();
