@@ -187,7 +187,7 @@ public class ProcData {
 //		io.ReadData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/case14.txt");
 //		io.InitData();
 //		io.PrintInfo_b();
-//		pd.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+//		pd.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee30cdf.txt");
 //		pd.PrintInfo_b();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
