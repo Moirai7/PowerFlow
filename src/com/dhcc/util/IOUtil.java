@@ -245,7 +245,7 @@ public class IOUtil {
 				row = br.readLine();
 				rowdata = row.split(",");
 				int type = Integer.parseInt(rowdata[6]);
-				//System.out.println("type:" + type);
+				System.out.println("type:" + type);
 				if (type == 2) {		//generator
 					int idx = Integer.parseInt(rowdata[0]) - 1;
 					npv++;
@@ -253,6 +253,8 @@ public class IOUtil {
 					v = Double.parseDouble(rowdata[7]);
 					p = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
 					q = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
+					p = -p;
+					q = -q;
 					generator[ng++] = new Gene(idx,Variable.PV,p/100.0,q/100.0,v);
 					generator[ng-1].setG(Double.parseDouble(rowdata[17]));
 					generator[ng-1].setB(Double.parseDouble(rowdata[18]));
@@ -264,6 +266,8 @@ public class IOUtil {
 					v = Double.parseDouble(rowdata[7]);
 					p = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
 					q = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
+					p = -p;
+					q = -q;
 					load[nl++] = new Load(idx,Variable.PQ,p/100.0,q/100.0,v);
 					if(type == 0) realLoad[nrl++] = new Load(idx,Variable.PQ,p/100,q/100,v);
 					load[nl-1].setG(Double.parseDouble(rowdata[17]));
@@ -274,6 +278,8 @@ public class IOUtil {
 					phv = Double.parseDouble(rowdata[7]);
 					php = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
 					phq = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
+					php = -php;
+					phq = -phq;
 					phg = Double.parseDouble(rowdata[17]);
 					phb = Double.parseDouble(rowdata[18]);
 ;				}
