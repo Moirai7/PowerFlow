@@ -170,6 +170,7 @@ public class NewtonPowerFlow {
 		//io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee30cdf.txt");
 		io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee30cdf.txt");
+		//io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee118cdf.txt");
 		//io.TestInfo();
 		//io.PrintInfo_b();
 		pd.AdmtMatrix();
@@ -179,7 +180,7 @@ public class NewtonPowerFlow {
 		pd.InitOri();
 		//pd.CalcPQ();
 		pd.calcPQ();
-		io.PrintInfo();
+		//io.PrintInfo();
 		NewtonPowerFlow pf = new NewtonPowerFlow();
 		pf.Run();
 		io.PrintInfo_iter(0);

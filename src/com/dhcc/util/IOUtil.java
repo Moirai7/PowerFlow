@@ -164,10 +164,10 @@ public class IOUtil {
 			
 			newIndex[generator[ng-1].getI()] = newIdx;
 			generator[ng-1].setI(newIdx);
-//
-//			System.out.println("newidx");
-//			for (int i = 1; i <= n_bus; ++i)
-//				System.out.println(i + " " + newIndex[i]);
+
+			System.out.println("newidx");
+			for (int i = 1; i <= n_bus; ++i)
+				System.out.println(i + " " + newIndex[i]);
 			
 			row = br.readLine();n_branch = Integer.parseInt(row);
 			tran = new Tran[n_branch];
