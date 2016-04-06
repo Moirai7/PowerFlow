@@ -163,6 +163,48 @@ public class ProcData {
 		Variable.setQ(Qi);
 	}
 	
+	public void CalBusPQFlow() {
+		Info info = Variable.getPf_info();
+		double B[][] = Variable.getB();
+		double G[][] = Variable.getG();
+		double Um[] = Variable.getOriU();
+		double Ua[] = Variable.getOriTheta();
+		double Pi[] = Variable.getP();
+		double Qi[] = Variable.getQ();
+		Load load[] = Variable.getLoad();
+		
+		System.out.println("sf:" + info.getNpq() + " " + info.getN() + " " + load.length);
+		
+		for (int i=0;i<load.length; ++i) {
+			Pi[load[i].getI()] = load[i].getP();
+			Qi[load[i].getI()] = load[i].getQ();
+		}
+		
+		for (int i=info.getNpq(); i<info.getN(); ++i) {
+			double sump = 0.0, di = Ua[i];
+			for (int j=0; j<info.getN(); ++j) {
+				double g = G[i][j], b = B[i][j], dj = Ua[j];
+				double dij = di-dj;
+				sump += Um[i]*Um[j]*(g*Math.cos(dij * Math.PI / 180)+b*Math.sin(dij * Math.PI / 180));
+			}
+			Pi[i] = sump; 
+		}
+		
+		for (int i=info.getNpq(); i<info.getN(); ++i) {
+			double sumq = 0.0, di = Ua[i];
+			for (int j=0; j<info.getN(); ++j) {
+				double g = G[i][j], b = B[i][j], dj = Ua[j];
+				double dij = di-dj;
+				sumq += Um[i]*Um[j]*(g*Math.sin(dij * Math.PI / 180)-b*Math.cos(dij * Math.PI / 180));
+			}
+			Qi[i] = sumq;
+		}
+		
+		for (int i=0; i<info.getN(); ++i) {
+			System.out.println("P: " + Pi[i] + "\tQ:" + Qi[i]);
+		}
+	}
+	
 	public void CalBusFlow() {
 		Info info = Variable.getPf_info();
 		Gene gene[] = Variable.getGenerator();
@@ -171,9 +213,6 @@ public class ProcData {
 		double Qi[] = Variable.getQ();
 		double Ua[] = Variable.getOriTheta();
 		double Um[] = Variable.getOriU();
-		for (int i=0;i<Pi.length;++i){
-			System.out.println("P:"+Pi[i]);
-		}
 		for (int i=0; i<info.getN(); ++i) {
 			double b1=0.0,b2=0.0,c1=0.0,c2=0.0;
 			for (int j=0; j<gene.length; ++j) {
@@ -204,7 +243,6 @@ public class ProcData {
 							b2 = b2 + c2;
 						}
 					}
-					break;
 				}
 			}
 			for (int j=0; j<load.length; ++j) {
