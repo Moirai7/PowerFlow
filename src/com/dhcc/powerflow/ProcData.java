@@ -217,6 +217,7 @@ public class ProcData {
 			for (int j=0; j<gene.length; ++j) {
 				if (i!=gene[j].getI())continue;
 				double pl = (gene[j].getP()+Pi[i])/2,ql = (gene[j].getQ()+Qi[i])/2;
+				System.out.println(Pi[i] + " " + gene[j].getP() + " ");
 				System.out.println(Pi[i]);
 				System.out.println(i +" "+pl+ " " + (Pi[i] - pl) + " " + (Qi[i] - ql) + " " + pl + " " + ql);
 				break;
