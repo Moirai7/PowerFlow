@@ -209,8 +209,8 @@ public class ProcData {
 		Info info = Variable.getPf_info();
 		Gene gene[] = Variable.getGenerator();
 		Load load[] = Variable.getLoad();
-		double Pi[] = Variable.getPtemp();
-		double Qi[] = Variable.getQtemp();
+		double Pi[] = Variable.getP();
+		double Qi[] = Variable.getQ();
 		double Ua[] = Variable.getOriTheta();
 		double Um[] = Variable.getOriU();
 		for (int i=0; i<info.getN(); ++i) {
@@ -265,7 +265,7 @@ public class ProcData {
 		double[] Um = Variable.getOriU();
 		int numbr = info.getNb(), numtr = info.getNt();
 		double ph=0, qh=0;
-		System.out.println("网损");
+		
 		for (int i=0; i<numbr; ++i) {
 			int from = br[i].getFrom(),to = br[i].getTo();
 			double r = br[i].getR(), x = br[i].getX();
@@ -316,7 +316,7 @@ public class ProcData {
 			qh = qh+dqb;
 			System.out.println(from +" "+ to +" "+ pij +" "+ qij +" "+ pji +" "+ qji +" "+ dpb +" "+ dqb);
 		}
-		System.out.println(ph +" " + qh);
+		System.out.println("总网损： "+ph +" " + qh);
 	}
 
 	public static void main(String[] args) {

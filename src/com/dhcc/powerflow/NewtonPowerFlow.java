@@ -15,7 +15,7 @@ public class NewtonPowerFlow {
 		double G[][] = Variable.getG();
 		double Um[] = Variable.getOriU();
 		double Ua[] = Variable.getOriTheta();
-		double Pi[] = Variable.getPtemp();
+		double Pi[] = Variable.getP();
 		double Qi[] = Variable.getQtemp();
 		int n =  info.getN();
 		int nu = 2*n+1, n2 = 2*n;
@@ -139,8 +139,8 @@ public class NewtonPowerFlow {
 
 		double Pi[] = new double[info.getN()];
 		double Qi[] = new double[info.getN()];
-		Variable.setPtemp(Pi);
-		Variable.setQtemp(Qi);
+		Variable.setP(Pi);
+		Variable.setQ(Qi);
 		
 		while (true) {
 			CalcJacobian();
@@ -172,8 +172,8 @@ public class NewtonPowerFlow {
 		ProcData pd = new ProcData();
 		//io.ReadCase14("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
 		//io.ReadCase14("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-		io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
-		//io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		//io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee30cdf.txt");
 		//io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee118cdf.txt");
@@ -191,14 +191,15 @@ public class NewtonPowerFlow {
 		pf.Run();
 		io.PrintInfo_iter(0);
 		
-		double[] Pi = Variable.getPtemp();
-		double[] Qi = Variable.getQtemp();
-		
+		double[] Pi = Variable.getP();
+		double[] Qi = Variable.getQ();
+		System.out.println("\nP Q");
 		for (int i=0;i<Pi.length;i++) {
-			System.out.println("P: " + Pi[i] + "\tQ:" + Qi[i]);
+			System.out.println("P"+i+": " + Pi[i] + "\tQ"+i+":" + Qi[i]);
 		}
-		
-		//pd.CalBusFlow();
+		System.out.println("\nPG QG PL QL");
+		pd.CalBusFlow();
+		System.out.println("\nÍøËð");
 		pd.BranchFlow();
 	}
 	
