@@ -135,9 +135,7 @@ public class ProcData {
 			System.out.print(oriU[i] + " ");
 		System.out.println();
 	}
-	
-	
-	
+		
 	public void calcPQ() {
 		Info info = Variable.getPf_info();
 		Gene gene[] = Variable.getGenerator();
@@ -165,7 +163,7 @@ public class ProcData {
 		Variable.setQ(Qi);
 	}
 	
-	public void calBusFlow() {
+	public void CalBusFlow() {
 		Info info = Variable.getPf_info();
 		Gene gene[] = Variable.getGenerator();
 		Load load[] = Variable.getLoad();
@@ -217,6 +215,67 @@ public class ProcData {
 		}
 	}
 	
+	public void BranchFlow() {
+		Branch[] br = Variable.getBranch();
+		Tran[] trans = Variable.getTrans();
+		Info info = Variable.getPf_info();
+		double[] Ua = Variable.getOriTheta();
+		double[] Um = Variable.getOriU();
+		int numbr = info.getNb(), numtr = info.getNt();
+		double ph=0, qh=0;
+		System.out.println("网损");
+		for (int i=0; i<numbr; ++i) {
+			int from = br[i].getFrom(),to = br[i].getTo();
+			double r = br[i].getR(), x = br[i].getX();
+			double b = r*r+x*x;
+			//没有from=to
+			r = r/b;
+			x = -x/b;
+			b = br[i].getY0();
+			double dij = Ua[from] - Ua[to];
+			double vi = Um[from], vj = Um[to];
+			double vij = vi*vj;
+			vi = vi*vi;
+			vj = vj*vj;
+			double cd = vij*Math.cos(dij);
+			double sd = vij*Math.sin(dij);
+			double pij = vi*r - r*cd - x*sd;
+			double pji = vj*r - r*cd + x*sd;
+			double dpb = pij+pji;
+			ph = ph+dpb;
+			double qij = -vj * (b+x) + x*cd - r*sd;
+			double qji = -vj * (b+x) + x*cd + r*sd;
+			double dqb = qij+qji;
+			qh = qh+dqb;
+			System.out.println(from +" "+ to +" "+ pij +" "+ qij +" "+ pji +" "+ qji +" "+ dpb +" "+ dqb);
+		}
+		for (int i=0; i<numtr; ++i) {
+			int from = trans[i].getFrom(),to = trans[i].getTo();
+			double r = trans[i].getR(), x = trans[i].getX(), t = trans[i].getK();
+			double b = t*(r*r+x*x);
+			r/=b;
+			x/=-b;
+			b=t-1.0;
+			double ri = r*b,xi = x*b, rj=-ri/t, xj=-xi/t;
+			double dij = Ua[from] - Ua[to];
+			double vi = Um[from], vj = Um[to];
+			double vij = vi*vj;
+			vi = vi*vi;
+			vj = vj*vj;
+			double cd = vij*Math.cos(dij);
+			double sd = vij*Math.sin(dij);
+			double pij = vi*(r+ri) - r*cd - x*sd;
+			double pji = vj*(r+rj) - r*cd + x*sd;
+			double dpb = pij+pji;
+			ph = ph+dpb;
+			double qij = -vj * (xi+x) + x*cd - r*sd;
+			double qji = -vj * (xj+x) + x*cd + r*sd;
+			double dqb = qij+qji;
+			qh = qh+dqb;
+			System.out.println(from +" "+ to +" "+ pij +" "+ qij +" "+ pji +" "+ qji +" "+ dpb +" "+ dqb);
+		}
+		System.out.println(ph +" " + qh);
+	}
 
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
