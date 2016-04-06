@@ -168,10 +168,10 @@ public class PowerFlow {
 		ProcData pd = new ProcData();
 		//io.ReadCase14("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/case14.txt");
 		//io.ReadCase14("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-		//io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee30cdf.txt");
-		io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee118cdf.txt");
+		//io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.TestInfo();
 		//io.PrintInfo_b();
 		pd.AdmtMatrix();
@@ -182,6 +182,7 @@ public class PowerFlow {
 		PowerFlow pf = new PowerFlow();
 		pf.Run();
 		io.PrintInfo_iter(0);
+		pd.calBusFlow();
 	}
 	
 	

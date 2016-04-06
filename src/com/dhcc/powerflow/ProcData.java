@@ -164,6 +164,59 @@ public class ProcData {
 		Variable.setP(Pi);
 		Variable.setQ(Qi);
 	}
+	
+	public void calBusFlow() {
+		Info info = Variable.getPf_info();
+		Gene gene[] = Variable.getGenerator();
+		Load load[] = Variable.getLoad();
+		double Pi[] = Variable.getP();
+		double Qi[] = Variable.getQ();
+		double Ua[] = Variable.getOriTheta();
+		double Um[] = Variable.getOriU();
+		for (int i=0; i<info.getN(); ++i) {
+			double b1=0.0,b2=0.0,c1=0.0,c2=0.0;
+			for (int j=0; j<gene.length; ++j) {
+				int ii = gene[j].getI();
+				int kk = gene[j].getJ();
+				if (i == ii && kk == Variable.PQ) {
+					b1 = Pi[ii];
+					b2 = Qi[ii];
+					for (int k=0; k<load.length; ++k) {
+						ii = load[k].getI();
+						if (i == ii) {
+							c1 = load[k].getP();
+							c2 = load[k].getQ();
+							b1 = b1 + c1;
+							b2 = b2 + c2;
+						}
+					}
+					break;
+				}
+				if (i == ii && kk == Variable.PV) {
+					b1 = gene[j].getP();
+					b2 = Qi[ii];
+					for (int k=0; k<load.length; ++k) {
+						ii = load[k].getI();
+						if (i == ii) {
+							c1 = load[k].getP();
+							c2 = load[k].getQ();
+							b2 = b2 + c2;
+						}
+					}
+				}
+			}
+			for (int j=0; j<load.length; ++j) {
+				int ii = load[j].getI();
+				if (i == ii) {
+					c1 = load[j].getP();
+					c2 = load[j].getQ();
+					break;
+				}
+			}
+			System.out.println(i + " " + Um[i] + " " + Ua[i] + " " + b1 + " " + b2 + " " + c1 + " " + c2);
+		}
+	}
+	
 
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();

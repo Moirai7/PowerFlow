@@ -428,7 +428,7 @@ public class IOUtil {
 		System.out.println();
 		System.out.println("Ua " + Ua.length );
 		for (int i=0; i<Ua.length; ++i) 
-			System.out.print(Ua[i] + " ");
+			System.out.print((Ua[i]) + " ");
 		System.out.println();
 		
 //		System.out.println("Ptemp " + Ptemp.length );
