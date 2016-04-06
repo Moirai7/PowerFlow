@@ -209,8 +209,8 @@ public class ProcData {
 		Info info = Variable.getPf_info();
 		Gene gene[] = Variable.getGenerator();
 		Load load[] = Variable.getLoad();
-		double Pi[] = Variable.getP();
-		double Qi[] = Variable.getQ();
+		double Pi[] = Variable.getPtemp();
+		double Qi[] = Variable.getQtemp();
 		double Ua[] = Variable.getOriTheta();
 		double Um[] = Variable.getOriU();
 		for (int i=0; i<info.getN(); ++i) {
