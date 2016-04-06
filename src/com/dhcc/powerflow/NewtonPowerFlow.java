@@ -26,8 +26,8 @@ public class NewtonPowerFlow {
 			for (int j=0; j<info.getN(); ++j) {
 				if (i==j) continue;
 				double g = G[i][j], b = B[i][j], dj = Ua[j];
-				double dij = (di-dj) * Math.PI / 180.0;
-				//double dij = di - dj;
+				//double dij = (di-dj) * Math.PI / 180.0;
+				double dij = di - dj;
 				double hij = -Um[i]*Um[j]*(g*Math.sin(dij)-b*Math.cos(dij));
 				jacob[i][j]=hij;
 				jacob[i+n][j+n]=hij;
@@ -184,7 +184,7 @@ public class NewtonPowerFlow {
 		NewtonPowerFlow pf = new NewtonPowerFlow();
 		pf.Run();
 		io.PrintInfo_iter(0);
-		pd.CalBusFlow();
+		//pd.CalBusFlow();
 		pd.BranchFlow();
 	}
 	
