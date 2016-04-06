@@ -64,7 +64,8 @@ public class NewtonPowerFlow {
 		for (int i=0; i<info.getNg(); ++i) {
 			int kk=gene[i].getI();
 			double gp=gene[i].getP();
-			double gq=gene[i].getQ();
+			//double gq=gene[i].getQ();
+			double gq=0;
 			jacob[kk][nu-1] = gp+jacob[kk][nu-1];
 			jacob[kk+n][nu-1] = gq+jacob[kk+n][nu-1];
 		}
@@ -197,9 +198,10 @@ public class NewtonPowerFlow {
 		for (int i=0;i<Pi.length;i++) {
 			System.out.println("P"+i+": " + Pi[i] + "\tQ"+i+":" + Qi[i]);
 		}
+		//pd.CalBusPQFlow();
 		System.out.println("\nPG QG PL QL");
 		pd.CalBusFlow();
-		System.out.println("\nÍøËð");
+		System.out.println("\nloss");
 		pd.BranchFlow();
 	}
 	

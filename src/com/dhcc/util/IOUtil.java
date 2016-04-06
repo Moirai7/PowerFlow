@@ -428,6 +428,7 @@ public class IOUtil {
 		System.out.println();
 		System.out.println("Ua " + Ua.length );
 		for (int i=0; i<Ua.length; ++i) 
+			//System.out.print((Ua[i]*180/Math.PI) + " ");
 			System.out.print((Ua[i]) + " ");
 		System.out.println();
 		

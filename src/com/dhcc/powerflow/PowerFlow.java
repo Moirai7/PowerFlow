@@ -184,8 +184,8 @@ public class PowerFlow {
 		System.out.println("\nP Q");
 		pd.CalBusPQFlow();
 		System.out.println("\nPG QG PL QL");
-		pd.CalBusFlow();
-		System.out.println("\nÍøËð");
+		pd.CalBusPQGFlow();
+		System.out.println("\nsum loss");
 		pd.BranchFlow();
 	}
 	
