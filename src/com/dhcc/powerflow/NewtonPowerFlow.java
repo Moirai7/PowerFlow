@@ -46,7 +46,7 @@ public class NewtonPowerFlow {
 			jacob[i+n][i+n]=-vi*dq+2*vi*vi*b;
 			
 			jacob[i][nu-1] = -vi*(dp+vi*g);
-			jacob[i+n][nu-1]=-vi*(dq-vi*b);
+			jacob[i+n][nu-1] = -vi*(dq-vi*b);
 			Pi[i] = vi*(dp+vi*g);
 			Qi[i] = vi*(dq-vi*b);
 		}
@@ -172,12 +172,12 @@ public class NewtonPowerFlow {
 		ProcData pd = new ProcData();
 		//io.ReadCase14("/Users/xyk0058/Git/PowerFlow_Version1.0/src/com/dhcc/data/case14.txt");
 		//io.ReadCase14("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
-		//io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee30cdf.txt");
 		//io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee118cdf.txt");
-		io.TestInfo();
+		//io.TestInfo();
 		//io.PrintInfo_b();
 		pd.AdmtMatrix();
 		//io.PrintInfo_b();
@@ -190,7 +190,15 @@ public class NewtonPowerFlow {
 		NewtonPowerFlow pf = new NewtonPowerFlow();
 		pf.Run();
 		io.PrintInfo_iter(0);
-		pd.CalBusFlow();
+		
+		double[] Pi = Variable.getPtemp();
+		double[] Qi = Variable.getQtemp();
+		
+		for (int i=0;i<Pi.length;i++) {
+			System.out.println("P: " + Pi[i] + "\tQ:" + Qi[i]);
+		}
+		
+		//pd.CalBusFlow();
 		pd.BranchFlow();
 	}
 	
