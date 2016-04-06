@@ -16,7 +16,7 @@ public class NewtonPowerFlow {
 		double Um[] = Variable.getOriU();
 		double Ua[] = Variable.getOriTheta();
 		double Pi[] = Variable.getP();
-		double Qi[] = Variable.getQtemp();
+		double Qi[] = Variable.getQ();
 		int n =  info.getN();
 		int nu = 2*n+1, n2 = 2*n;
 		
