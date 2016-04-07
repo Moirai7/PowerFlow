@@ -3,11 +3,30 @@ package com.dhcc.model;
 public class Gene {
 	private int i;
 	private int j;//type
-	private double p;//ÓÐ¹¦¹¦ÂÊ
-	private double q;//ÎÞ¹¦¹¦ÂÊ
+	private double p;//ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½ï¿½
+	private double q;//ï¿½Þ¹ï¿½ï¿½ï¿½ï¿½ï¿½
 	private double v;
 	private double g;
 	private double b;
+	private double pl;
+	private double ql;
+	
+	public double getPl() {
+		return pl;
+	}
+
+	public void setPl(double pl) {
+		this.pl = pl;
+	}
+
+	public double getQl() {
+		return ql;
+	}
+
+	public void setQl(double ql) {
+		this.ql = ql;
+	}
+	
 	public double getG() {
 		return g;
 	}

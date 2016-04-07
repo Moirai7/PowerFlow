@@ -8,6 +8,25 @@ public class Load {
 	private double v;
 	private double g;
 	private double b;
+	private double pl;
+	private double ql;
+	
+	public double getPl() {
+		return pl;
+	}
+
+	public void setPl(double pl) {
+		this.pl = pl;
+	}
+
+	public double getQl() {
+		return ql;
+	}
+
+	public void setQl(double ql) {
+		this.ql = ql;
+	}
+
 	public double getG() {
 		return g;
 	}
