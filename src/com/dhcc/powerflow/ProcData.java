@@ -314,8 +314,9 @@ public class ProcData {
 			double pji = vj*r - r*cd + x*sd;
 			double dpb = pij+pji;
 			ph = ph+dpb;
-			double qij = -vi * (b+x) + x*cd - r*sd;
-			double qji = -vj * (b+x) + x*cd + r*sd;
+			//double qij = -vi * (b+x) + x*cd - r*sd;
+			double qij = -vi * (b/2+x) + x*cd - r*sd;
+			double qji = -vj * (b/2+x) + x*cd + r*sd;
 			double dqb = qij+qji;
 			qh = qh+dqb;
 			System.out.println(from +" "+ to +" "+ pij*100 +" "+ qij*100 +" "+ pji*100 +" "+ qji*100 +" "+ dpb*100 +" "+ dqb*100);
@@ -339,11 +340,11 @@ public class ProcData {
 			double pji = vj*(r+rj) - r*cd + x*sd;
 			double dpb = pij+pji;
 			ph = ph+dpb;
-			double qij = -vi * (xi+x) + x*cd - r*sd;
-			double qji = -vj * (xj+x) + x*cd + r*sd;
+			double qij = -vi * (xj+x) + x*cd - r*sd;
+			double qji = -vj * (xi+x) + x*cd + r*sd;
 			double dqb = qij+qji;
 			qh = qh+dqb;
-			System.out.println(from +" "+ to +" "+ pij +" "+ qij +" "+ pji +" "+ qji +" "+ dpb +" "+ dqb);
+			System.out.println(from +" "+ to +" "+ pij*100 +" "+ qij*100 +" "+ pji*100 +" "+ qji*100 +" "+ dpb*100 +" "+ dqb*100);
 		}
 		System.out.println("sum loss： "+ph +" " + qh);
 	}
@@ -366,14 +367,26 @@ public class ProcData {
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
 		ProcData pd = new ProcData();
-		io.TestInfo();
+		//io.ReadCase14("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/case14.txt");
+		//io.ReadCase14("D:/Java/PowerFlow/src/com/dhcc/casedata/case14.txt");
+		//io.readCDFData("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		//io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee30cdf.txt");
+		//io.TestInfo();
+		//io.PrintInfo_b();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
 		pd.calcPQ();
-		io.PrintInfo();		
+		//io.PrintInfo();
 		PowerFlow pf = new PowerFlow();
 		pf.Run();
 		io.PrintInfo_iter(0);
+		//System.out.println("\nP Q");
+		//pd.CalBusPQFlow();
+		//System.out.println("\nPG QG PL QL");
+		//pd.CalBusPQGFlow();
+		System.out.println("\nsum loss");
+		pd.BranchFlow();
 	}
 }
