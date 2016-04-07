@@ -203,7 +203,7 @@ public class ProcData {
 		}
 		
 		for (int i=0; i<info.getN(); ++i) {
-			System.out.println("P: " + Pi[i] + "\tQ:" + Qi[i]);
+			System.out.println("P"+i+": " + Pi[i] + "\tQ:" + Qi[i]);
 		}
 	}
 	
@@ -216,17 +216,18 @@ public class ProcData {
 		for (int i=0; i<info.getN(); ++i) {
 			for (int j=0; j<gene.length; ++j) {
 				if (i!=gene[j].getI())continue;
-				double pl = (gene[j].getP()+Pi[i])/2,ql = (gene[j].getQ()+Qi[i])/2;
-				System.out.println(Pi[i] + " " + gene[j].getP() + " ");
-				System.out.println(Pi[i]);
-				System.out.println(i +" "+pl+ " " + (Pi[i] - pl) + " " + (Qi[i] - ql) + " " + pl + " " + ql);
+				double pl = gene[j].getPl(),ql = gene[j].getQl();
+				System.out.println(i+" "+pl+" "+ql);
+				System.out.println((Pi[i] - pl)+" "+(Qi[i] - ql)+"\n");
+				//System.out.println(i +" "+pl+ " " + (Pi[i] - pl) + " " + ql + " " + (Qi[i] - ql) );
 				break;
 			}
 			for (int j=0; j<load.length; ++j) {
 				if (i!=load[j].getI())continue;
-				double pl = (load[j].getP()+Pi[i])/2,ql = (load[j].getQ()+Qi[i])/2;
-				System.out.println(Pi[i]);
-				System.out.println(i +" "+pl+ " " + (Pi[i] - pl) + " " + (Qi[i] - ql) + " " + pl + " " + ql);
+				double pl = load[j].getPl(),ql = load[j].getQl();
+				System.out.println(i+" "+pl+" "+ql);
+				System.out.println((Pi[i]*100 - pl)+" "+(Qi[i]*100 - ql)+"\n");
+				//System.out.println(i +" "+pl+ " " + (Pi[i] - pl) + " " + ql + " " + (Qi[i] - ql) );
 				break;
 			}
 		}
@@ -382,11 +383,12 @@ public class ProcData {
 		PowerFlow pf = new PowerFlow();
 		pf.Run();
 		io.PrintInfo_iter(0);
-		//System.out.println("\nP Q");
-		//pd.CalBusPQFlow();
-		//System.out.println("\nPG QG PL QL");
-		//pd.CalBusPQGFlow();
+		System.out.println("\nP Q");
+		pd.CalBusPQFlow();
+		System.out.println("\nPL PG QL QG");
+		pd.CalBusPQGFlow();
 		System.out.println("\nsum loss");
 		pd.BranchFlow();
 	}
+	
 }
