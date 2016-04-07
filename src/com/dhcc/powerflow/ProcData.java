@@ -299,6 +299,7 @@ public class ProcData {
 			double r = br[i].getR(), x = br[i].getX();
 			double b = r*r+x*x;
 			//没有from=to
+			if(from==to) System.out.println("from == to");
 			r = r/b;
 			x = -x/b;
 			b = br[i].getY0();
@@ -307,17 +308,17 @@ public class ProcData {
 			double vij = vi*vj;
 			vi = vi*vi;
 			vj = vj*vj;
-			double cd = vij*Math.cos(dij);
-			double sd = vij*Math.sin(dij);
+			double cd = vij*Math.cos(dij*Math.PI/180);
+			double sd = vij*Math.sin(dij*Math.PI/180);
 			double pij = vi*r - r*cd - x*sd;
 			double pji = vj*r - r*cd + x*sd;
 			double dpb = pij+pji;
 			ph = ph+dpb;
-			double qij = -vj * (b+x) + x*cd - r*sd;
+			double qij = -vi * (b+x) + x*cd - r*sd;
 			double qji = -vj * (b+x) + x*cd + r*sd;
 			double dqb = qij+qji;
 			qh = qh+dqb;
-			System.out.println(from +" "+ to +" "+ pij +" "+ qij +" "+ pji +" "+ qji +" "+ dpb +" "+ dqb);
+			System.out.println(from +" "+ to +" "+ pij*100 +" "+ qij*100 +" "+ pji*100 +" "+ qji*100 +" "+ dpb*100 +" "+ dqb*100);
 		}
 		for (int i=0; i<numtr; ++i) {
 			int from = trans[i].getFrom(),to = trans[i].getTo();
@@ -332,13 +333,13 @@ public class ProcData {
 			double vij = vi*vj;
 			vi = vi*vi;
 			vj = vj*vj;
-			double cd = vij*Math.cos(dij);
-			double sd = vij*Math.sin(dij);
+			double cd = vij*Math.cos(dij*Math.PI/180);
+			double sd = vij*Math.sin(dij*Math.PI/180);
 			double pij = vi*(r+ri) - r*cd - x*sd;
 			double pji = vj*(r+rj) - r*cd + x*sd;
 			double dpb = pij+pji;
 			ph = ph+dpb;
-			double qij = -vj * (xi+x) + x*cd - r*sd;
+			double qij = -vi * (xi+x) + x*cd - r*sd;
 			double qji = -vj * (xj+x) + x*cd + r*sd;
 			double dqb = qij+qji;
 			qh = qh+dqb;
@@ -347,6 +348,21 @@ public class ProcData {
 		System.out.println("sum loss： "+ph +" " + qh);
 	}
 
+	public void BranchLoss() {
+		Branch[] br = Variable.getBranch();
+		Tran[] trans = Variable.getTrans();
+		Info info = Variable.getPf_info();
+		int numbr = info.getNb(), numtr = info.getNt();
+		for (int i=0; i<numbr; ++i) {
+			int from = br[i].getFrom(),to = br[i].getTo();
+			//double rsij = br[from];
+			//double msij = br[from];
+		}
+		for (int i=0; i<numtr; ++i) {
+			int from = trans[i].getFrom(),to = trans[i].getTo();
+		}
+	}
+	
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
 		ProcData pd = new ProcData();
