@@ -122,8 +122,8 @@ public class IOUtil {
 					p = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
 					q = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
 					generator[ng++] = new Gene(idx,Variable.PV,p/100.0,q/100.0,v);
-					generator[ng-1].setPl(Double.parseDouble(rowdata[11]));
-					generator[ng-1].setQl(Double.parseDouble(rowdata[12]));
+					generator[ng-1].setPl(Double.parseDouble(rowdata[9]));
+					generator[ng-1].setQl(Double.parseDouble(rowdata[10]));
 					generator[ng-1].setG(Double.parseDouble(rowdata[17]));
 					generator[ng-1].setB(Double.parseDouble(rowdata[18]));
 					//System.out.println("Gene:" + Double.parseDouble(rowdata[18]));
@@ -136,8 +136,8 @@ public class IOUtil {
 					q = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
 					load[nl++] = new Load(idx,Variable.PQ,p/100.0,q/100.0,v);
 					if(type == 0) realLoad[nrl++] = new Load(idx,Variable.PQ,p/100,q/100,v);
-					load[nl-1].setPl(Double.parseDouble(rowdata[11]));
-					load[nl-1].setQl(Double.parseDouble(rowdata[12]));
+					load[nl-1].setPl(Double.parseDouble(rowdata[9]));
+					load[nl-1].setQl(Double.parseDouble(rowdata[10]));
 					load[nl-1].setG(Double.parseDouble(rowdata[17]));
 					load[nl-1].setB(Double.parseDouble(rowdata[18]));
 					//System.out.println("Load:" + Double.parseDouble(rowdata[18]));
@@ -148,8 +148,8 @@ public class IOUtil {
 					php = Double.parseDouble(rowdata[11]) - Double.parseDouble(rowdata[9]);
 					phq = Double.parseDouble(rowdata[12]) - Double.parseDouble(rowdata[10]);
 					phtheta = Double.parseDouble(rowdata[8]);
-					phpl = Double.parseDouble(rowdata[11]);
-					phql = Double.parseDouble(rowdata[12]);
+					phpl = Double.parseDouble(rowdata[9]);
+					phql = Double.parseDouble(rowdata[10]);
 				}
 			}
 			
@@ -264,8 +264,8 @@ public class IOUtil {
 					p = -p;
 					q = -q;
 					generator[ng++] = new Gene(idx,Variable.PV,p/100.0,q/100.0,v);
-					generator[ng-1].setPl(Double.parseDouble(rowdata[11]));
-					generator[ng-1].setQl(Double.parseDouble(rowdata[12]));
+					generator[ng-1].setPl(Double.parseDouble(rowdata[9]));
+					generator[ng-1].setQl(Double.parseDouble(rowdata[10]));
 					generator[ng-1].setG(Double.parseDouble(rowdata[17]));
 					generator[ng-1].setB(Double.parseDouble(rowdata[18]));
 //					System.out.println("Gene:" + idx);
@@ -280,8 +280,8 @@ public class IOUtil {
 					q = -q;
 					load[nl++] = new Load(idx,Variable.PQ,p/100.0,q/100.0,v);
 					if(type == 0) realLoad[nrl++] = new Load(idx,Variable.PQ,p/100,q/100,v);
-					load[nl-1].setPl(Double.parseDouble(rowdata[11]));
-					load[nl-1].setQl(Double.parseDouble(rowdata[12]));
+					load[nl-1].setPl(Double.parseDouble(rowdata[9]));
+					load[nl-1].setQl(Double.parseDouble(rowdata[10]));
 					load[nl-1].setG(Double.parseDouble(rowdata[17]));
 					load[nl-1].setB(Double.parseDouble(rowdata[18]));
 				} else if (type == 3) {
@@ -294,8 +294,8 @@ public class IOUtil {
 					phq = -phq;
 					phg = Double.parseDouble(rowdata[17]);
 					phb = Double.parseDouble(rowdata[18]);
-					phpl = Double.parseDouble(rowdata[11]);
-					phql = Double.parseDouble(rowdata[12]);
+					phpl = Double.parseDouble(rowdata[9]);
+					phql = Double.parseDouble(rowdata[10]);
 ;				}
 			}
 			
