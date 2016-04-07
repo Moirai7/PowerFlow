@@ -280,8 +280,8 @@ public class IOUtil {
 					q = -q;
 					load[nl++] = new Load(idx,Variable.PQ,p/100.0,q/100.0,v);
 					if(type == 0) realLoad[nrl++] = new Load(idx,Variable.PQ,p/100,q/100,v);
-					load[nl-1].setPl(Double.parseDouble(rowdata[9]));
-					load[nl-1].setQl(Double.parseDouble(rowdata[10]));
+					load[nl-1].setPl(Double.parseDouble(rowdata[11]));
+					load[nl-1].setQl(Double.parseDouble(rowdata[12]));
 					load[nl-1].setG(Double.parseDouble(rowdata[17]));
 					load[nl-1].setB(Double.parseDouble(rowdata[18]));
 				} else if (type == 3) {
@@ -294,8 +294,8 @@ public class IOUtil {
 					phq = -phq;
 					phg = Double.parseDouble(rowdata[17]);
 					phb = Double.parseDouble(rowdata[18]);
-					phpl = Double.parseDouble(rowdata[9]);
-					phql = Double.parseDouble(rowdata[10]);
+					phpl = Double.parseDouble(rowdata[11]);
+					phql = Double.parseDouble(rowdata[12]);
 ;				}
 			}
 			
