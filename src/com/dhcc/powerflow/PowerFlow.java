@@ -186,7 +186,8 @@ public class PowerFlow {
 		System.out.println("\nPL PG QL QG");
 		pd.CalBusPQGFlow();
 		System.out.println("\nsum loss");
-		pd.BranchFlow();
+		//pd.BranchFlow();
+		pd.BranchFlowByMat();
 	}
 	
 	

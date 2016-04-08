@@ -286,6 +286,62 @@ public class ProcData {
 		}
 	}
 	
+	private double dp=0,dq=0;
+	public void BranchFlowByMat() {
+		Branch[] br = Variable.getBranch();
+		Tran[] trans = Variable.getTrans();
+		Info info = Variable.getPf_info();
+		int numbr = info.getNb(), numtr = info.getNt();
+		double ph=0, qh=0;
+		for (int i=0; i<numbr; ++i) {
+			int from = br[i].getFrom(),to = br[i].getTo();
+			double r = br[i].getR(), x = br[i].getX();
+			MatPower(from,to,r,x,1);
+			ph+=dp;
+			qh+=dq;
+		}
+		for (int i=0; i<numtr; ++i) {
+			int from = trans[i].getFrom(),to = trans[i].getTo();
+			double r = trans[i].getR(), x = trans[i].getX();
+			MatPower(from,to,r,x,trans[i].getK());
+			ph+=dp;
+			qh+=dq;
+		}
+		System.out.println("sum loss： "+ph*100 +" " + qh*100);
+	}
+	
+	public void MatPower(int from, int to, double r, double x,double k) {
+		double b = r*r+x*x;
+		r = r/b;
+		x = -x/b;
+		double[] Ua = Variable.getOriTheta();
+		double[] Um = Variable.getOriU();
+		double vi = Um[from], vj = Um[to];
+		double vii = vi*vi, vjj = vj*vj, vij = vi*vj;
+		double di = Ua[from]*Math.PI/180, dj = Ua[to]*Math.PI/180;
+		double cdi = Math.cos(di)*Math.cos(di);
+		double sdi = Math.sin(di)*Math.sin(di);
+		double cdj = Math.cos(dj)*Math.cos(dj);
+		double sdj = Math.sin(dj)*Math.sin(dj);
+		double cij = Math.cos(di)*Math.cos(dj);
+		double sij = Math.sin(di)*Math.sin(dj);
+		double sici = Math.sin(di)*Math.cos(di);
+		double sjcj = Math.sin(dj)*Math.cos(dj);
+		
+
+		double real = vii*(cdi-sdi)/k/k
+				- 2*vij*(cij-sij)/k
+				+ vjj*(cdj-sdj);
+		
+		double imag = 2*vii*sici/k/k
+				- 2*vij*(Math.sin(dj)*Math.cos(di)+Math.sin(di)*Math.cos(dj))/k
+				+ 2*vjj*sjcj;
+		
+		dp = r*real+x*imag;
+		dq = r*imag-x*real;
+		System.out.println(from +" "+ to +" "+ dp*100 +" "+ dq*100);
+	}
+	
 	public void BranchFlow() {
 		Branch[] br = Variable.getBranch();
 		Tran[] trans = Variable.getTrans();
@@ -347,7 +403,7 @@ public class ProcData {
 			qh = qh+dqb;
 			System.out.println(from +" "+ to +" "+ pij*100 +" "+ qij*100 +" "+ pji*100 +" "+ qji*100 +" "+ dpb*100 +" "+ dqb*100);
 		}
-		System.out.println("sum loss： "+ph +" " + qh);
+		System.out.println("sum loss： "+ph*100 +" " + qh*100);
 	}
 
 	public void BranchLoss() {
@@ -374,7 +430,7 @@ public class ProcData {
 		io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee30cdf.txt");
 		//io.TestInfo();
-		//io.PrintInfo_b();
+		io.PrintInfo_b();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();

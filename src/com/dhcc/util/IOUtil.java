@@ -440,15 +440,19 @@ public class IOUtil {
 		
 		System.out.println(k + "'s iterator.");
 		
-		System.out.println("Um " + Um.length );
-		for (int i=0; i<Um.length; ++i) 
-			System.out.print(Um[i] + " ");
-		System.out.println();
-		System.out.println("Ua " + Ua.length );
-		for (int i=0; i<Ua.length; ++i) 
-			//System.out.print((Ua[i]*180/Math.PI) + " ");
-			System.out.print((Ua[i]) + " ");
-		System.out.println();
+		System.out.println("ID UM UA");
+		for (int i=0; i<Um.length; ++i) {
+			System.out.println(i+" "+Um[i] + " "+Ua[i]);
+		}
+//		System.out.println("Um " + Um.length );
+//		for (int i=0; i<Um.length; ++i) 
+//			System.out.print(Um[i] + " ");
+//		System.out.println();
+//		System.out.println("Ua " + Ua.length );
+//		for (int i=0; i<Ua.length; ++i) 
+//			//System.out.print((Ua[i]*180/Math.PI) + " ");
+//			System.out.print((Ua[i]) + " ");
+//		System.out.println();
 		
 //		System.out.println("Ptemp " + Ptemp.length );
 //		for (int i=0; i<Ptemp.length; ++i) 
