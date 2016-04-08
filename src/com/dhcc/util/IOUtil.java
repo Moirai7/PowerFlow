@@ -377,10 +377,12 @@ public class IOUtil {
 		
 		System.out.println("Branch " + branch.length);
 		for (int i=0; i<info.getNb(); ++i) {
+			//System.out.println(branch[i].getFrom() + " " + branch[i].getTo() + " "
+			//		+ branch[i].getR() + " "+ branch[i].getX() + " "+ branch[i].getY0() + " ");
 			System.out.println(branch[i].getFrom() + " " + branch[i].getTo() + " "
-					+ branch[i].getR() + " "+ branch[i].getX() + " "+ branch[i].getY0() + " ");
+							+ branch[i].getR() + " "+ branch[i].getX() + " "+  "1 ");
 		}
-		System.out.println("Tran " + tran.length );
+		//System.out.println("Tran " + tran.length );
 		for (int i=0; i<info.getNt(); ++i) {
 			System.out.println(tran[i].getFrom() + " " + tran[i].getTo() + " "
 					+ tran[i].getR() + " "+ tran[i].getX() + " "+ tran[i].getK() + " ");

@@ -172,12 +172,12 @@ public class PowerFlow {
 		io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		//io.readCDFData("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee30cdf.txt");
 		//io.TestInfo();
-		//io.PrintInfo_b();
+		io.PrintInfo_b();
 		pd.AdmtMatrix();
 		pd.CalcFactor();
 		pd.InitOri();
 		pd.calcPQ();
-		//io.PrintInfo();
+		io.PrintInfo();
 		PowerFlow pf = new PowerFlow();
 		pf.Run();
 		io.PrintInfo_iter(0);
