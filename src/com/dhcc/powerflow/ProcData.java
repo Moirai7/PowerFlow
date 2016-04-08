@@ -313,7 +313,7 @@ public class ProcData {
 	public void MatPower(int from, int to, double r, double x,double k) {
 		double b = r*r+x*x;
 		r = r/b;
-		x = -x/b;
+		x = x/b;
 		double[] Ua = Variable.getOriTheta();
 		double[] Um = Variable.getOriU();
 		double vi = Um[from], vj = Um[to];
@@ -329,16 +329,19 @@ public class ProcData {
 		double sjcj = Math.sin(dj)*Math.cos(dj);
 		
 
-		double real = vii*(cdi-sdi)/k/k
-				- 2*vij*(cij-sij)/k
-				+ vjj*(cdj-sdj);
-		
-		double imag = 2*vii*sici/k/k
-				- 2*vij*(Math.sin(dj)*Math.cos(di)+Math.sin(di)*Math.cos(dj))/k
-				+ 2*vjj*sjcj;
-		
-		dp = r*real+x*imag;
-		dq = r*imag-x*real;
+//		double real = vii*(cdi-sdi)/k/k
+//				- 2*vij*(cij-sij)/k
+//				+ vjj*(cdj-sdj);
+//		
+//		double imag = 2*vii*sici/k/k
+//				- 2*vij*(Math.sin(dj)*Math.cos(di)+Math.sin(di)*Math.cos(dj))
+//				+ 2*vjj*sjcj;
+//		
+//		dp = r*real+x*imag;
+//		dq = r*imag-x*real;
+		double hi = vii+k*k*vjj-2*k*vij*(cij+sij);
+		dp = hi*r/k/k;
+		dq = hi*x/k/k;
 		System.out.println(from +" "+ to +" "+ dp*100 +" "+ dq*100);
 	}
 	
@@ -404,21 +407,6 @@ public class ProcData {
 			System.out.println(from +" "+ to +" "+ pij*100 +" "+ qij*100 +" "+ pji*100 +" "+ qji*100 +" "+ dpb*100 +" "+ dqb*100);
 		}
 		System.out.println("sum loss： "+ph*100 +" " + qh*100);
-	}
-
-	public void BranchLoss() {
-		Branch[] br = Variable.getBranch();
-		Tran[] trans = Variable.getTrans();
-		Info info = Variable.getPf_info();
-		int numbr = info.getNb(), numtr = info.getNt();
-		for (int i=0; i<numbr; ++i) {
-			int from = br[i].getFrom(),to = br[i].getTo();
-			//double rsij = br[from];
-			//double msij = br[from];
-		}
-		for (int i=0; i<numtr; ++i) {
-			int from = trans[i].getFrom(),to = trans[i].getTo();
-		}
 	}
 	
 	public static void main(String[] args) {
