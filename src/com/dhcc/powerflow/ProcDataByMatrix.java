@@ -123,11 +123,11 @@ public class ProcDataByMatrix {
 			if (branchDatas[i].getType() == VariableByMatrix.BRANCH) {
 				int a1 = branchDatas[i].getNoa();
 				int a2 = branchDatas[i].getNob();
-				y[a1-1][a1-1] = new Complex(y[a1-1][a1-1].re()+branchDatas[i].getGl().re(),y[a1-1][a1-1].im()+branchDatas[i].getGl().im()+branchDatas[i].getB()/2);
-				y[a2-1][a2-1] = new Complex(y[a2-1][a2-1].re()+branchDatas[i].getGl().re(),y[a2-1][a2-1].im()+branchDatas[i].getGl().im()+branchDatas[i].getB()/2);
+				y[a1][a1] = new Complex(y[a1][a1].re()+branchDatas[i].getGl().re(),y[a1][a1].im()+branchDatas[i].getGl().im()+branchDatas[i].getB()/2);
+				y[a2][a2] = new Complex(y[a2][a2].re()+branchDatas[i].getGl().re(),y[a2][a2].im()+branchDatas[i].getGl().im()+branchDatas[i].getB()/2);
 				
-				y[a1-1][a2-1] = new Complex(y[a1-1][a2-1].re()-branchDatas[i].getGl().re(),y[a1-1][a2-1].im()-branchDatas[i].getGl().im());
-				y[a2-1][a1-1] = new Complex(y[a2-1][a1-1].re()-branchDatas[i].getGl().re(),y[a2-1][a1-1].im()-branchDatas[i].getGl().im());
+				y[a1][a2] = new Complex(y[a1][a2].re()-branchDatas[i].getGl().re(),y[a1][a2].im()-branchDatas[i].getGl().im());
+				y[a2][a1] = new Complex(y[a2][a1].re()-branchDatas[i].getGl().re(),y[a2][a1].im()-branchDatas[i].getGl().im());
 			}
 			else {
 				int a1 = branchDatas[i].getNoa();
@@ -139,11 +139,11 @@ public class ProcDataByMatrix {
 				gb = new Complex(gll.re()*(kl-1)/kl, gll.im()*(kl-1)/kl);
 				gc = new Complex(gll.re()/kl, gll.im()/kl);
 				
-				y[a1-1][a1-1] = new Complex(y[a1-1][a1-1].re()+gc.re()+ga.re(),y[a1-1][a1-1].im()+gc.im()+ga.im()-branchDatas[i].getB()/2);
-				y[a2-1][a2-1] = new Complex(y[a2-1][a2-1].re()+gc.re()+gb.re(),y[a2-1][a2-1].im()+gc.im()+gb.im()-branchDatas[i].getB()/2);
+				y[a1][a1] = new Complex(y[a1][a1].re()+gc.re()+ga.re(),y[a1][a1].im()+gc.im()+ga.im()-branchDatas[i].getB()/2);
+				y[a2][a2] = new Complex(y[a2][a2].re()+gc.re()+gb.re(),y[a2][a2].im()+gc.im()+gb.im()-branchDatas[i].getB()/2);
 				
-				y[a1-1][a2-1] = new Complex(y[a1-1][a2-1].re()-gc.re(),y[a1-1][a2-1].im()-gc.im());
-				y[a2-1][a1-1] = new Complex(y[a2-1][a1-1].re()-gc.re(),y[a2-1][a1-1].im()-gc.im());
+				y[a1][a2] = new Complex(y[a1][a2].re()-gc.re(),y[a1][a2].im()-gc.im());
+				y[a2][a1] = new Complex(y[a2][a1].re()-gc.re(),y[a2][a1].im()-gc.im());
 			}
 		}
 	}
@@ -342,17 +342,20 @@ public class ProcDataByMatrix {
 	
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
-		Info info = Variable.getPf_info();
-		Complex[][] y = VariableByMatrix.getY();
-		double[] oriu = VariableByMatrix.getOriu();
 		ProcDataByMatrix pd = new ProcDataByMatrix();
-		io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		//io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		Info info = Variable.getPf_info();
 		pd.MatchData();
+		pd.InitData();
 		pd.makeyn();
 		pd.originU();
+		
+		Complex[][] y = VariableByMatrix.getY();
+		double[] oriu = VariableByMatrix.getOriu();
 		for (int i=0; i<info.getN(); ++i) {
 			for (int j=0; j<info.getN(); ++j) 
-				System.out.println(y[i][j]);
+				System.out.print("("+y[i][j]+") ");
 			System.out.println();
 		}
 		System.out.println("oriu");
