@@ -70,7 +70,7 @@ public class ProcDataByMatrix {
 			branchData[i+branch.length].setNoa(tran[i].getFrom());
 			branchData[i+branch.length].setNob(tran[i].getTo());
 			branchData[i+branch.length].setR(tran[i].getR());
-			branchData[i+branch.length].setType(VariableByMatrix.BRANCH);
+			branchData[i+branch.length].setType(VariableByMatrix.TRANS);
 			branchData[i+branch.length].setX(tran[i].getX());
 			double op = (branchData[i].getR() * branchData[i].getR()) + (branchData[i].getX() * branchData[i].getX());
 	        double m = branch[i].getR() / op;
@@ -121,11 +121,11 @@ public class ProcDataByMatrix {
 		for (int i=0; i<info.getN(); ++i) {
 			y[i][i]=new Complex(busData[i].getG(),busData[i].getB());
 		}
-		for (int i=0; i<info.getN(); ++i) {
-			for (int j=0; j<info.getN(); ++j) 
-				System.out.print("("+y[i][j]+") ");
-			System.out.println();
-		}
+//		for (int i=0; i<info.getN(); ++i) {
+//			for (int j=0; j<info.getN(); ++j) 
+//				System.out.print("("+y[i][j]+") ");
+//			System.out.println();
+//		}
 		for (int i=0; i<branchDatas.length; ++i) {
 			if (branchDatas[i].getType() == VariableByMatrix.BRANCH) {
 				int a1 = branchDatas[i].getNoa();
