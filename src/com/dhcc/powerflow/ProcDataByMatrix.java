@@ -59,23 +59,26 @@ public class ProcDataByMatrix {
 			branchData[i].setType(VariableByMatrix.BRANCH);
 			branchData[i].setX(branch[i].getX());
 			double op = (branchData[i].getR() * branchData[i].getR()) + (branchData[i].getX() * branchData[i].getX());
-	        double m = branch[i].getR() / op;
-	        double n = (-branch[i].getX() / op);
+	        double m = branchData[i].getR() / op;
+	        double n = (-branchData[i].getX() / op);
 	        branchData[i].setGl(new Complex(m,n));
 		}
+		
 		for (int i=0; i<tran.length; i++) {
 			branchData[i+branch.length] = new BranchData();
-			branchData[i+branch.length].setB(0);
+			branchData[i+branch.length].setB(tran[i].getK());
 			branchData[i+branch.length].setK(tran[i].getK());
 			branchData[i+branch.length].setNoa(tran[i].getFrom());
 			branchData[i+branch.length].setNob(tran[i].getTo());
 			branchData[i+branch.length].setR(tran[i].getR());
 			branchData[i+branch.length].setType(VariableByMatrix.TRANS);
 			branchData[i+branch.length].setX(tran[i].getX());
-			double op = (branchData[i].getR() * branchData[i].getR()) + (branchData[i].getX() * branchData[i].getX());
-	        double m = branch[i].getR() / op;
-	        double n = (-branch[i].getX() / op);
+			double op = (branchData[i+branch.length].getR() * branchData[i+branch.length].getR()) +
+					(branchData[i+branch.length].getX() * branchData[i+branch.length].getX());
+	        double m = branchData[i+branch.length].getR() / op;
+	        double n = (-branchData[i+branch.length].getX() / op);
 	        branchData[i+branch.length].setGl(new Complex(m,n));
+	        System.out.println("mn:" + m + ' ' + n + ' ' + op + ' ' + branchData[i+branch.length].getX());
 		}
 		VariableByMatrix.setBranchData(branchData);
 		VariableByMatrix.setBusData(busData);
@@ -126,6 +129,7 @@ public class ProcDataByMatrix {
 //				System.out.print("("+y[i][j]+") ");
 //			System.out.println();
 //		}
+		for (int i=0; i<branchDatas.length; ++i) System.out.println(branchDatas[i].getB() + " " + branchDatas[i].getGl());
 		for (int i=0; i<branchDatas.length; ++i) {
 			if (branchDatas[i].getType() == VariableByMatrix.BRANCH) {
 				int a1 = branchDatas[i].getNoa();
