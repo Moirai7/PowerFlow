@@ -172,10 +172,10 @@ public class ProcDataByMatrix {
 		for (int i=0; i<info.getN(); ++i) {
 			if(busData[i].getType() == Variable.REF){
 				oriu[2*i+1] = busData[i].getU()*Math.cos(busData[i].getA()*Math.PI/180);
-				oriu[2*i] = busData[i].getU()*Math.cos(busData[i].getA()*Math.PI/180);
+				oriu[2*i] = busData[i].getU()*Math.sin(busData[i].getA()*Math.PI/180);
 			} else {
 				oriu[2*i+1] = busData[i].getU0()*Math.cos(0);
-				oriu[2*i] = busData[i].getU0()*Math.cos(0);
+				oriu[2*i] = busData[i].getU0()*Math.sin(0);
 			}
 		}
 	}
@@ -359,8 +359,8 @@ public class ProcDataByMatrix {
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
 		ProcDataByMatrix pd = new ProcDataByMatrix();
-		io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
-		//io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		//io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		Info info = Variable.getPf_info();
 		pd.MatchData();
 		pd.InitData();
