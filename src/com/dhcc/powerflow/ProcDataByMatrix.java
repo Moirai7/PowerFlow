@@ -24,28 +24,30 @@ public class ProcDataByMatrix {
 		BranchData[] branchData = new BranchData[branch.length + tran.length];
 		System.out.println("Load:" + load.length);
 		for (int i=0; i<load.length; i++) {
-			busData[i] = new BusData();
-			busData[i].setPl(load[i].getPl() / 100);
-			busData[i].setPg((load[i].getP() + load[i].getPl()) / 100);
-			busData[i].setQl(load[i].getQl() / 100);
-			busData[i].setQg((load[i].getQ() + load[i].getQl()) / 100);
-			busData[i].setB(load[i].getB());
-			busData[i].setG(load[i].getG());
-			busData[i].setId(load[i].getI());
-			busData[i].setType(load[i].getJ());
-			busData[i].setU(load[i].getV());
+			int ii = load[i].getI();
+			busData[ii] = new BusData();
+			busData[ii].setPl(load[i].getPl() / 100);
+			busData[ii].setPg((load[i].getP() + load[i].getPl()) / 100);
+			busData[ii].setQl(load[i].getQl() / 100);
+			busData[ii].setQg((load[i].getQ() + load[i].getQl()) / 100);
+			busData[ii].setB(load[i].getB());
+			busData[ii].setG(load[i].getG());
+			busData[ii].setId(load[i].getI());
+			busData[ii].setType(load[i].getJ());
+			busData[ii].setU(load[i].getV());
 		}
 		for (int i=0; i<gene.length; i++) {
-			busData[i+load.length] = new BusData();
-			busData[i+load.length].setPl(gene[i].getPl() / 100);
-			busData[i+load.length].setPg((gene[i].getP() + gene[i].getPl()) / 100);
-			busData[i+load.length].setQl(gene[i].getQl() / 100);
-			busData[i+load.length].setQg((gene[i].getQ() + gene[i].getQl()) / 100);
-			busData[i+load.length].setB(gene[i].getB());
-			busData[i+load.length].setG(gene[i].getG());
-			busData[i+load.length].setId(gene[i].getI());
-			busData[i+load.length].setType(gene[i].getJ());
-			busData[i+load.length].setU(gene[i].getV());
+			int ii = gene[i].getI();
+			busData[ii] = new BusData();
+			busData[ii].setPl(gene[i].getPl() / 100);
+			busData[ii].setPg((gene[i].getP() + gene[i].getPl()) / 100);
+			busData[ii].setQl(0 / 100);
+			busData[ii].setQg((gene[i].getQ() + gene[i].getQl()) / 100);
+			busData[ii].setB(gene[i].getB());
+			busData[ii].setG(gene[i].getG());
+			busData[ii].setId(gene[i].getI());
+			busData[ii].setType(gene[i].getJ());
+			busData[ii].setU(gene[i].getV());
 		}
 		for (int i=0; i<branch.length; i++) {
 			branchData[i] = new BranchData();
@@ -73,7 +75,7 @@ public class ProcDataByMatrix {
 			double op = (branchData[i].getR() * branchData[i].getR()) + (branchData[i].getX() * branchData[i].getX());
 	        double m = branch[i].getR() / op;
 	        double n = (-branch[i].getX() / op);
-	        branchData[i].setGl(new Complex(m,n));
+	        branchData[i+branch.length].setGl(new Complex(m,n));
 		}
 		VariableByMatrix.setBranchData(branchData);
 		VariableByMatrix.setBusData(busData);
@@ -119,17 +121,27 @@ public class ProcDataByMatrix {
 		for (int i=0; i<info.getN(); ++i) {
 			y[i][i]=new Complex(busData[i].getG(),busData[i].getB());
 		}
-		for (int i=0; i<info.getNb(); ++i) {
+		for (int i=0; i<info.getN(); ++i) {
+			for (int j=0; j<info.getN(); ++j) 
+				System.out.print("("+y[i][j]+") ");
+			System.out.println();
+		}
+		for (int i=0; i<branchDatas.length; ++i) {
 			if (branchDatas[i].getType() == VariableByMatrix.BRANCH) {
 				int a1 = branchDatas[i].getNoa();
 				int a2 = branchDatas[i].getNob();
+//				System.out.println("a:"+a1+" "+a2+" " +i);
 				y[a1][a1] = new Complex(y[a1][a1].re()+branchDatas[i].getGl().re(),y[a1][a1].im()+branchDatas[i].getGl().im()+branchDatas[i].getB()/2);
 				y[a2][a2] = new Complex(y[a2][a2].re()+branchDatas[i].getGl().re(),y[a2][a2].im()+branchDatas[i].getGl().im()+branchDatas[i].getB()/2);
 				
 				y[a1][a2] = new Complex(y[a1][a2].re()-branchDatas[i].getGl().re(),y[a1][a2].im()-branchDatas[i].getGl().im());
 				y[a2][a1] = new Complex(y[a2][a1].re()-branchDatas[i].getGl().re(),y[a2][a1].im()-branchDatas[i].getGl().im());
 			}
-			else {
+		}
+		for (int i=0; i<branchDatas.length; ++i) {
+			if (branchDatas[i].getType() == VariableByMatrix.BRANCH) {
+				continue;
+			} else {
 				int a1 = branchDatas[i].getNoa();
 				int a2 = branchDatas[i].getNob();
 				double kl = branchDatas[i].getK();
@@ -343,8 +355,8 @@ public class ProcDataByMatrix {
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();
 		ProcDataByMatrix pd = new ProcDataByMatrix();
-		//io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
-		io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		//io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		Info info = Variable.getPf_info();
 		pd.MatchData();
 		pd.InitData();
