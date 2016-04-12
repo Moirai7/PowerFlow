@@ -1,5 +1,7 @@
 package com.dhcc.powerflow;
 
+import java.time.Year;
+
 import com.dhcc.Global.Variable;
 import com.dhcc.Global.VariableByMatrix;
 import com.dhcc.model.Branch;
@@ -10,6 +12,7 @@ import com.dhcc.model.Info;
 import com.dhcc.model.Load;
 import com.dhcc.model.Tran;
 import com.dhcc.util.Complex;
+import com.dhcc.util.IOUtil;
 import com.dhcc.util.NEquation;
 
 public class ProcDataByMatrix {
@@ -318,5 +321,26 @@ public class ProcDataByMatrix {
 	
 	public void branchloss() {
 		
+	}
+	
+	public static void main(String[] args) {
+		IOUtil io = new IOUtil();
+		Info info = Variable.getPf_info();
+		Complex[][] y = VariableByMatrix.getY();
+		double[] oriu = VariableByMatrix.getOriu();
+		ProcDataByMatrix pd = new ProcDataByMatrix();
+		io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		pd.MatchData();
+		pd.makeyn();
+		pd.originU();
+		for (int i=0; i<info.getN(); ++i) {
+			for (int j=0; j<info.getN(); ++j) 
+				System.out.println(y[i][j]);
+			System.out.println();
+		}
+		System.out.println("oriu");
+		for (int i=0; i<info.getN(); ++i) {
+			System.out.println(oriu[2*i]+" "+oriu[2*i+1]);
+		}
 	}
 }
