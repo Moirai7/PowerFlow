@@ -178,7 +178,7 @@ public class ProcDataByMatrix {
 				oriu[2*i] = busData[i].getU()*Math.sin(0);
 			} else {
 				oriu[2*i+1] = 1;
-				oriu[2*i] = 1;
+				oriu[2*i] = 0;
 			}
 		}
 	}
@@ -354,15 +354,25 @@ public class ProcDataByMatrix {
 	}
 	
 	public void checkPVbus() {
-		
-	}
-	
-	public void makenewbus() {
-		
-	}
-	
-	public void branchloss() {
-		
+		Info info = Variable.getPf_info();
+		BusData[] busDatas = VariableByMatrix.getBusData();
+		for(int i=0; i<info.getN(); ++i) {
+			if(busDatas[i].getType() == Variable.PV) {
+				if((busDatas[i].getSump()-busDatas[i].getQl())<busDatas[i].getQmin()) {
+					busDatas[i].setType(1);
+					busDatas[i].setQg(busDatas[i].getQmin());
+					busDatas[i].setQl(0);
+				}else if((busDatas[i].getSump()-busDatas[i].getQl())>busDatas[i].getQmax()){
+					busDatas[i].setType(1);
+					busDatas[i].setQg(busDatas[i].getQmax());
+					busDatas[i].setQl(0);
+				}else {
+					continue;
+				}
+			}else {
+				continue;
+			}
+		}
 	}
 	
 	public static void main(String[] args) {
