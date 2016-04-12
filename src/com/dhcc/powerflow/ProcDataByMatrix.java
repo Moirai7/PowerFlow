@@ -173,9 +173,12 @@ public class ProcDataByMatrix {
 			if(busData[i].getType() == Variable.REF){
 				oriu[2*i+1] = busData[i].getU()*Math.cos(busData[i].getA()*Math.PI/180);
 				oriu[2*i] = busData[i].getU()*Math.sin(busData[i].getA()*Math.PI/180);
+			} else if(busData[i].getType() == Variable.PV){
+				oriu[2*i+1] = busData[i].getU()*Math.cos(0);
+				oriu[2*i] = busData[i].getU()*Math.sin(0);
 			} else {
-				oriu[2*i+1] = busData[i].getU0()*Math.cos(0);
-				oriu[2*i] = busData[i].getU0()*Math.sin(0);
+				oriu[2*i+1] = 1;
+				oriu[2*i] = 1;
 			}
 		}
 	}
@@ -193,7 +196,9 @@ public class ProcDataByMatrix {
 			}else if (busData[i].getType() == Variable.PV) {
 				double power = 0;
 				for (int j=0; j<info.getN(); ++j) {
-					power = power+oriu[2*i+1]*(y[i][j].re()*oriu[2*j+1]-y[i][j].im()*oriu[2*j])+oriu[2*i]*(y[i][j].re()*oriu[2*j]+y[i][j].im()*oriu[2*j+1]);
+					power = power+
+							oriu[2*i+1]*(y[i][j].re()*oriu[2*j+1]-y[i][j].im()*oriu[2*j])+
+							oriu[2*i]*(y[i][j].re()*oriu[2*j]+y[i][j].im()*oriu[2*j+1]);
 				}
 				double deltau2 = oriu[2*i]*oriu[2*i]+oriu[2*i+1]*oriu[2*i+1];
 				delta[2*i]=busData[i].getPg()-busData[i].getPl()-power;
@@ -201,14 +206,18 @@ public class ProcDataByMatrix {
 			}else {
 				double power = 0;
 				for (int j=0; j<info.getN(); ++j) {
-					power = power+oriu[2*i+1]*(y[i][j].re()*oriu[2*j+1]-y[i][j].im()*oriu[2*j])+oriu[2*i]*(y[i][j].re()*oriu[2*j]+y[i][j].im()*oriu[2*j+1]);
+					power = power+
+							oriu[2*i+1]*(y[i][j].re()*oriu[2*j+1]-y[i][j].im()*oriu[2*j])+
+							oriu[2*i]*(y[i][j].re()*oriu[2*j]+y[i][j].im()*oriu[2*j+1]);
 				}
 				double qower = 0;
 				for (int j=0; j<info.getN(); ++j) {
-					qower = qower+oriu[2*i]*(y[i][j].re()*oriu[2*j+1]-y[i][j].im()*oriu[2*j])-oriu[2*i+1]*(y[i][j].re()*oriu[2*j]+y[i][j].im()*oriu[2*j+1]);
+					qower = qower+
+							oriu[2*i]*(y[i][j].re()*oriu[2*j+1]-y[i][j].im()*oriu[2*j])-
+							oriu[2*i+1]*(y[i][j].re()*oriu[2*j]+y[i][j].im()*oriu[2*j+1]);
 				}
 				delta[2*i]=busData[i].getPg()-busData[i].getPl()-power;
-				delta[2*i+1]=busData[i].getU()*busData[i].getU()-qower;
+				delta[2*i+1]=busData[i].getQg()*busData[i].getQl()-qower;
 			}
 		}
 	}
@@ -377,6 +386,18 @@ public class ProcDataByMatrix {
 		System.out.println("oriu");
 		for (int i=0; i<info.getN(); ++i) {
 			System.out.println(oriu[2*i]+" "+oriu[2*i+1]);
+		}
+		int k=0;
+		while (true) {
+			pd.makedelta();
+			double[] delta = VariableByMatrix.getDelta();
+			++k;
+			System.out.println("iter  "+k);
+			for(int i=0; i<info.getN(); ++i) {
+				System.out.print("dp"+i+"= "+delta[2*i]);
+				System.out.println("\tdq"+i+"= "+delta[2*i+1]);
+			}
+			break;
 		}
 	}
 }
