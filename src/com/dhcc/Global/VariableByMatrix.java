@@ -2,6 +2,7 @@ package com.dhcc.Global;
 
 import com.dhcc.model.BranchData;
 import com.dhcc.model.BusData;
+import com.dhcc.util.Complex;
 
 public class VariableByMatrix {
 	
@@ -9,7 +10,67 @@ public class VariableByMatrix {
 	public static int TRANS = 2;
 	private static BranchData[] branchData = null;
 	private static BusData[] busData = null;
-	 
+	private static Complex[][] y = null;
+	private static double[] delta = null;
+	private static double[] oriu = null;
+	private static double[][] N,H,J,R,S,L;
+	
+	
+
+	public static double[][] getN() {
+		return N;
+	}
+	public static void setN(double[][] n) {
+		N = n;
+	}
+	public static double[][] getH() {
+		return H;
+	}
+	public static void setH(double[][] h) {
+		H = h;
+	}
+	public static double[][] getJ() {
+		return J;
+	}
+	public static void setJ(double[][] j) {
+		J = j;
+	}
+	public static double[][] getR() {
+		return R;
+	}
+	public static void setR(double[][] r) {
+		R = r;
+	}
+	public static double[][] getS() {
+		return S;
+	}
+	public static void setS(double[][] s) {
+		S = s;
+	}
+	public static double[][] getL() {
+		return L;
+	}
+	public static void setL(double[][] l) {
+		L = l;
+	}
+	public static double[] getOriu() {
+		return oriu;
+	}
+	public static void setOriu(double[] oriu) {
+		VariableByMatrix.oriu = oriu;
+	}
+	public static double[] getDelta() {
+		return delta;
+	}
+	public static void setDelta(double[] delta) {
+		VariableByMatrix.delta = delta;
+	}
+	public static Complex[][] getY() {
+		return y;
+	}
+	public static void setY(Complex[][] y) {
+		VariableByMatrix.y = y;
+	}
     
 	public static BranchData[] getBranchData() {
 		return branchData;
