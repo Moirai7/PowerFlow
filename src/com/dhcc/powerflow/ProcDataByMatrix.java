@@ -1,7 +1,5 @@
 package com.dhcc.powerflow;
 
-import java.time.Year;
-
 import com.dhcc.Global.Variable;
 import com.dhcc.Global.VariableByMatrix;
 import com.dhcc.model.Branch;
@@ -24,8 +22,9 @@ public class ProcDataByMatrix {
 		Tran[] tran = Variable.getTrans();
 		BusData[] busData = new BusData[load.length + gene.length];
 		BranchData[] branchData = new BranchData[branch.length + tran.length];
-		
+		System.out.println("Load:" + load.length);
 		for (int i=0; i<load.length; i++) {
+			busData[i] = new BusData();
 			busData[i].setPl(load[i].getPl() / 100);
 			busData[i].setPg((load[i].getP() + load[i].getPl()) / 100);
 			busData[i].setQl(load[i].getQl() / 100);
@@ -37,6 +36,7 @@ public class ProcDataByMatrix {
 			busData[i].setU(load[i].getV());
 		}
 		for (int i=0; i<gene.length; i++) {
+			busData[i+load.length] = new BusData();
 			busData[i+load.length].setPl(gene[i].getPl() / 100);
 			busData[i+load.length].setPg((gene[i].getP() + gene[i].getPl()) / 100);
 			busData[i+load.length].setQl(gene[i].getQl() / 100);
@@ -48,6 +48,7 @@ public class ProcDataByMatrix {
 			busData[i+load.length].setU(gene[i].getV());
 		}
 		for (int i=0; i<branch.length; i++) {
+			branchData[i] = new BranchData();
 			branchData[i].setB(branch[i].getY0());
 			branchData[i].setK(0);
 			branchData[i].setNoa(branch[i].getFrom());
@@ -61,6 +62,7 @@ public class ProcDataByMatrix {
 	        branchData[i].setGl(new Complex(m,n));
 		}
 		for (int i=0; i<tran.length; i++) {
+			branchData[i+branch.length] = new BranchData();
 			branchData[i+branch.length].setB(0);
 			branchData[i+branch.length].setK(tran[i].getK());
 			branchData[i+branch.length].setNoa(tran[i].getFrom());
@@ -344,7 +346,7 @@ public class ProcDataByMatrix {
 		Complex[][] y = VariableByMatrix.getY();
 		double[] oriu = VariableByMatrix.getOriu();
 		ProcDataByMatrix pd = new ProcDataByMatrix();
-		io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		pd.MatchData();
 		pd.makeyn();
 		pd.originU();
