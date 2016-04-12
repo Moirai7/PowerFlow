@@ -308,7 +308,22 @@ public class ProcDataByMatrix {
 	}
 	
 	public void busflow() {
-		
+		Info info = Variable.getPf_info();
+		BusData[] busData = VariableByMatrix.getBusData();
+		double[] oriu = VariableByMatrix.getOriu();
+		Complex[][] y = VariableByMatrix.getY();
+		for (int i=0; i<info.getN(); ++i) {
+			double power = 0;
+			for (int j=0; j<info.getN(); ++j) {
+				power = power+oriu[2*i+1]*(y[i][j].re()*oriu[2*j+1]-y[i][j].im()*oriu[2*j])+oriu[2*i]*(y[i][j].re()*oriu[2*j]+y[i][j].im()*oriu[2*j+1]);
+			}
+			double qower = 0;
+			for (int j=0; j<info.getN(); ++j) {
+				qower = qower+oriu[2*i]*(y[i][j].re()*oriu[2*j+1]-y[i][j].im()*oriu[2*j])-oriu[2*i+1]*(y[i][j].re()*oriu[2*j]+y[i][j].im()*oriu[2*j+1]);
+			}
+			busData[i].setSump(power);
+			busData[i].setSumq(qower);
+		}
 	}
 	
 	public void checkPVbus() {
