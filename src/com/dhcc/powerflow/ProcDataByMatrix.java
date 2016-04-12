@@ -1,7 +1,5 @@
 package com.dhcc.powerflow;
 
-import java.time.Year;
-
 import com.dhcc.Global.Variable;
 import com.dhcc.Global.VariableByMatrix;
 import com.dhcc.model.Branch;
@@ -12,6 +10,7 @@ import com.dhcc.model.Info;
 import com.dhcc.model.Load;
 import com.dhcc.model.Tran;
 import com.dhcc.util.Complex;
+import com.dhcc.util.NEquation;
 
 public class ProcDataByMatrix {
 	
@@ -86,12 +85,19 @@ public class ProcDataByMatrix {
 		double[][] H = new double[info.getN()][info.getN()],N = new double[info.getN()][info.getN()],
 				J= new double[info.getN()][info.getN()],L= new double[info.getN()][info.getN()],
 				R= new double[info.getN()][info.getN()],S= new double[info.getN()][info.getN()];
+		double[][] jac = new double[info.getN()*2+1][info.getN()*2+1];
+		double[] absu = new double[info.getN()];
+		double[] angleu = new double[info.getN()];
+		
 		VariableByMatrix.setH(H);
 		VariableByMatrix.setN(N);
 		VariableByMatrix.setJ(J);
 		VariableByMatrix.setL(L);
 		VariableByMatrix.setR(R);
 		VariableByMatrix.setS(S);
+		VariableByMatrix.setAbsu(absu);
+		VariableByMatrix.setAngleu(angleu);
+		VariableByMatrix.setJac(jac);
 	}
 	
 	public void makeyn() {
@@ -230,7 +236,7 @@ public class ProcDataByMatrix {
 		double[][] H = VariableByMatrix.getH(),N = VariableByMatrix.getN(),
 				J= VariableByMatrix.getJ(),L= VariableByMatrix.getL(),
 				R= VariableByMatrix.getR(),S= VariableByMatrix.getS();
-		double[][] jac = new double[info.getN()*2+1][info.getN()*2+1];
+		double[][] jac = VariableByMatrix.getJac();
 		for (int i=0; i<info.getN(); ++i) {
 			for (int j=0; j<info.getN(); ++j) {
 				if (busData[i].getType()==Variable.REF){
@@ -266,10 +272,36 @@ public class ProcDataByMatrix {
 				}
 			}
 		}
+		
 	}
 	
 	public void fcsolution() {
-		
+		Info info = Variable.getPf_info();
+		double[][] jac = VariableByMatrix.getJac();
+		double[] delta = VariableByMatrix.getDelta();
+		double[] oriu = VariableByMatrix.getOriu();
+		double[] absu = VariableByMatrix.getAbsu();
+		double[] angleu = VariableByMatrix.getAngleu();
+		NEquation ob = new NEquation();
+		ob.SetSize(2 * info.getN());
+		for (int i=0; i<2*info.getN(); ++i)
+			for (int j=0; j<2*info.getN(); ++j) {
+				ob.Data(i, j, jac[i][j]);
+			}
+		for (int i=0; i<2*info.getN(); ++i) {
+			ob.Value(i, delta[i]);
+		}
+		ob.Run();
+		for (int i=0; i<info.getN(); ++i) {
+			double a = ob.Value(2 * i + 1);
+			double b = ob.Value(2 * i);
+			oriu[2 * i + 1] += a;
+			oriu[2 * i] += b;
+		}
+		for (int i=0; i<info.getN(); ++i) {
+			absu[i] = Math.sqrt(oriu[2*i+1]*oriu[2*i+1] + oriu[2*i]*oriu[2*i]);
+			angleu[i] = (Math.atan(oriu[2*i] / oriu[2*i+1])) * 180 / Math.PI;
+		}
 	}
 	
 	public void busflow() {

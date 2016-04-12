@@ -14,9 +14,29 @@ public class VariableByMatrix {
 	private static double[] delta = null;
 	private static double[] oriu = null;
 	private static double[][] N,H,J,R,S,L;
-	
-	
+	private static double[][] jac = null;
+	private static double[] absu = null;
+	private static double[] angleu = null;
 
+	
+	public static double[] getAbsu() {
+		return absu;
+	}
+	public static void setAbsu(double[] absu) {
+		VariableByMatrix.absu = absu;
+	}
+	public static double[] getAngleu() {
+		return angleu;
+	}
+	public static void setAngleu(double[] angleu) {
+		VariableByMatrix.angleu = angleu;
+	}
+	public static double[][] getJac() {
+		return jac;
+	}
+	public static void setJac(double[][] jac) {
+		VariableByMatrix.jac = jac;
+	}
 	public static double[][] getN() {
 		return N;
 	}

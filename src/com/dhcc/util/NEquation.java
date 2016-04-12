@@ -30,12 +30,22 @@ public class NEquation {
 	    	return m_nDataBuffer[0];
 	}
 	
+	public void Data(int lhs, int rhs, double value)
+	{
+		m_nDataBuffer[lhs * m_nNumber + rhs] = value;
+	}
+	
 	public double Value(int lhs)
 	{
 	    if((lhs<m_nNumber)&&(lhs>=0))
 	        return m_nValue[lhs];
 	    else
 	    	return m_nValue[0];
+	}
+	
+	public void Value(int lhs, double value)
+	{
+		m_nValue[lhs] = value;
 	}
 	
 	public int Run()
