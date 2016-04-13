@@ -26,10 +26,10 @@ public class ProcDataByMatrix {
 		for (int i=0; i<load.length; i++) {
 			int ii = load[i].getI();
 			busData[ii] = new BusData();
-			busData[ii].setPl(load[i].getPl() / 100);
-			busData[ii].setPg((load[i].getP() + load[i].getPl()) / 100);
-			busData[ii].setQl(load[i].getQl() / 100);
-			busData[ii].setQg((load[i].getQ() + load[i].getQl()) / 100);
+			busData[ii].setPl(load[i].getP() + load[i].getPl() / 100);
+			busData[ii].setPg(load[i].getPl() / 100);
+			busData[ii].setQl(load[i].getQ() + load[i].getQl() / 100);
+			busData[ii].setQg(load[i].getQl() / 100);
 			busData[ii].setB(load[i].getB());
 			busData[ii].setG(load[i].getG());
 			busData[ii].setId(load[i].getI());
@@ -39,16 +39,25 @@ public class ProcDataByMatrix {
 		for (int i=0; i<gene.length; i++) {
 			int ii = gene[i].getI();
 			busData[ii] = new BusData();
-			busData[ii].setPl(gene[i].getPl() / 100);
-			busData[ii].setPg((gene[i].getP() + gene[i].getPl()) / 100);
-			busData[ii].setQl(0 / 100);
-			busData[ii].setQg((gene[i].getQ() + gene[i].getQl()) / 100);
+			if (gene[i].getJ() == Variable.REF) {
+				busData[ii].setPl(gene[i].getP() + gene[i].getPl() / 100);
+				busData[ii].setPg(gene[i].getPl() / 100);
+				busData[ii].setQl(gene[i].getQ() + gene[i].getQl() / 100);
+				busData[ii].setQg(gene[i].getQl() / 100);
+			} else {
+				busData[ii].setPl(gene[i].getPl() / 100);
+				busData[ii].setPg(gene[i].getPl() / 100 - gene[i].getP());
+				busData[ii].setQl(gene[i].getQl() / 100);
+				busData[ii].setQg(gene[i].getQl() / 100 - gene[i].getQ());
+			}
 			busData[ii].setB(gene[i].getB());
 			busData[ii].setG(gene[i].getG());
 			busData[ii].setId(gene[i].getI());
 			busData[ii].setType(gene[i].getJ());
 			busData[ii].setU(gene[i].getV());
+//			System.out.println("P PL  " + busData[ii].getPg() + ' ' + busData[ii].getPl());
 		}
+		for (int i=0; i<14; ++i) System.out.println("PG PL  " + busData[i].getPg() + ' ' + busData[i].getPl());
 		for (int i=0; i<branch.length; i++) {
 			branchData[i] = new BranchData();
 			branchData[i].setB(branch[i].getY0());
@@ -189,6 +198,7 @@ public class ProcDataByMatrix {
 		double[] delta = VariableByMatrix.getDelta();
 		double[] oriu = VariableByMatrix.getOriu();
 		Complex[][] y = VariableByMatrix.getY();
+		
 		for (int i=0; i<info.getN(); ++i) {
 			if(busData[i].getType() == Variable.REF) {
 				delta[2*i] = 0;
@@ -414,6 +424,7 @@ public class ProcDataByMatrix {
 			if (mmax < info.getEps()) {
 				break;
 			}
+			break;
 		}
 	}
 	
