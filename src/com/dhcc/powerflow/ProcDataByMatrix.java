@@ -22,7 +22,7 @@ public class ProcDataByMatrix {
 		Tran[] tran = Variable.getTrans();
 		BusData[] busData = new BusData[load.length + gene.length];
 		BranchData[] branchData = new BranchData[branch.length + tran.length];
-		System.out.println("Load:" + load.length);
+//		System.out.println("Load:" + load.length);
 		for (int i=0; i<load.length; i++) {
 			int ii = load[i].getI();
 			busData[ii] = new BusData();
@@ -78,7 +78,7 @@ public class ProcDataByMatrix {
 	        double m = branchData[i+branch.length].getR() / op;
 	        double n = (-branchData[i+branch.length].getX() / op);
 	        branchData[i+branch.length].setGl(new Complex(m,n));
-	        System.out.println("mn:" + m + ' ' + n + ' ' + op + ' ' + branchData[i+branch.length].getX());
+//	        System.out.println("mn:" + m + ' ' + n + ' ' + op + ' ' + branchData[i+branch.length].getX());
 		}
 		VariableByMatrix.setBranchData(branchData);
 		VariableByMatrix.setBusData(busData);
@@ -129,7 +129,7 @@ public class ProcDataByMatrix {
 //				System.out.print("("+y[i][j]+") ");
 //			System.out.println();
 //		}
-		for (int i=0; i<branchDatas.length; ++i) System.out.println(branchDatas[i].getB() + " " + branchDatas[i].getGl());
+//		for (int i=0; i<branchDatas.length; ++i) System.out.println(branchDatas[i].getB() + " " + branchDatas[i].getGl());
 		for (int i=0; i<branchDatas.length; ++i) {
 			if (branchDatas[i].getType() == VariableByMatrix.BRANCH) {
 				int a1 = branchDatas[i].getNoa();
@@ -375,11 +375,11 @@ public class ProcDataByMatrix {
 		}
 	}
 	
-	public static void main(String[] args) {
+	public void run() {
 		IOUtil io = new IOUtil();
 		ProcDataByMatrix pd = new ProcDataByMatrix();
-		//io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
-		io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		//io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		Info info = Variable.getPf_info();
 		pd.MatchData();
 		pd.InitData();
@@ -407,7 +407,18 @@ public class ProcDataByMatrix {
 				System.out.print("dp"+i+"= "+delta[2*i]);
 				System.out.println("\tdq"+i+"= "+delta[2*i+1]);
 			}
-			break;
+			double mmax = 0;
+			for (int i=0; i<info.getN(); ++i) {
+				mmax = Math.max(mmax, Math.abs(delta[i]));
+			}
+			if (mmax < info.getEps()) {
+				break;
+			}
 		}
+	}
+	
+	public static void main(String[] args) {
+		ProcDataByMatrix pdbm = new ProcDataByMatrix();
+		pdbm.run();
 	}
 }
