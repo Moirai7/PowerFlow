@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.dhcc.Global.Opt;
 import com.dhcc.Global.Variable;
 import com.dhcc.model.Branch;
 import com.dhcc.model.Gene;
@@ -16,6 +17,7 @@ import com.dhcc.model.Info;
 import com.dhcc.model.Load;
 import com.dhcc.model.MPC;
 import com.dhcc.model.Tran;
+
 
 public class IOUtil {
 	public void UsingAdmtMatrix() {
@@ -109,6 +111,8 @@ public class IOUtil {
 			int phIdx = 0;
 			double php = 0, phq = 0, phv = 0, phtheta = 0, phpl = 0, phql = 0;
 			
+			int _npv=0;
+			double[] max = new double[n_bus],min = new double[n_bus];
 			for (int i = 0; i < n_bus; ++i) {
 				row = br.readLine();
 				rowdata = row.split(",");
@@ -126,6 +130,9 @@ public class IOUtil {
 					generator[ng-1].setQl(Double.parseDouble(rowdata[10]));
 					generator[ng-1].setG(Double.parseDouble(rowdata[17]));
 					generator[ng-1].setB(Double.parseDouble(rowdata[18]));
+					_npv+=Double.parseDouble(rowdata[9]);
+					max[ng-1] = 300;
+					min[ng-1] = 0;
 					//System.out.println("Gene:" + Double.parseDouble(rowdata[18]));
 				} else if (type == 0 || type == 1) {
 					int idx = Integer.parseInt(rowdata[0]);
@@ -152,10 +159,16 @@ public class IOUtil {
 					phql = Double.parseDouble(rowdata[10]);
 				}
 			}
+			Opt.setNpq(_npv);
+			double[] _max = new double[npv];
+			System.arraycopy(max, 0, _max, 0, npv);
+			Opt.setMax(_max);
+			System.arraycopy(min, 0, _max, 0, npv);
+			Opt.setMin(_max);
 			
 			generator[ng++] = new Gene(phIdx,Variable.REF,php/100.0,phq/100.0,phv);
 			generator[ng-1].setPl(phpl);
-			generator[ng-1].setPl(phql);
+			generator[ng-1].setQl(phql);
 			
 			
 			int newIdx = 0;
@@ -250,6 +263,8 @@ public class IOUtil {
 			int phIdx = 0;
 			double php = 0, phq = 0, phv = 0, phg = 0, phb = 0, phpl = 0, phql = 0;
 			
+			int _npv=0;
+			double[] max = new double[n_bus],min = new double[n_bus];
 			for (int i = 0; i < n_bus; ++i) {
 				row = br.readLine();
 				rowdata = row.split(",");
@@ -268,6 +283,9 @@ public class IOUtil {
 					generator[ng-1].setQl(Double.parseDouble(rowdata[10]));
 					generator[ng-1].setG(Double.parseDouble(rowdata[17]));
 					generator[ng-1].setB(Double.parseDouble(rowdata[18]));
+					_npv+=Double.parseDouble(rowdata[9]);
+					max[ng-1] = 300;
+					min[ng-1] = 0;
 //					System.out.println("Gene:" + idx);
 				} else if (type == 0 || type == 1) {
 					int idx = Integer.parseInt(rowdata[0]) - 1;
@@ -299,6 +317,12 @@ public class IOUtil {
 ;				}
 			}
 			
+			Opt.setNpq(_npv);
+			double[] _max = new double[npv];
+			System.arraycopy(max, 0, _max, 0, npv);
+			Opt.setMax(_max);
+			System.arraycopy(min, 0, _max, 0, npv);
+			Opt.setMin(_max);
 			
 			generator[ng] = new Gene(phIdx,Variable.REF,php/100.0,phq/100.0,phv);
 			generator[ng].setG(phg);
