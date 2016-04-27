@@ -24,4 +24,9 @@ public class Functions {
 		}
 		return ret;
 	}
+	
+	public static boolean constrain(double[] X) {
+		boolean flag = true;
+		return flag;
+	}
 }
