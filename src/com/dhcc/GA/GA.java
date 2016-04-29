@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
+import com.dhcc.Global.Function;
 import com.dhcc.Global.Functions;
 
 public class GA {
@@ -25,13 +26,17 @@ public class GA {
 	public static double[] q = new double[POP_SIZE];// q[i]是前n项p之和（累积概率）
 	public static Random random = new Random();// 用于产生随机数的工具
 	public static Best best = new Best(varnum);// 记录最佳答案的对象
+	public static Function function = null;
+	public static int t = 0;
 
-	public GA(double initpop[][]) {
+	public GA(double initpop[][], int time, Function f) {
 		for (int i = 0; i < initpop.length; i++) {
 			for (int j = 0; j < initpop[0].length; j++) {
 				result[i][j] = initpop[i][j];
 			}
 		}
+		t = time;
+		function = f;
 	}
 
 	public void encoding() {
@@ -84,9 +89,9 @@ public class GA {
 			fitness[i] = 0;
 			double[] X = new double[varnum];
 			for (int j = 0; j < varnum; j++) X[j] = result[j][i];
-			if (Functions.constrain(X)) {
-				fitness[i] = 1000000 - (5.3578547 * Math.pow(result[2][i], 2)
-							+ 0.8356891 * result[0][i] * result[4][i] + 37.293239 * result[0][i] - 40792.141);
+			if (function.constrain(X)) {
+				fitness[i] = 1000000 - function.F(X);
+//				System.out.println("fitness:" + fitness[i]);
 			}
 			for (int j = 0; j < varnum; j++) result[j][i] = X[j];
 		}
@@ -228,7 +233,8 @@ public class GA {
 			}
 		}
 		// 初始化其它参数
-		GA ga = new GA(initpop);
+		Functions f = new Functions();
+		GA ga = new GA(initpop, 0, f);
 		System.out.println("种群进化中....");
 		// 进化，这里进化10000次
 		long starttime = System.currentTimeMillis();
