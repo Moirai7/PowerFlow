@@ -38,6 +38,9 @@ public class ProcDataByMatrix {
 			busData[ii].setId(load[i].getI());
 			busData[ii].setType(load[i].getJ());
 			busData[ii].setU(load[i].getV());
+			//TODO Qmax Qmin means Vmax & Vmin.
+			busData[ii].setQmax(load[i].getMax());
+			busData[ii].setQmin(load[i].getMin());
 		}
 		for (int i=0; i<gene.length; i++) {
 			int ii = gene[i].getI();
@@ -59,9 +62,11 @@ public class ProcDataByMatrix {
 			busData[ii].setId(gene[i].getI());
 			busData[ii].setType(gene[i].getJ());
 			busData[ii].setU(gene[i].getV());
+			busData[ii].setQmax(gene[i].getMax());
+			busData[ii].setQmin(gene[i].getMin());
 //			System.out.println("P PL  " + busData[ii].getPg() + ' ' + busData[ii].getPl());
 		}
-		for (int i=0; i<14; ++i) System.out.println("PG PL  " + busData[i].getQg() + ' ' + busData[i].getQl());
+//		for (int i=0; i<14; ++i) System.out.println("PG PL  " + busData[i].getQg() + ' ' + busData[i].getQl());
 		for (int i=0; i<branch.length; i++) {
 			branchData[i] = new BranchData();
 			branchData[i].setB(branch[i].getY0());
@@ -230,7 +235,7 @@ public class ProcDataByMatrix {
 							oriu[2*i]*(y[i][j].re()*oriu[2*j+1]-y[i][j].im()*oriu[2*j])-
 							oriu[2*i+1]*(y[i][j].re()*oriu[2*j]+y[i][j].im()*oriu[2*j+1]);
 				}
-				System.out.println(qower + " " + busData[i].getQg() + " " + busData[i].getQl());
+//				System.out.println(qower + " " + busData[i].getQg() + " " + busData[i].getQl());
 				delta[2*i]=busData[i].getPg()-busData[i].getPl()-power;
 				delta[2*i+1]=busData[i].getQg()-busData[i].getQl()-qower;
 			}
@@ -390,7 +395,17 @@ public class ProcDataByMatrix {
 		}
 	}
 	
-	public void run() {
+	public boolean checkPV() {
+		Info info = Variable.getPf_info();
+		BusData[] busDatas = VariableByMatrix.getBusData();
+		for(int i=0; i<info.getN(); ++i) {
+			if (busDatas[i].getU()>busDatas[i].getQmax() || busDatas[i].getU()<busDatas[i].getQmin() ) 
+				return false;
+		}
+		return true;
+	}
+	
+	public boolean Run() {
 		Info info = Variable.getPf_info();
 		MatchData();
 		InitData();
@@ -399,34 +414,35 @@ public class ProcDataByMatrix {
 		
 		Complex[][] y = VariableByMatrix.getY();
 		double[] oriu = VariableByMatrix.getOriu();
-		for (int i=0; i<info.getN(); ++i) {
-			for (int j=0; j<info.getN(); ++j) 
-				System.out.print("("+y[i][j]+") ");
-			System.out.println();
-		}
-		System.out.println("oriu");
-		for (int i=0; i<info.getN(); ++i) {
-			System.out.println(oriu[2*i]+" "+oriu[2*i+1]);
-		}
+//		for (int i=0; i<info.getN(); ++i) {
+//			for (int j=0; j<info.getN(); ++j) 
+//				System.out.print("("+y[i][j]+") ");
+//			System.out.println();
+//		}
+//		System.out.println("oriu");
+//		for (int i=0; i<info.getN(); ++i) {
+//			System.out.println(oriu[2*i]+" "+oriu[2*i+1]);
+//		}
 		int k=0;
 		while (true) {
+			if(k>6000)return false;
 			makedelta();
 			double[] delta = VariableByMatrix.getDelta();
 			++k;
-			System.out.println("iter  "+k);
-			for(int i=0; i<info.getN(); ++i) {
-				System.out.print("dp"+i+"= "+delta[2*i]);
-				System.out.println("\tdq"+i+"= "+delta[2*i+1]);
-			}
+//			System.out.println("iter  "+k);
+//			for(int i=0; i<info.getN(); ++i) {
+//				System.out.print("dp"+i+"= "+delta[2*i]);
+//				System.out.println("\tdq"+i+"= "+delta[2*i+1]);
+//			}
 			makeHNJLRS();
 			makejac();
-			System.out.println("jacb");
+//			System.out.println("jacb");
 			double[][] jac = VariableByMatrix.getJac();
-			for (int i=0; i<2*info.getN(); ++i){
-				for (int j=0; j<info.getN()*2; ++j)
-					System.out.print(jac[i][j]+" ");
-				System.out.println();
-			}
+//			for (int i=0; i<2*info.getN(); ++i){
+//				for (int j=0; j<info.getN()*2; ++j)
+//					System.out.print(jac[i][j]+" ");
+//				System.out.println();
+//			}
 			double error=0.0;
 			for(int i=0; i<info.getN(); ++i) {
 				error = Math.max(error, delta[2*i]);
@@ -438,18 +454,19 @@ public class ProcDataByMatrix {
 				break;
 			}
 			fcsolution();
-			System.out.println("U");
+			//System.out.println("U");
 			double[] absu = VariableByMatrix.getAbsu();
 			double[] angleu = VariableByMatrix.getAngleu();
-			for (int i=0; i<info.getN(); ++i)
-				System.out.println(oriu[2*i]+" "+oriu[2*i+1]+" "+ absu[i]+" "+angleu[i]);
+//			for (int i=0; i<info.getN(); ++i)
+//				System.out.println(oriu[2*i]+" "+oriu[2*i+1]+" "+ absu[i]+" "+angleu[i]);
 		}
 		busflow();
-		BusData[] busData = VariableByMatrix.getBusData();
-		System.out.println("P Q");
-		for (int i=0; i<info.getN(); ++i)
-			System.out.println("PL "+(-100*busData[i].getPl())+"\t"+"QL "+(-100*busData[i].getQl())+"\n"
-					+"PG "+(100*(busData[i].getSump() - busData[i].getPl()))+"\t"+"QG "+(100*(busData[i].getSumq() - busData[i].getQl())));
+//		BusData[] busData = VariableByMatrix.getBusData();
+//		System.out.println("P Q");
+//		for (int i=0; i<info.getN(); ++i)
+//			System.out.println("PL "+(-100*busData[i].getPl())+"\t"+"QL "+(-100*busData[i].getQl())+"\n"
+//					+"PG "+(100*(busData[i].getSump() - busData[i].getPl()))+"\t"+"QG "+(100*(busData[i].getSumq() - busData[i].getQl())));
+		return true;
 	}
 	
 	public static void main(String[] args) {
@@ -458,6 +475,6 @@ public class ProcDataByMatrix {
 		//io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		io.readCDFDataWithOriIdx("D:/Java/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		ProcDataByMatrix pdbm = new ProcDataByMatrix();
-		pdbm.run();
+		pdbm.Run();
 	}
 }

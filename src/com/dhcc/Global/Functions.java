@@ -52,7 +52,7 @@ public class Functions implements Function {
 			flag = false;
 			break;
 		}
-		if (sum <= 270) flag = false;
+		//if (sum <= 270) flag = false;
 		return flag;
 	}
 	

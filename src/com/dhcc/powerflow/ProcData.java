@@ -130,10 +130,10 @@ public class ProcData {
 				oriU[(int) load[i].getI()] = load[i].getV();
 		Variable.setOriTheta(oriTheta);
 		Variable.setOriU(oriU);
-		System.out.println("Um " + oriU.length );
-		for (int i=0; i<oriU.length; ++i) 
-			System.out.print(oriU[i] + " ");
-		System.out.println();
+//		System.out.println("Um " + oriU.length );
+//		for (int i=0; i<oriU.length; ++i) 
+//			System.out.print(oriU[i] + " ");
+//		System.out.println();
 	}
 		
 	public void calcPQ() {
@@ -408,6 +408,7 @@ public class ProcData {
 		}
 		System.out.println("sum loss： "+ph*100 +" " + qh*100);
 	}
+	
 	
 	public static void main(String[] args) {
 		IOUtil io = new IOUtil();

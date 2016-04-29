@@ -130,6 +130,9 @@ public class IOUtil {
 					generator[ng-1].setQl(Double.parseDouble(rowdata[10]));
 					generator[ng-1].setG(Double.parseDouble(rowdata[17]));
 					generator[ng-1].setB(Double.parseDouble(rowdata[18]));
+					if (Double.parseDouble(rowdata[15]) == 0) generator[ng-1].setMax(2147483647);
+					else generator[ng-1].setMax(Double.parseDouble(rowdata[15]));
+					generator[ng-1].setMin(Double.parseDouble(rowdata[16]));
 					_npv+=Double.parseDouble(rowdata[9]);
 					max[ng-1] = 300;
 					min[ng-1] = 0;
@@ -147,6 +150,9 @@ public class IOUtil {
 					load[nl-1].setQl(Double.parseDouble(rowdata[10]));
 					load[nl-1].setG(Double.parseDouble(rowdata[17]));
 					load[nl-1].setB(Double.parseDouble(rowdata[18]));
+					if (Double.parseDouble(rowdata[15]) == 0) load[nl-1].setMax(2147483647);
+					else load[nl-1].setMax(Double.parseDouble(rowdata[15]));
+					load[nl-1].setMin(Double.parseDouble(rowdata[16]));
 					//System.out.println("Load:" + Double.parseDouble(rowdata[18]));
 				} else if (type == 3) {
 					phIdx = Integer.parseInt(rowdata[0]);
@@ -169,6 +175,9 @@ public class IOUtil {
 			generator[ng++] = new Gene(phIdx,Variable.REF,php/100.0,phq/100.0,phv);
 			generator[ng-1].setPl(phpl);
 			generator[ng-1].setQl(phql);
+			if (Double.parseDouble(rowdata[15]) == 0) generator[ng-1].setMax(2147483647);
+			else generator[ng-1].setMax(Double.parseDouble(rowdata[15]));
+			generator[ng-1].setMin(Double.parseDouble(rowdata[16]));
 			
 			
 			int newIdx = 0;
@@ -187,9 +196,9 @@ public class IOUtil {
 			newIndex[generator[ng-1].getI()] = newIdx;
 			generator[ng-1].setI(newIdx);
 
-			System.out.println("newidx");
-			for (int i = 1; i <= n_bus; ++i)
-				System.out.println(i + " " + newIndex[i]);
+//			System.out.println("newidx");
+//			for (int i = 1; i <= n_bus; ++i)
+//				System.out.println(i + " " + newIndex[i]);
 			
 			row = br.readLine();n_branch = Integer.parseInt(row);
 			tran = new Tran[n_branch];
@@ -283,6 +292,9 @@ public class IOUtil {
 					generator[ng-1].setQl(Double.parseDouble(rowdata[10]));
 					generator[ng-1].setG(Double.parseDouble(rowdata[17]));
 					generator[ng-1].setB(Double.parseDouble(rowdata[18]));
+					if (Double.parseDouble(rowdata[15]) == 0) generator[ng-1].setMax(2147483647);
+					else generator[ng-1].setMax(Double.parseDouble(rowdata[15]));
+					generator[ng-1].setMin(Double.parseDouble(rowdata[16]));
 					_npv+=Double.parseDouble(rowdata[9]);
 					max[ng-1] = 300;
 					min[ng-1] = 0;
@@ -302,6 +314,9 @@ public class IOUtil {
 					load[nl-1].setQl(Double.parseDouble(rowdata[12]));
 					load[nl-1].setG(Double.parseDouble(rowdata[17]));
 					load[nl-1].setB(Double.parseDouble(rowdata[18]));
+					if (Double.parseDouble(rowdata[15]) == 0) load[nl-1].setMax(2147483647);
+					else load[nl-1].setMax(Double.parseDouble(rowdata[15]));
+					load[nl-1].setMin(Double.parseDouble(rowdata[16]));
 				} else if (type == 3) {
 					phIdx = Integer.parseInt(rowdata[0]) - 1;
 					npv++;
@@ -329,7 +344,9 @@ public class IOUtil {
 			generator[ng].setPl(phpl);
 			generator[ng].setQl(phql);
 			generator[ng++].setB(phb);
-			
+			if (Double.parseDouble(rowdata[15]) == 0) generator[ng-1].setMax(2147483647);
+			else generator[ng-1].setMax(Double.parseDouble(rowdata[15]));
+			generator[ng-1].setMin(Double.parseDouble(rowdata[16]));
 			
 
 			row = br.readLine();n_branch = Integer.parseInt(row);

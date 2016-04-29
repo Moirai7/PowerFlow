@@ -2,6 +2,7 @@ package com.dhcc.GA;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
 
 import com.dhcc.Global.Function;
@@ -29,6 +30,8 @@ public class GA {
 	public static Function function = null;
 	public static int t = 0;
 
+	public GA(){}
+	
 	public GA(double initpop[][], int time, Function f) {
 		for (int i = 0; i < initpop.length; i++) {
 			for (int j = 0; j < initpop[0].length; j++) {
@@ -214,6 +217,67 @@ public class GA {
 			}
 		}
 		return max;
+	}
+	
+	public static List<Result> run() {
+		Random random = new Random();
+		// d为初试种群
+		lower[0] = 78;
+		uper[0] = 102;
+		lower[1] = 33;
+		uper[1] = 45;
+		for (int i = 2; i < 5; i++) {
+			lower[i] = 27;
+			uper[i] = 45;
+		}
+		for (int i = 0; i < varnum; i++) {
+			for (int j = 0; j < POP_SIZE; j++) {
+				initpop[i][j] = lower[i] + random.nextDouble() * (uper[i] - lower[i]);
+			}
+		}
+		// 初始化其它参数
+		Functions f = new Functions();
+		GA ga = new GA(initpop, 0, f);
+		System.out.println("种群进化中....");
+		// 进化，这里进化10000次
+		long starttime = System.currentTimeMillis();
+		ga.dispose(10000);
+		long endtime = System.currentTimeMillis();
+		System.out.println("进化耗时：" + (endtime - starttime) + "ms");
+		System.out.println("+++++++++++++++++++++++++++结果为：");
+		for (int i = 0; i < varnum; i++) {
+			System.out.print("x[" + (i + 1) + "]=" + best.x[i] + "\t");
+		}
+//		System.out.println();
+//		System.out.println("约束条件1的值：" + (85.334407 + 0.0056858 * best.x[1] * best.x[4]
+//				+ 0.0006262 * best.x[0] * best.x[3] - 0.0022053 * best.x[2] * best.x[4]));
+//		System.out.println("约束条件2的值：" + (80.51249 + 0.0071317 * best.x[1] * best.x[4]
+//				+ 0.0029955 * best.x[0] * best.x[1] + 0.0021813 * best.x[2] * best.x[2]));
+//		System.out.println("约束条件3的值：" + (9.300961 + 0.0047026 * best.x[2] * best.x[4]
+//				+ 0.0012547 * best.x[0] * best.x[2] + 0.0019085 * best.x[2] * best.x[3]));
+//		System.out.println("目标函数值：" + (5.3578547 * Math.pow(best.x[2], 2) + 0.8356891 * best.x[0] * best.x[4]
+//				+ 37.293239 * best.x[0] - 40792.141));
+//		System.out.println("Function=" + (1000000 - best.fitness));
+		
+		Collections.sort(best.list, new Comparator<Result>() {
+		      public int compare(Result r1, Result r2) {
+		    	  Double d1 = r1.getFitness();
+		    	  Double d2 = r2.getFitness();
+		    	  return Double.compare(d1, d2);
+		      }
+		});
+		
+		System.out.println();System.out.println();System.out.println();
+		for (int i = 0; i < best.list.size(); ++i) {
+			Result res = best.list.get(i);
+			double[] X = res.getX();
+			System.out.println("fitness:" + res.getFitness());
+			for (int j = 0; j < X.length; ++j) {
+				System.out.print(X[j] + " ");
+			}
+			System.out.println();
+		}
+		return best.list;
 	}
 
 	public static void main(String[] args) {

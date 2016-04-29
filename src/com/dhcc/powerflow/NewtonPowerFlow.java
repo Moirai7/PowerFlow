@@ -131,7 +131,22 @@ public class NewtonPowerFlow {
 	
 	int k=0;
 	
-	public void Run() {
+	public boolean checkPV() {
+		Gene[] gene = Variable.getGenerator();
+		Load[] load = Variable.getLoad();
+		double Um[] = Variable.getOriU();
+		for (int i=0; i<gene.length; ++i) {
+			if (Um[gene[i].getI()]>gene[i].getMax() || Um[gene[i].getI()]<gene[i].getMin())
+				return false;
+		}
+		for (int i=0; i<load.length; ++i) {
+			if (Um[load[i].getI()]>load[i].getMax() || Um[load[i].getI()]<load[i].getMin())
+				return false;
+		}
+		return true;
+	}
+	
+	public boolean Run() {
 		Info info = Variable.getPf_info();
 		int n =  info.getN(), nu = 2*n+1, n2 = 2*n;
 		jacob = new double[n2][nu];
@@ -144,6 +159,7 @@ public class NewtonPowerFlow {
 		Variable.setQ(Qi);
 		
 		while (true) {
+			if(k>1000) return false;
 			CalcJacobian();
 
 			double error=0.0;
@@ -165,7 +181,12 @@ public class NewtonPowerFlow {
 				Um[i] = Um[i]-(Um[i]*a);
 			}
 		}
-
+//		ProcData pd = new ProcData();
+//		System.out.println("\nPG QG PL QL");
+//		pd.CalBusFlow();
+//		System.out.println("\nloss");
+//		pd.BranchFlow();
+		return true;
 	}
 	
 	public static void main(String[] args) {
