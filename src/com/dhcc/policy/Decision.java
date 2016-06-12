@@ -23,10 +23,14 @@ public class Decision {
 	
 	private void testVar(){
 		Gene[] gene = Variable.getGenerator();
-		for (int i=0; i<gene.length-1; ++i) {
-			gene[i].setP(gene[i].getP()-30);
-			gene[i+1].setP(gene[i].getP()+30);
-		}
+//		for (int i=0; i<gene.length-1; ++i) {
+//			gene[i].setP(gene[i].getP()-30);
+////			System.out.println(gene[i].get);
+//			gene[i+1].setP(gene[i].getP()+30);
+//		}
+		gene[0].setP(gene[0].getP()-1);
+		gene[gene.length-1].setP(gene[gene.length-1].getP()+1);
+//		System.out.println(gene[2].getP() + " " + gene[1].getP());
 		return;
 	}
 	
@@ -60,7 +64,8 @@ public class Decision {
 	
 	public void Run(){
 		IOUtil io = new IOUtil();
-		io.readCDFDataWithOriIdx("/home/tlr/lanlan/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+//		io.readCDFDataWithOriIdx("/home/tlr/lanlan/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
+		io.readCDFDataWithOriIdx("/Users/xyk0058/Git/PowerFlow/src/com/dhcc/casedata/ieee14cdf.txt");
 		for (int k=0; k<10; ++k) {
 			testVar();
 			ProcData pd = new ProcData();

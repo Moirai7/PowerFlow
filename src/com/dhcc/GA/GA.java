@@ -9,7 +9,7 @@ import com.dhcc.Global.Function;
 import com.dhcc.Global.Functions;
 
 public class GA {
-	
+
 	public static final int varnum = 5;// 变量的个数
 	public static final double[] lower = new double[varnum];
 	public static final double[] uper = new double[varnum];
@@ -30,8 +30,9 @@ public class GA {
 	public static Function function = null;
 	public static int t = 0;
 
-	public GA(){}
-	
+	public GA() {
+	}
+
 	public GA(double initpop[][], int time, Function f) {
 		for (int i = 0; i < initpop.length; i++) {
 			for (int j = 0; j < initpop[0].length; j++) {
@@ -71,32 +72,38 @@ public class GA {
 	}
 
 	public void fitness() {
-//		for (int i = 0; i < POP_SIZE; i++) {
-//			fitness[i] = 0;
-//			double a = 85.334407 + 0.0056858 * result[1][i] * result[4][i] + 0.0006262 * result[0][i] * result[3][i]
-//					- 0.0022053 * result[2][i] * result[4][i];
-//			double b = 80.51249 + 0.0071317 * result[1][i] * result[4][i] + 0.0029955 * result[0][i] * result[1][i]
-//					+ 0.0021813 * result[2][i] * result[2][i];
-//			double c = 9.300961 + 0.0047026 * result[2][i] * result[4][i] + 0.0012547 * result[0][i] * result[2][i]
-//					+ 0.0019085 * result[2][i] * result[3][i];
-//			if (a >= 0 && a <= 92) {
-//				if (b >= 90 && b <= 110) {
-//					if (c >= 20 && c <= 25) {
-//						fitness[i] = 1000000 - (5.3578547 * Math.pow(result[2][i], 2)
-//								+ 0.8356891 * result[0][i] * result[4][i] + 37.293239 * result[0][i] - 40792.141);
-//					}
-//				}
-//			}
-//		}
+		// for (int i = 0; i < POP_SIZE; i++) {
+		// fitness[i] = 0;
+		// double a = 85.334407 + 0.0056858 * result[1][i] * result[4][i] +
+		// 0.0006262 * result[0][i] * result[3][i]
+		// - 0.0022053 * result[2][i] * result[4][i];
+		// double b = 80.51249 + 0.0071317 * result[1][i] * result[4][i] +
+		// 0.0029955 * result[0][i] * result[1][i]
+		// + 0.0021813 * result[2][i] * result[2][i];
+		// double c = 9.300961 + 0.0047026 * result[2][i] * result[4][i] +
+		// 0.0012547 * result[0][i] * result[2][i]
+		// + 0.0019085 * result[2][i] * result[3][i];
+		// if (a >= 0 && a <= 92) {
+		// if (b >= 90 && b <= 110) {
+		// if (c >= 20 && c <= 25) {
+		// fitness[i] = 1000000 - (5.3578547 * Math.pow(result[2][i], 2)
+		// + 0.8356891 * result[0][i] * result[4][i] + 37.293239 * result[0][i]
+		// - 40792.141);
+		// }
+		// }
+		// }
+		// }
 		for (int i = 0; i < POP_SIZE; i++) {
 			fitness[i] = 0;
 			double[] X = new double[varnum];
-			for (int j = 0; j < varnum; j++) X[j] = result[j][i];
+			for (int j = 0; j < varnum; j++)
+				X[j] = result[j][i];
 			if (function.constrain(X)) {
 				fitness[i] = 1000000 - function.F(X);
-//				System.out.println("fitness:" + fitness[i]);
+				// System.out.println("fitness:" + fitness[i]);
 			}
-			for (int j = 0; j < varnum; j++) result[j][i] = X[j];
+			for (int j = 0; j < varnum; j++)
+				result[j][i] = X[j];
 		}
 		// System.out.println(fitness[i]);
 	}
@@ -169,8 +176,9 @@ public class GA {
 				if (ran[i] < q[j]) {
 					k = j;
 					break;
-				} else
+				} else {
 					continue;
+				}
 			}
 			tempPop[i] = pop[k];
 		}
@@ -218,7 +226,7 @@ public class GA {
 		}
 		return max;
 	}
-	
+
 	public static List<Result> run() {
 		Random random = new Random();
 		// d为初试种群
@@ -238,36 +246,45 @@ public class GA {
 		// 初始化其它参数
 		Functions f = new Functions();
 		GA ga = new GA(initpop, 0, f);
-		System.out.println("种群进化中....");
+		System.out.println("start....");
 		// 进化，这里进化10000次
 		long starttime = System.currentTimeMillis();
 		ga.dispose(10000);
 		long endtime = System.currentTimeMillis();
-		System.out.println("进化耗时：" + (endtime - starttime) + "ms");
+		System.out.println("耗时：" + (endtime - starttime) + "ms");
 		System.out.println("+++++++++++++++++++++++++++结果为：");
 		for (int i = 0; i < varnum; i++) {
 			System.out.print("x[" + (i + 1) + "]=" + best.x[i] + "\t");
 		}
-//		System.out.println();
-//		System.out.println("约束条件1的值：" + (85.334407 + 0.0056858 * best.x[1] * best.x[4]
-//				+ 0.0006262 * best.x[0] * best.x[3] - 0.0022053 * best.x[2] * best.x[4]));
-//		System.out.println("约束条件2的值：" + (80.51249 + 0.0071317 * best.x[1] * best.x[4]
-//				+ 0.0029955 * best.x[0] * best.x[1] + 0.0021813 * best.x[2] * best.x[2]));
-//		System.out.println("约束条件3的值：" + (9.300961 + 0.0047026 * best.x[2] * best.x[4]
-//				+ 0.0012547 * best.x[0] * best.x[2] + 0.0019085 * best.x[2] * best.x[3]));
-//		System.out.println("目标函数值：" + (5.3578547 * Math.pow(best.x[2], 2) + 0.8356891 * best.x[0] * best.x[4]
-//				+ 37.293239 * best.x[0] - 40792.141));
-//		System.out.println("Function=" + (1000000 - best.fitness));
-		
+		// System.out.println();
+		// System.out.println("约束条件1的值：" + (85.334407 + 0.0056858 * best.x[1] *
+		// best.x[4]
+		// + 0.0006262 * best.x[0] * best.x[3] - 0.0022053 * best.x[2] *
+		// best.x[4]));
+		// System.out.println("约束条件2的值：" + (80.51249 + 0.0071317 * best.x[1] *
+		// best.x[4]
+		// + 0.0029955 * best.x[0] * best.x[1] + 0.0021813 * best.x[2] *
+		// best.x[2]));
+		// System.out.println("约束条件3的值：" + (9.300961 + 0.0047026 * best.x[2] *
+		// best.x[4]
+		// + 0.0012547 * best.x[0] * best.x[2] + 0.0019085 * best.x[2] *
+		// best.x[3]));
+		// System.out.println("目标函数值：" + (5.3578547 * Math.pow(best.x[2], 2) +
+		// 0.8356891 * best.x[0] * best.x[4]
+		// + 37.293239 * best.x[0] - 40792.141));
+		// System.out.println("Function=" + (1000000 - best.fitness));
+
 		Collections.sort(best.list, new Comparator<Result>() {
-		      public int compare(Result r1, Result r2) {
-		    	  Double d1 = r1.getFitness();
-		    	  Double d2 = r2.getFitness();
-		    	  return Double.compare(d1, d2);
-		      }
+			public int compare(Result r1, Result r2) {
+				Double d1 = r1.getFitness();
+				Double d2 = r2.getFitness();
+				return Double.compare(d1, d2);
+			}
 		});
-		
-		System.out.println();System.out.println();System.out.println();
+
+		System.out.println();
+		System.out.println();
+		System.out.println();
 		for (int i = 0; i < best.list.size(); ++i) {
 			Result res = best.list.get(i);
 			double[] X = res.getX();
@@ -299,36 +316,45 @@ public class GA {
 		// 初始化其它参数
 		Functions f = new Functions();
 		GA ga = new GA(initpop, 0, f);
-		System.out.println("种群进化中....");
+		System.out.println("start....");
 		// 进化，这里进化10000次
 		long starttime = System.currentTimeMillis();
 		ga.dispose(10000);
 		long endtime = System.currentTimeMillis();
-		System.out.println("进化耗时：" + (endtime - starttime) + "ms");
+		System.out.println("耗时：" + (endtime - starttime) + "ms");
 		System.out.println("+++++++++++++++++++++++++++结果为：");
 		for (int i = 0; i < varnum; i++) {
 			System.out.print("x[" + (i + 1) + "]=" + best.x[i] + "\t");
 		}
-//		System.out.println();
-//		System.out.println("约束条件1的值：" + (85.334407 + 0.0056858 * best.x[1] * best.x[4]
-//				+ 0.0006262 * best.x[0] * best.x[3] - 0.0022053 * best.x[2] * best.x[4]));
-//		System.out.println("约束条件2的值：" + (80.51249 + 0.0071317 * best.x[1] * best.x[4]
-//				+ 0.0029955 * best.x[0] * best.x[1] + 0.0021813 * best.x[2] * best.x[2]));
-//		System.out.println("约束条件3的值：" + (9.300961 + 0.0047026 * best.x[2] * best.x[4]
-//				+ 0.0012547 * best.x[0] * best.x[2] + 0.0019085 * best.x[2] * best.x[3]));
-//		System.out.println("目标函数值：" + (5.3578547 * Math.pow(best.x[2], 2) + 0.8356891 * best.x[0] * best.x[4]
-//				+ 37.293239 * best.x[0] - 40792.141));
-//		System.out.println("Function=" + (1000000 - best.fitness));
-		
+		// System.out.println();
+		// System.out.println("约束条件1的值：" + (85.334407 + 0.0056858 * best.x[1] *
+		// best.x[4]
+		// + 0.0006262 * best.x[0] * best.x[3] - 0.0022053 * best.x[2] *
+		// best.x[4]));
+		// System.out.println("约束条件2的值：" + (80.51249 + 0.0071317 * best.x[1] *
+		// best.x[4]
+		// + 0.0029955 * best.x[0] * best.x[1] + 0.0021813 * best.x[2] *
+		// best.x[2]));
+		// System.out.println("约束条件3的值：" + (9.300961 + 0.0047026 * best.x[2] *
+		// best.x[4]
+		// + 0.0012547 * best.x[0] * best.x[2] + 0.0019085 * best.x[2] *
+		// best.x[3]));
+		// System.out.println("目标函数值：" + (5.3578547 * Math.pow(best.x[2], 2) +
+		// 0.8356891 * best.x[0] * best.x[4]
+		// + 37.293239 * best.x[0] - 40792.141));
+		// System.out.println("Function=" + (1000000 - best.fitness));
+
 		Collections.sort(best.list, new Comparator<Result>() {
-		      public int compare(Result r1, Result r2) {
-		    	  Double d1 = r1.getFitness();
-		    	  Double d2 = r2.getFitness();
-		    	  return Double.compare(d1, d2);
-		      }
+			public int compare(Result r1, Result r2) {
+				Double d1 = r1.getFitness();
+				Double d2 = r2.getFitness();
+				return Double.compare(d1, d2);
+			}
 		});
-		
-		System.out.println();System.out.println();System.out.println();
+
+		System.out.println();
+		System.out.println();
+		System.out.println();
 		for (int i = 0; i < best.list.size(); ++i) {
 			Result res = best.list.get(i);
 			double[] X = res.getX();
@@ -340,4 +366,3 @@ public class GA {
 		}
 	}
 }
-
